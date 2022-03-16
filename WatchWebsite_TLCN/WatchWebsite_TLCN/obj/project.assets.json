@@ -9790,11 +9790,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\source\\repos\\WatvhWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
+      "projectUniqueName": "G:\\project\\WatchWebsite_KLTN\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
       "projectName": "WatchWebsite_TLCN",
-      "projectPath": "C:\\Users\\PC\\source\\repos\\WatvhWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
+      "projectPath": "G:\\project\\WatchWebsite_KLTN\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
       "packagesPath": "C:\\Users\\Nguyen Duc Hoa\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC\\source\\repos\\WatvhWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\obj\\",
+      "outputPath": "G:\\project\\WatchWebsite_KLTN\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\"

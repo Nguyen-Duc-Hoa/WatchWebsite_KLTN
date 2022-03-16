@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0Sy+pIGZY3Ykz0MXVC7SocnmiscGdOWUniluSLAZZLxfbT582EQWWJgeD0zddrNNzyZYLnb2tTQaJTp9vRYvYg==",
+  "dgSpecHash": "kCOzsCh/EB7K1vY+CF+UcGbfiemEXZa9JIQRXZRC1AsTiBRNiwKVHqTPueXCJSDRHMCZKya8cBC5NwkSwIoHgA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\PC\\source\\repos\\WatvhWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
+  "projectFilePath": "G:\\project\\WatchWebsite_KLTN\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Nguyen Duc Hoa\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\Nguyen Duc Hoa\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
