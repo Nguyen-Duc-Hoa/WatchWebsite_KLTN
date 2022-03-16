@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20210925100334_DbInit.cs" />
+    <Compile Remove="Migrations\20210925100334_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20210925100501_DbInit.cs" />
+    <Compile Remove="Migrations\20210925100501_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20210925102141_DbInit.cs" />
+    <Compile Remove="Migrations\20210925102141_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20211003102445_DbInit.cs" />
+    <Compile Remove="Migrations\20211003102445_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20211003104000_DbInit.cs" />
+    <Compile Remove="Migrations\20211003104000_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20211003120450_DbInit.cs" />
+    <Compile Remove="Migrations\20211003120450_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20211003120851_DbInit.cs" />
+    <Compile Remove="Migrations\20211003120851_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20211003121358_DbInit.cs" />
+    <Compile Remove="Migrations\20211003121358_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20211003121448_DbInit.cs" />
+    <Compile Remove="Migrations\20211003121448_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20211003122549_DbInit.cs" />
+    <Compile Remove="Migrations\20211003122549_DbInit.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="MailKit" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.19" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.19" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.19" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.19" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.18" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.19" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.19">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="MimeKit" Version="3.0.0" />
+    <PackageReference Include="Stripe.net" Version="39.73.0" />
+  </ItemGroup>
+
+
+</Project>
