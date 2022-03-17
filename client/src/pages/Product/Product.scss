@@ -1,0 +1,88 @@
+@mixin antBtn() {
+    color: white;
+    background-color: black;
+    border-color: black;
+}
+
+.product {
+    padding-top: 65px;
+    @media (max-width: 1006px) {
+        padding-top: 56px;
+    }
+    .content {
+        display: flex;
+        max-width: 1200px;
+        margin: auto;
+        justify-content: space-between;
+        @media (max-width: 750px) {
+            flex-direction: column;
+        }
+        .image {
+            width: 40%;
+            @media (max-width: 750px) {
+                width: 100%;
+            }
+        }
+        .info {
+            color: #000;
+            font-size: 16px;
+            width: 40%;
+            margin-top: 5px;
+            @media (max-width: 750px) {
+                width: 100%;
+            }
+            .icon-social {
+                font-size: 24px;
+                margin-right: 10px;
+            }
+            div {
+                margin-bottom: 8px;
+            }
+            .name {
+                font-size: 30px;
+                font-weight: 500;
+                letter-spacing: 2px;
+                margin-bottom: 16px;
+                @media (max-width: 750px) {
+                    font-size: 24px;
+                }
+            }
+            .price {
+                font-size: 24px;
+                margin-bottom: 12px;
+                @media (max-width: 750px) {
+                    font-size: 20px;
+                }
+            }
+            .stock {
+                color: #666666;
+                margin-bottom: 12px;
+                span {
+                    color: red;
+                }
+            }
+            .ant-btn {
+                padding: 0px 70px;
+                height: 50px;
+                &:hover {
+                    @include antBtn();
+                }
+                &:focus {
+                    @include antBtn();
+                }
+            }
+        }
+    }
+    .descriptionAndComments {
+        max-width: 1200px;
+        margin: auto;
+        .ant-tabs-tab-btn {
+            font-size: 20px;
+        }
+        .ant-tabs-content-holder {
+            .ant-comment-content-detail > p {
+                font-size: 16px;
+            }
+        }
+    }
+}

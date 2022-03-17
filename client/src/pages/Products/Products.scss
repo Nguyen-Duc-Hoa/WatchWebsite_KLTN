@@ -1,0 +1,42 @@
+.products {
+    padding-top: 65px;
+    @media (max-width: 1006px) {
+        padding-top: 56px;
+    }
+    .banner {
+        width: 100%;
+        padding: 0 60px 0;
+        @media (max-width: 740px) {
+            padding: 0;
+        }
+        .gallery__text {
+            @media (max-width: 740px) {
+                padding: 0;
+            }
+            div {
+                font-size: 20px;
+                font-weight: 500;
+            }
+            button {
+                letter-spacing: 2px;
+            }
+        }
+        img {
+            height: 200px;
+            object-fit: cover;
+        }
+    }
+    .body {
+        display: flex;
+        margin-top: 60px;
+        @media (max-width: 980px) {
+            flex-direction: column;
+        }
+        .product-list {
+            width: 100%;
+            .ant-empty-image {
+                height: 180px;
+            }
+        }
+    }
+}

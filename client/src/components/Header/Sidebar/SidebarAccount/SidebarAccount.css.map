@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,iBAAiB,CAAC;EACd,SAAS,EAAE,IAAI;EACf,WAAW,EAAE,IAAI;EACjB,YAAY,EAAE,IAAI;EAClB,aAAa,EAAE,IAAI;CAKtB;;AATD,AAKI,iBALa,CAKb,QAAQ,CAAC;EACL,WAAW,EAAE,GAAG;EAChB,aAAa,EAAE,IAAI;CACtB",
+    "sources": [
+        "SidebarAccount.scss"
+    ],
+    "names": [],
+    "file": "SidebarAccount.css"
+}

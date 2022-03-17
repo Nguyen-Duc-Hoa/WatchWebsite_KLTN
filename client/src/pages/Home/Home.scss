@@ -1,0 +1,13 @@
+.gallery {
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 740px) {
+        flex-direction: column;
+    }
+}
+
+.services {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

@@ -1,0 +1,29 @@
+.form-order {
+  width: 50%;
+  padding: 0 2.5rem;
+}
+
+.form-order .heading {
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+@media (max-width: 1080px) {
+  .form-order {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .form-order {
+    padding: 0;
+  }
+}
+
+@media (max-width: 590px) {
+  .form-order {
+    width: 100%;
+  }
+}
+/*# sourceMappingURL=CheckoutForm.css.map */

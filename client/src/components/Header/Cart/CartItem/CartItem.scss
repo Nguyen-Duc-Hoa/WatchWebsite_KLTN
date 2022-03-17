@@ -1,0 +1,24 @@
+$size: 16px;
+
+.cart__card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    img {
+        width: 82px;
+        margin-right: $size;
+    }
+    .card__info {
+        flex: 1;
+        div {
+            font-size: $size;
+            font-weight: 500;
+        }
+        p {
+            font-size: $size;
+        }
+    }
+    .price {
+        font-size: 18px;
+    }
+}

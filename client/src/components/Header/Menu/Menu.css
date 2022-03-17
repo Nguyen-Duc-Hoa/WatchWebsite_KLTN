@@ -1,0 +1,123 @@
+.menu {
+  font-weight: 500;
+  height: 100%;
+  width: 40%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.menu .menu__item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+  padding: 20px 16px;
+}
+
+@media (max-width: 1006px) {
+  .menu .menu__item {
+    display: none;
+  }
+}
+
+.menu .menu__item .item-brand:hover + .drop-down {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.menu .menu__item span {
+  font-size: 16px;
+  position: relative;
+}
+
+.menu .menu__item span::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1.5px;
+  background-color: #000;
+  bottom: 0;
+  -webkit-transition: width 0.3s;
+  transition: width 0.3s;
+}
+
+.menu .menu__item span:hover::before {
+  width: 100%;
+}
+
+.menu .menu__item span:hover span {
+  color: #000;
+}
+
+.menu .menu__item .drop-down {
+  background-color: #fff;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 75%;
+  display: none;
+  padding: 20px 68px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+          box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  -webkit-transition: all 2s;
+  transition: all 2s;
+}
+
+.menu .menu__item .drop-down::before {
+  content: '';
+  position: absolute;
+  height: 10px;
+  width: 200px;
+  background-color: transparent;
+  top: -5px;
+}
+
+.menu .menu__item .drop-down:hover {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.menu .menu__item .drop-down .brands {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+}
+
+.menu .menu__item .drop-down .brands div {
+  margin: 10px;
+}
+
+.menu .hamburger {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 22px;
+  display: none;
+  cursor: pointer;
+}
+
+@media (max-width: 1006px) {
+  .menu .hamburger {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+/*# sourceMappingURL=Menu.css.map */

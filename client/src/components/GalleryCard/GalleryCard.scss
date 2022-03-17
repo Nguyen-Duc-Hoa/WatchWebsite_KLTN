@@ -1,0 +1,35 @@
+.gallery__card {
+    width: 48%;
+    position: relative;
+    @media (max-width: 740px) {
+        width: 100%;
+        padding: 0 30px 30px 30px;
+    }
+    @media (max-width: 490px) {
+        padding: 0;
+        margin-bottom: 30px;
+    }
+    img {
+        width: 100%;
+    }
+    .gallery__text {
+        position: absolute;
+        bottom: 10%;
+        left: 10%;
+        @media (max-width: 740px) {
+            padding: 0 30px 30px 30px;
+        }
+        @media (max-width: 490px) {
+            padding: 0;
+        }
+        div {
+            color: white;
+            font-weight: 500;
+            font-size: 18;
+        }
+        p {
+            font-size: 16px;
+            color: white;
+        }
+    }
+}

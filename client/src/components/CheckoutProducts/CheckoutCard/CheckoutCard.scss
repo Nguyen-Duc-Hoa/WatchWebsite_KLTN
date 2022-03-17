@@ -1,0 +1,31 @@
+@mixin cssTag($fontSize, $lineHeight, $marBtm) {
+    font-size: $fontSize;
+    line-height: $lineHeight;
+    margin-bottom: $marBtm;
+}
+
+.checkout__card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    img {
+        width: 5.5rem;
+        height: 5.5rem;
+        border-radius: 10px;
+        object-fit: contain;
+    }
+    .info {
+        flex: 1;
+        div {
+            font-weight: 500;
+            @include cssTag(1.2rem, 1.2rem, .5rem)
+        }
+        p {
+            @include cssTag(1rem, 1rem, .5rem)
+        }
+    }
+    .price {
+        font-size: 1.1rem;
+        font-weight: 550;
+    }
+}

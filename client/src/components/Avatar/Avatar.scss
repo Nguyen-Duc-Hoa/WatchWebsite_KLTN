@@ -1,0 +1,9 @@
+.avatar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    .userName {
+        padding: 0 8px;
+        cursor: pointer;
+    }
+}

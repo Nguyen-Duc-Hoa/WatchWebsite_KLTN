@@ -1,0 +1,40 @@
+section.header {
+  height: 65px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+section.header .header__logo {
+  font-size: 30px;
+  font-weight: 600;
+  width: 20%;
+}
+
+section.header .header__icons .icons__item {
+  padding: 14px 8px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+section.header .header__icons .icons__item--account {
+  position: relative;
+}
+
+section.header .header__icons .icons__item--account:hover .dropdown-account {
+  display: block;
+}
+
+section.header .header__icons .dropdown-account {
+  position: absolute;
+  bottom: -75%;
+  display: none;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  min-width: 130px;
+}
+/*# sourceMappingURL=Header.css.map */

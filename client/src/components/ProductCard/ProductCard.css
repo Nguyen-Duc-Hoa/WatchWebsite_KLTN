@@ -1,0 +1,68 @@
+.productCard {
+  width: 100%;
+  cursor: pointer;
+}
+
+.productCard .imageAndButton {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.productCard .imageAndButton:hover img {
+  -webkit-transform: scale(1.15);
+          transform: scale(1.15);
+}
+
+.productCard .imageAndButton img {
+  width: 100%;
+  -webkit-transition: .3s transform;
+  transition: .3s transform;
+}
+
+.productCard .imageAndButton img:hover + button {
+  top: 75%;
+}
+
+.productCard .imageAndButton button {
+  width: 60%;
+  padding: 6px 0;
+  background: #ffffffc9;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  position: absolute;
+  border: 1px solid #ccc;
+  top: 100%;
+  cursor: pointer;
+}
+
+.productCard .imageAndButton button:hover {
+  color: white;
+  border: 1px solid #000000b5;
+  background-color: #000000b5;
+  top: 75%;
+}
+
+.productCard .name {
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.productCard .price {
+  font-size: 16px;
+  text-align: center;
+}
+/*# sourceMappingURL=ProductCard.css.map */

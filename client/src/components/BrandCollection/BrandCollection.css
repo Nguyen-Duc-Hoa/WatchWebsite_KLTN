@@ -1,0 +1,45 @@
+.brandCollection {
+  margin: 60px 0 30px 0;
+}
+
+.brandCollection .heading {
+  font-size: 38px;
+  font-weight: 500;
+  margin-bottom: 30px;
+  color: #000;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+@media (max-width: 740px) {
+  .brandCollection .heading {
+    font-size: 28px;
+  }
+}
+
+.brandCollection .swiper-card {
+  width: 150px;
+  cursor: pointer;
+}
+
+.brandCollection .swiper-card img {
+  width: 100%;
+}
+
+.brandCollection .swiper-container {
+  overflow: hidden;
+  padding-bottom: 30px;
+}
+
+.brandCollection .swiper-container .swiper-pagination-bullet {
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 10px;
+  height: 10px;
+}
+
+.swiper-container-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-custom,
+.swiper-pagination-fraction {
+  bottom: 0;
+}
+/*# sourceMappingURL=BrandCollection.css.map */

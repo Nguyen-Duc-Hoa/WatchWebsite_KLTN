@@ -1,0 +1,23 @@
+.register {
+  padding-top: 65px;
+}
+
+@media (max-width: 1006px) {
+  .register {
+    padding-top: 56px;
+  }
+}
+
+.register .heading {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.register .register__form {
+  max-width: 380px;
+  margin: auto;
+}
+/*# sourceMappingURL=Register.css.map */

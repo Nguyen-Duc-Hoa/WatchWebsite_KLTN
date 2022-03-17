@@ -1,0 +1,10 @@
+.paymentSuccess {
+  padding-top: 65px;
+}
+
+@media (max-width: 1006px) {
+  .paymentSuccess {
+    padding-top: 56px;
+  }
+}
+/*# sourceMappingURL=PaymentSuccess.css.map */

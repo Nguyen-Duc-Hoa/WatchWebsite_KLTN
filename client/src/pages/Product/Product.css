@@ -1,0 +1,125 @@
+.product {
+  padding-top: 65px;
+}
+
+@media (max-width: 1006px) {
+  .product {
+    padding-top: 56px;
+  }
+}
+
+.product .content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 1200px;
+  margin: auto;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+@media (max-width: 750px) {
+  .product .content {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+
+.product .content .image {
+  width: 40%;
+}
+
+@media (max-width: 750px) {
+  .product .content .image {
+    width: 100%;
+  }
+}
+
+.product .content .info {
+  color: #000;
+  font-size: 16px;
+  width: 40%;
+  margin-top: 5px;
+}
+
+@media (max-width: 750px) {
+  .product .content .info {
+    width: 100%;
+  }
+}
+
+.product .content .info .icon-social {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.product .content .info div {
+  margin-bottom: 8px;
+}
+
+.product .content .info .name {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 750px) {
+  .product .content .info .name {
+    font-size: 24px;
+  }
+}
+
+.product .content .info .price {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 750px) {
+  .product .content .info .price {
+    font-size: 20px;
+  }
+}
+
+.product .content .info .stock {
+  color: #666666;
+  margin-bottom: 12px;
+}
+
+.product .content .info .stock span {
+  color: red;
+}
+
+.product .content .info .ant-btn {
+  padding: 0px 70px;
+  height: 50px;
+}
+
+.product .content .info .ant-btn:hover {
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.product .content .info .ant-btn:focus {
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.product .descriptionAndComments {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.product .descriptionAndComments .ant-tabs-tab-btn {
+  font-size: 20px;
+}
+
+.product .descriptionAndComments .ant-tabs-content-holder .ant-comment-content-detail > p {
+  font-size: 16px;
+}
+/*# sourceMappingURL=Product.css.map */

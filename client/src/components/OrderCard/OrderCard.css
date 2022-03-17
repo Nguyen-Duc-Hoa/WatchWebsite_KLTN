@@ -1,0 +1,41 @@
+.orderCard {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.orderCard .image {
+  max-width: 140px;
+  padding: 0 15px;
+  width: 30%;
+}
+
+.orderCard .image img {
+  width: 100%;
+}
+
+.orderCard .info {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.orderCard .info div {
+  font-size: 16px;
+}
+
+.orderCard .info .name {
+  font-weight: 500;
+}
+
+.orderCard .price {
+  padding: 0 15px;
+  font-weight: 500;
+}
+/*# sourceMappingURL=OrderCard.css.map */

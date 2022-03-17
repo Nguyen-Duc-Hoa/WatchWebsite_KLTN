@@ -1,0 +1,41 @@
+.serivce-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 1007px) {
+  .serivce-item {
+    width: 50%;
+  }
+}
+
+@media (max-width: 750px) {
+  .serivce-item {
+    width: 100%;
+  }
+}
+
+.serivce-item .icon {
+  height: 30px;
+  margin: 0 15px 20px 0;
+}
+
+.serivce-item .icon img {
+  height: 100%;
+}
+
+.serivce-item .text div {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.serivce-item .text p {
+  color: #666666;
+  font-size: 16px;
+}
+/*# sourceMappingURL=Service.css.map */

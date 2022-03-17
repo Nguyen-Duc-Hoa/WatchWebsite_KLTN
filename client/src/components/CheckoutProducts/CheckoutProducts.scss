@@ -1,0 +1,82 @@
+@mixin flex() {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin shipAndTotal($weight, $size) {
+    font-weight: $weight;
+    font-size: $size;
+    margin: 0;
+}
+
+.content__detail {
+    width: 50%;
+    padding: 0 2.5rem;
+    @media (max-width: 1080px) {
+        width: 100%;
+        padding: 0;
+    }
+    @media (max-width: 590px) {
+        padding: 0;
+    }
+    .detail__header {
+        display: flex;
+        justify-content: space-between;
+        background: ghostwhite;
+        padding: 0.75rem 0;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        div {
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            span {
+                transform: translateY(3px);
+            }
+        }
+        p {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+    }
+    .detail__body {
+        margin-bottom: 30px;
+        @media (max-width: 1080px) {
+            max-height: 0;
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+        }
+        &.active {
+            @media (max-width: 1080px) {
+                max-height: 500px;
+                opacity: 1;
+                transition: max-height 0.3s ease-in;
+                animation: showSubmenu 0.6s ease-in;
+            }
+        }
+        .subtotal {
+            @include flex();
+            div,
+            p {
+                @include shipAndTotal(400, 1rem);
+            }
+        }
+        .shipping {
+            @include flex();
+            div,
+            p {
+                @include shipAndTotal(400, 1rem);
+            }
+        }
+        .total {
+            @include flex();
+            div,
+            p {
+                @include shipAndTotal(600, 1.2rem);
+            }
+        }
+    }
+}

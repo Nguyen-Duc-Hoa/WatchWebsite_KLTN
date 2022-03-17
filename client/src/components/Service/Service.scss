@@ -1,0 +1,28 @@
+.serivce-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+    @media (max-width: 1007px) {
+        width: 50%;
+    }
+    @media (max-width: 750px) {
+        width: 100%;
+    }
+    .icon {
+        height: 30px;
+        margin: 0 15px 20px 0;
+        img {
+            height: 100%;
+        }
+    }
+    .text {
+        div {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        p {
+            color: #666666;
+            font-size: 16px;
+        }
+    }
+}

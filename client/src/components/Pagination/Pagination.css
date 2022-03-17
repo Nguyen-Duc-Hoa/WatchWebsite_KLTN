@@ -1,0 +1,21 @@
+.ant-pagination-item-active {
+  border-color: black;
+}
+
+.ant-pagination-item-active a {
+  color: black;
+}
+
+.ant-pagination-item:focus-visible, .ant-pagination-item:hover {
+  border-color: black;
+}
+
+.ant-pagination-item:focus-visible a, .ant-pagination-item:hover a {
+  color: black;
+}
+
+.ant-pagination-prev:focus-visible .ant-pagination-item-link, .ant-pagination-next:focus-visible .ant-pagination-item-link, .ant-pagination-prev:hover .ant-pagination-item-link, .ant-pagination-next:hover .ant-pagination-item-link {
+  color: #000;
+  border-color: black;
+}
+/*# sourceMappingURL=Pagination.css.map */

@@ -1,0 +1,45 @@
+.orderDetail {
+  padding-top: 65px;
+  max-width: 1200px;
+  padding-bottom: 36px;
+  margin: auto;
+  @media (max-width: 1006px) {
+    padding-top: 56px;
+  }
+  .heading {
+    font-size: 30px;
+    margin-bottom: 12px;
+  }
+  .orderItem {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    .title {
+      font-weight: 600;
+    }
+    .left {
+      color: #1890ff;
+    }
+    .right {
+      color: #eb2f96;
+    }
+    .name {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 4px 0;
+    }
+  }
+  .vertical {
+      display: block;
+  }
+  .total {
+    float: right;
+    margin-top: 20px;
+    font-size: 18px;
+    span {
+      font-weight: 400;
+      margin-right: 12px;
+    }
+    font-weight: 500;
+  }
+}

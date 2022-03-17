@@ -1,0 +1,8 @@
+.userProfile {
+    padding-top: 65px;
+    max-width: 1200px;
+    margin: auto;
+    @media (max-width: 1006px) {
+        padding-top: 56px;
+    }
+}

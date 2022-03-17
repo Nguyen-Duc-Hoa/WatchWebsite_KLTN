@@ -1,0 +1,42 @@
+.checkout__card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.checkout__card img {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 10px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.checkout__card .info {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.checkout__card .info div {
+  font-weight: 500;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.checkout__card .info p {
+  font-size: 1rem;
+  line-height: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.checkout__card .price {
+  font-size: 1.1rem;
+  font-weight: 550;
+}
+/*# sourceMappingURL=CheckoutCard.css.map */

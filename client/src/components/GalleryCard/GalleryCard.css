@@ -1,0 +1,52 @@
+.gallery__card {
+  width: 48%;
+  position: relative;
+}
+
+@media (max-width: 740px) {
+  .gallery__card {
+    width: 100%;
+    padding: 0 30px 30px 30px;
+  }
+}
+
+@media (max-width: 490px) {
+  .gallery__card {
+    padding: 0;
+    margin-bottom: 30px;
+  }
+}
+
+.gallery__card img {
+  width: 100%;
+}
+
+.gallery__card .gallery__text {
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+}
+
+@media (max-width: 740px) {
+  .gallery__card .gallery__text {
+    padding: 0 30px 30px 30px;
+  }
+}
+
+@media (max-width: 490px) {
+  .gallery__card .gallery__text {
+    padding: 0;
+  }
+}
+
+.gallery__card .gallery__text div {
+  color: white;
+  font-weight: 500;
+  font-size: 18;
+}
+
+.gallery__card .gallery__text p {
+  font-size: 16px;
+  color: white;
+}
+/*# sourceMappingURL=GalleryCard.css.map */

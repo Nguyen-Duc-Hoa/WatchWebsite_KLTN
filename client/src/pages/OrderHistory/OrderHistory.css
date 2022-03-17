@@ -1,0 +1,10 @@
+.orderHistory {
+  padding-top: 65px;
+}
+
+@media (max-width: 1006px) {
+  .orderHistory {
+    padding-top: 56px;
+  }
+}
+/*# sourceMappingURL=OrderHistory.css.map */

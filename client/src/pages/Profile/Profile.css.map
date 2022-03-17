@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,YAAY,CAAC;EACT,WAAW,EAAE,IAAI;EACjB,SAAS,EAAE,MAAM;EACjB,MAAM,EAAE,IAAI;CAIf;;AAHG,MAAM,EAAE,SAAS,EAAE,MAAM;EAJ7B,AAAA,YAAY,CAAC;IAKL,WAAW,EAAE,IAAI;GAExB",
+    "sources": [
+        "Profile.scss"
+    ],
+    "names": [],
+    "file": "Profile.css"
+}

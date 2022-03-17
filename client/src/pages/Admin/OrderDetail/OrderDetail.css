@@ -1,0 +1,58 @@
+.orderDetailAdmin {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.orderDetailAdmin .heading {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.orderDetailAdmin .title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.orderDetailAdmin .personalInfo,
+.orderDetailAdmin .payment {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.orderDetailAdmin .personalInfo .shippedBy,
+.orderDetailAdmin .personalInfo .paymentDate,
+.orderDetailAdmin .payment .shippedBy,
+.orderDetailAdmin .payment .paymentDate {
+  text-align: right;
+}
+
+.orderDetailAdmin .subtotal,
+.orderDetailAdmin .total,
+.orderDetailAdmin .shippingCost {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  max-width: 350px;
+  margin-top: 14px;
+}
+
+.orderDetailAdmin .subtotal .price,
+.orderDetailAdmin .total .price,
+.orderDetailAdmin .shippingCost .price {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.orderDetailAdmin button.ant-btn-primary {
+  margin-top: 14px;
+}
+/*# sourceMappingURL=OrderDetail.css.map */

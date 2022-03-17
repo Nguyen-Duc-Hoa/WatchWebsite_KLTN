@@ -1,0 +1,18 @@
+.checkout {
+    padding-top: 65px;
+    @media (max-width: 1006px) {
+        padding-top: 56px;
+    }
+    .checkout__content {
+        display: flex;
+        justify-content: space-between;
+        padding: 35px;
+        @media (max-width: 1080px) {
+            padding: 2rem 10rem;
+            flex-direction: column-reverse;
+        }
+        @media (max-width: 860px) {
+            padding: 2rem 0;
+        }
+    }
+}

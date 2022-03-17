@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,uBAAuB,CAAC;EACpB,KAAK,EAAE,KAAK;CACf;;AAED,AAAA,cAAc,AAAA,uBAAuB,AAAA,MAAM,CAAC;EACxC,KAAK,EAAE,KAAK;CACf",
+    "sources": [
+        "Menu.scss"
+    ],
+    "names": [],
+    "file": "Menu.css"
+}

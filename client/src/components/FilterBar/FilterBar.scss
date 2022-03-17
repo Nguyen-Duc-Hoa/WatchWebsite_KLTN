@@ -1,0 +1,72 @@
+.filterBar {
+    width: 340px;
+    padding-right: 40px;
+    margin-bottom: 30px;
+    button {
+        span {
+            margin-left: 5px;
+        }
+    }
+    .hide {
+        display: none;
+    }
+    .ant-checkbox-wrapper,
+    .ant-radio-wrapper {
+        span {
+            color: #666666;
+            padding: 0;
+            font-size: 16px;
+            line-height: 24px;
+        }
+    }
+    .ant-select-selection-item {
+        color: #000;
+    }
+    .ant-radio,
+    .ant-checkbox {
+        display: none;
+    }
+    .ant-checkbox-wrapper,
+    .ant-radio-wrapper {
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 1.5px;
+            background-color: #000;
+            bottom: 0;
+            transition: width 0.3s;
+        }
+        &:hover {
+            &::before {
+                width: 100%;
+            }
+            span {
+                color: #000;
+            }
+        }
+    }
+    .ant-radio-wrapper-checked,
+    .ant-checkbox-wrapper-checked {
+        span {
+            color: #000;
+            text-shadow: 0.01px 0 black;
+        }
+    }
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+        border: 1px solid #000;
+        outline: none;
+    }
+    .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+        box-shadow: none;
+        border: none;
+    }
+    .heading {
+        font-size: 20px;
+        font-weight: 500;
+        margin-bottom: 12px;
+    }
+}
+
+

@@ -1,0 +1,48 @@
+@mixin contentBlock() {
+    width: 50%;
+    margin: 0 40px;
+}
+
+@mixin screenSmaller750px {
+    width: 100%;
+    padding: 0 16px;
+    margin: 0;
+}
+
+.login {
+    padding-top: 65px;
+    @media (max-width: 1006px) {
+        padding-top: 56px;
+    }
+    .login__body {
+        display: flex;
+        max-width: 760px;
+        margin: auto;
+        @media (max-width: 750px) {
+            flex-direction: column;
+        }
+        .heading {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+        .login__form {
+            @include contentBlock();
+            @media (max-width: 1008px) {
+                margin: 0 16px;
+            }
+            @media (max-width: 750px) {
+                @include screenSmaller750px();
+            }
+        }
+        .login__newUser {
+            @include contentBlock();
+            @media (max-width: 1008px) {
+                margin: 0 16px;
+            }
+            @media (max-width: 750px) {
+                @include screenSmaller750px();
+            }
+        }
+    }
+}

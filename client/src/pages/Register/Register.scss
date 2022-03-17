@@ -1,0 +1,17 @@
+.register {
+    padding-top: 65px;
+    @media (max-width: 1006px) {
+        padding-top: 56px;
+    }
+    .heading {
+        font-size: 22px;
+        font-weight: 500;
+        margin-bottom: 16px;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .register__form {
+        max-width: 380px;
+        margin: auto;
+    }
+}

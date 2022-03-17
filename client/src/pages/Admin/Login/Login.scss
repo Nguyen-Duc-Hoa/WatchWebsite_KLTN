@@ -1,0 +1,38 @@
+.wrapper {
+    width: 100%;
+    height: 100vh;
+    background-color: #f0f2f5;
+    .adminLogin {
+        background-color: white;
+        max-width: 500px;
+        transform: translateY(25%);
+        padding: 25px 16px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        border-radius: 20px;
+        margin: auto;
+        .welcomeHeader {
+            img {
+                max-width: 100px;
+                margin: auto;
+                display: inherit;
+                margin-bottom: 12px;
+            }
+            .heading {
+                font-size: 40px;
+                font-weight: 700;
+                text-transform: uppercase;
+                text-align: center;
+            }
+        }
+        .formLogin {
+            padding: 20px 20px;
+            .ant-input-affix-wrapper {
+                border: none;
+                border-bottom: 1px solid #d9d9d9;
+            }
+            .ant-input-affix-wrapper-focused {
+                box-shadow: 0 2px 0px 0px rgb(0 0 0 / 20%);
+            }
+        }
+    }
+}

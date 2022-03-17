@@ -1,0 +1,62 @@
+.orderDetail {
+  padding-top: 65px;
+  max-width: 1200px;
+  padding-bottom: 36px;
+  margin: auto;
+}
+
+@media (max-width: 1006px) {
+  .orderDetail {
+    padding-top: 56px;
+  }
+}
+
+.orderDetail .heading {
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+
+.orderDetail .orderItem {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-size: 16px;
+}
+
+.orderDetail .orderItem .title {
+  font-weight: 600;
+}
+
+.orderDetail .orderItem .left {
+  color: #1890ff;
+}
+
+.orderDetail .orderItem .right {
+  color: #eb2f96;
+}
+
+.orderDetail .orderItem .name {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.orderDetail .vertical {
+  display: block;
+}
+
+.orderDetail .total {
+  float: right;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.orderDetail .total span {
+  font-weight: 400;
+  margin-right: 12px;
+}
+/*# sourceMappingURL=OrderDetail.css.map */
