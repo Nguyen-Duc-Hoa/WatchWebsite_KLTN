@@ -37,5 +37,7 @@ namespace WatchWebsite_TLCN.Entities
 
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
+
+        public int State { get; set; } = 0;
     }
 }
