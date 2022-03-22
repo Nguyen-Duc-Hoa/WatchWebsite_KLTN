@@ -20,12 +20,17 @@ const breadCrumbRoute = [
 // recreating the Stripe object on every render.
 // loadStripe is initialized with a fake API key.
 const stripePromise = loadStripe(
-  //   "pk_test_51JLIp1IZZBbB9jhOSEmU0HhjLSotrTVGMU7pFcr6wXn75rgcuwHDMFHSQcjzz8OI4f3UosYsfnMKD0qNKLeKiCTU003nNWpvLF"
   `${process.env.REACT_APP_STRIPE_PROMISE}`
 );
 
 function Shipping({ phone, address, cart }) {
   const [payMethod, setPaymethod] = useState("");
+
+  useEffect(() => {
+    if(payMethod === "Zalopay") {
+      console.log('redirect url')
+    }
+  }, [payMethod])
 
   if (cart.length === 0) {
     return <Redirect to="/" />;
@@ -59,17 +64,17 @@ function Shipping({ phone, address, cart }) {
             <div className="price">Free</div>
           </div>
           <div className="heading">Payment</div>
-          <Space style={{marginBottom: 20}}>
-            <Button
-              onClick={() => choosePayMethod("Stripe")}
-              type="primary"
-              icon={<SiStripe style={{ marginRight: "8px" }} />}
-            >
-              Stripe
-            </Button>
-            <Button type="primary" onClick={() => choosePayMethod("Zalopay")}>
-              Zalo pay
-            </Button>
+          <Space style={{marginBottom: 20}} direction="horizontal">
+            <div className="paymethod" onClick={() => choosePayMethod("Stripe")}>
+              <div className="left">
+                <img src="https://woocommerce.com/wp-content/uploads/2011/12/stripe-logo-blue.png" alt="" />
+              </div>
+            </div>
+            <div className="paymethod" onClick={() => choosePayMethod("Zalopay")}>
+              <div className="left">
+                <img src="https://upload.wikimedia.org/wikipedia/vi/7/77/ZaloPay_Logo.png" alt="" />
+              </div>
+            </div>
           </Space>
           {payMethod === "Stripe" && (
             <Elements stripe={stripePromise}>

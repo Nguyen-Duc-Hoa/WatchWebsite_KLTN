@@ -1,18 +1,41 @@
 .form-order {
-    width: 50%;
-    padding: 0 2.5rem;
-    .heading {
-        font-size: 1.5rem;
-        margin-bottom: 1.2rem;
+  width: 50%;
+  padding: 0 2.5rem;
+  .heading {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .voucher-list {
+    margin-bottom: 1rem;
+    .voucher-item {
+      margin-bottom: 1rem;
+      display: flex;
+      font-size: 1rem;
+      align-items: center;
+      padding: 5px 10px;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      border-radius: 5px;
+      width: 60%;
+      min-width: 330px;
+      .left {
+        flex: 1;
+      }
+      .right {
+        .copy {
+          cursor: pointer;
+          padding: 10px;
+        }
+      }
     }
-    @media (max-width: 1080px) {
-        width: 100%;
-        padding: 0;
-    }
-    @media (max-width: 860px) {
-        padding: 0;
-    }
-    @media (max-width: 590px) {
-        width: 100%;
-    }
+  }
+  @media (max-width: 1080px) {
+    width: 100%;
+    padding: 0;
+  }
+  @media (max-width: 860px) {
+    padding: 0;
+  }
+  @media (max-width: 590px) {
+    width: 100%;
+  }
 }

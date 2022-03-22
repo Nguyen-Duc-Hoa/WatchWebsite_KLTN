@@ -6,26 +6,7 @@ import CheckoutCard from "./CheckoutCard/CheckoutCard";
 import { useWindowDimensions } from "../../hook/useWindowDemension";
 import { connect } from "react-redux";
 
-const products = [
-  {
-    image:
-      "https://cdn.shopify.com/s/files/1/1063/3618/products/iwc-big-pilots_360x.png?v=1568783338",
-    name: "Cosmonaute",
-    price: 395.4,
-    number: 1,
-    brand: "Casio",
-  },
-  {
-    image:
-      "https://cdn.shopify.com/s/files/1/1063/3618/products/iwc-big-pilots_360x.png?v=1568783338",
-    name: "Cosmonaute",
-    price: 395.4,
-    number: 3,
-    brand: "Casio",
-  },
-];
-
-function CheckoutProducts({ cart, total }) {
+function CheckoutProducts({ cart, total, amount, voucherDiscount }) {
   const windowDimensions = useWindowDimensions();
   const [resizeFlag, setResizeFlag] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
@@ -72,10 +53,16 @@ function CheckoutProducts({ cart, total }) {
           <div>Shipping</div>
           <p>Free</p>
         </div>
+        {voucherDiscount !== 0 && (
+          <div className="shipping">
+            <div>Voucher</div>
+            <p>${voucherDiscount}</p>
+          </div>
+        )}
         <div className="underline"></div>
         <div className="total">
           <div>Total</div>
-          <p>${total}</p>
+          <p>${total - voucherDiscount}</p>
         </div>
       </div>
     </div>
@@ -85,7 +72,8 @@ function CheckoutProducts({ cart, total }) {
 const mapStateToProps = (state) => {
   return {
     cart: state.cart.cart,
-    total: state.cart.total
+    total: state.cart.total,
+    voucherDiscount: state.order.voucherDiscount
   };
 };
 

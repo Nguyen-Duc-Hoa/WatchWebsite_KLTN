@@ -4,6 +4,8 @@ const intialState = {
   address: null,
   name: null,
   phone: null,
+  voucherCode: null,
+  voucherDiscount: 0
 };
 
 const orderReducer = (state = intialState, action) => {

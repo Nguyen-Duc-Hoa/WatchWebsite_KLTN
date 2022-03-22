@@ -4,6 +4,7 @@ import "./CheckoutForm.scss";
 import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import * as actionTypes from "../../store/actions/actionTypes";
+import { BiCopy } from "react-icons/bi";
 
 const formItemLayout = {
   labelCol: {
@@ -16,7 +17,7 @@ const formItemLayout = {
 
 function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   const [form] = Form.useForm();
-  const history = useHistory()
+  const history = useHistory();
   useEffect(() => {
     if (orderInfo.name || orderInfo.address || orderInfo.phone) {
       form.setFieldsValue({
@@ -34,8 +35,11 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   }, []);
 
   const onFinish = (values) => {
+    if (values.voucherCode.trim() !== "") {
+      values["voucherDiscount"] = 8.5;
+    }
     onSetInfoOrder(values);
-    history.push('/checkout/payment')
+    history.push("/checkout/payment");
   };
 
   return (
@@ -77,6 +81,45 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
         >
           <Input placeholder="Phone" />
         </Form.Item>
+
+        <Form.Item name="voucherCode">
+          <Input placeholder="Your voucher" />
+        </Form.Item>
+
+        <div className="voucher-list">
+          <div className="voucher-item">
+            <div className="left">
+              <div className="name">Voucher 1</div>
+              <div className="value">Value: $8.50</div>
+              <div className="date">Date: 3/22/2022 - 4/22/2022</div>
+            </div>
+            <div className="right">
+              <div
+                className="copy"
+                title="Click to copy"
+                onClick={() => navigator.clipboard.writeText("voucher code")}
+              >
+                <BiCopy style={{ fontSize: "1.5rem" }} />
+              </div>
+            </div>
+          </div>
+          <div className="voucher-item">
+            <div className="left">
+              <div className="name">Voucher 1</div>
+              <div className="value">Value: $8.50</div>
+              <div className="date">Date: 3/22/2022 - 4/22/2022</div>
+            </div>
+            <div className="right">
+              <div
+                className="copy"
+                title="Click to copy"
+                onClick={() => navigator.clipboard.writeText("voucher code")}
+              >
+                <BiCopy style={{ fontSize: "1.5rem" }} />
+              </div>
+            </div>
+          </div>
+        </div>
 
         <Form.Item>
           <Space>
