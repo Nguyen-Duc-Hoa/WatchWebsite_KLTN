@@ -21,6 +21,9 @@ namespace WatchWebsite_TLCN.Entities
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<Rate> Rates { get; set; }
+        public DbSet<SubImage> SubImages { get; set; }
 
         public MyDBContext(DbContextOptions options) : base(options)
         {
@@ -95,8 +98,29 @@ namespace WatchWebsite_TLCN.Entities
             //Name of Product is unique
             modelBuilder.Entity<Product>().HasIndex(u => new { u.Name })
             .IsUnique(true);
-        }
 
+            modelBuilder.Entity<Voucher>().HasIndex(u => new { u.Code })
+            .IsUnique(true);
+
+            modelBuilder.Entity<Rate>().HasKey(u => new
+            {
+                u.UserId,
+                u.ProductId
+            });
+
+            modelBuilder.Entity<Rate>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.Rates)
+                .HasForeignKey(u => u.UserId);
+
+            modelBuilder.Entity<Rate>()
+                .HasOne(u => u.Product)
+                .WithMany(x => x.Rates)
+                .HasForeignKey(x => x.ProductId);
+
+            modelBuilder.Entity<SubImage>().HasKey(u => new { u.Id});
+        }
+       
 
     }
 }

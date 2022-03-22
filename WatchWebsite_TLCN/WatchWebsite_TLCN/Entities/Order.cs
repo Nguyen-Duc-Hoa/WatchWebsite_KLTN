@@ -40,9 +40,13 @@ namespace WatchWebsite_TLCN.Entities
         //[Required]
         public string DeliveryStatus { get; set; } = Constant.status[0];
 
+        public int CodeVoucher { get; set; }
+
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
+        [ForeignKey("CodeVoucher")]
+        public virtual Voucher Voucher { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
 
     }
