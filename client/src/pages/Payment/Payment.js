@@ -7,6 +7,8 @@ import "./Payment.scss";
 import PaymentForm from "../../components/PaymentForm/PaymentForm";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
+import { Button, Space } from "antd";
+import { SiStripe } from "react-icons/si";
 
 const breadCrumbRoute = [
   { link: "/", name: "Home" },
@@ -18,14 +20,21 @@ const breadCrumbRoute = [
 // recreating the Stripe object on every render.
 // loadStripe is initialized with a fake API key.
 const stripePromise = loadStripe(
-//   "pk_test_51JLIp1IZZBbB9jhOSEmU0HhjLSotrTVGMU7pFcr6wXn75rgcuwHDMFHSQcjzz8OI4f3UosYsfnMKD0qNKLeKiCTU003nNWpvLF"
+  //   "pk_test_51JLIp1IZZBbB9jhOSEmU0HhjLSotrTVGMU7pFcr6wXn75rgcuwHDMFHSQcjzz8OI4f3UosYsfnMKD0qNKLeKiCTU003nNWpvLF"
   `${process.env.REACT_APP_STRIPE_PROMISE}`
 );
 
 function Shipping({ phone, address, cart }) {
+  const [payMethod, setPaymethod] = useState("");
+
   if (cart.length === 0) {
     return <Redirect to="/" />;
   }
+
+  const choosePayMethod = (method) => {
+    setPaymethod(method);
+  };
+
   return (
     <section className="shipping">
       <Breadcrumbing route={breadCrumbRoute} />
@@ -50,9 +59,23 @@ function Shipping({ phone, address, cart }) {
             <div className="price">Free</div>
           </div>
           <div className="heading">Payment</div>
-          <Elements stripe={stripePromise}>
-            <PaymentForm />
-          </Elements>
+          <Space style={{marginBottom: 20}}>
+            <Button
+              onClick={() => choosePayMethod("Stripe")}
+              type="primary"
+              icon={<SiStripe style={{ marginRight: "8px" }} />}
+            >
+              Stripe
+            </Button>
+            <Button type="primary" onClick={() => choosePayMethod("Zalopay")}>
+              Zalo pay
+            </Button>
+          </Space>
+          {payMethod === "Stripe" && (
+            <Elements stripe={stripePromise}>
+              <PaymentForm />
+            </Elements>
+          )}
         </div>
         <CheckoutProducts />
       </div>
