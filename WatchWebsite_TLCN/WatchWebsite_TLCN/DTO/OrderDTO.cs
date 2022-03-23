@@ -22,4 +22,13 @@ namespace WatchWebsite_TLCN.DTO
         public int OrderId { get; set; }
         public string DeliveryStatus { get; set; }
     }
+
+    public class PaymentZalo
+    {
+        public int UserId { get; set; }
+        public string Address { get; set; }
+        public string Name { get; set; }
+        public string Phone { get; set; }
+        public List<ProductItem> Products { get; set; }
+    }
 }
