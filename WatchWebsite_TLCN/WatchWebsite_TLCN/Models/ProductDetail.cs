@@ -28,5 +28,7 @@ namespace WatchWebsite_TLCN.Models
         public float Size { get; set; }
 
         public string Energy { get; set; }
+
+        public List<byte[]> SubImage { get; set; }
     }
 }
