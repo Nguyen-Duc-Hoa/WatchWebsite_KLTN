@@ -58,17 +58,31 @@ namespace WatchWebsite_TLCN.Controllers
         [Route("ProductDetail")]
         public async Task<ActionResult<Product>> GetProductDetail(string id)
         {
+
             var product = await _unitOfWork.Products.Get(
                 expression: p => p.Id == id, 
-                includes: new List<string> { "Brand", "Size", "Energy", "GetWaterResistance", "Material" }) ;
+                includes: new List<string> { "Brand", "Size", "Energy", "GetWaterResistance", "Material", "SubImages" }) ;
 
             if (product == null)
             {
                 return NotFound();
             }
 
+            //ProductDetail productDetail = await GetProductDetailLogicAsync(product);
             return product;
         }
+
+        //private async Task<ProductDetail> GetProductDetailLogicAsync(Product product)
+        //{
+        //    ProductDetail productDetail = new ProductDetail();
+            
+        //    List<SubImage> lstSubImage = await _unitOfWork.SubImage.GetAll(
+        //        expression: x => x.ProductId == product.Id);
+        //    foreach(var subImage in lstSubImage)
+        //    {
+
+        //    }    
+        //}
 
 
         //[Authorize(Roles = "Admin,Employee")]

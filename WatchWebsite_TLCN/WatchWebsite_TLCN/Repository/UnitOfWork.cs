@@ -24,6 +24,11 @@ namespace WatchWebsite_TLCN.Repository
         private IGenericRepository<WaterResistance> _waterResistances;
         private IGenericRepository<Role> _roles;
         private IGenericRepository<User_Role> _userRole;
+        private IGenericRepository<SubImage> _subImage;
+
+        private IGenericRepository<Voucher> _voucher;
+        private IGenericRepository<Rate> _rate;
+
         public UnitOfWork(MyDBContext context)
         {
             _context = context;
@@ -179,6 +184,42 @@ namespace WatchWebsite_TLCN.Repository
                     _waterResistances = new GenericRepository<WaterResistance>(_context);
                 }
                 return _waterResistances;
+            }
+        }
+
+        public IGenericRepository<SubImage> SubImages
+        {
+            get
+            {
+                if (_subImage == null)
+                {
+                    _subImage = new GenericRepository<SubImage>(_context);
+                }
+                return _subImage;
+            }
+        }
+
+        public IGenericRepository<Voucher> Vouchers
+        {
+            get
+            {
+                if (_voucher == null)
+                {
+                    _voucher = new GenericRepository<Voucher>(_context);
+                }
+                return _voucher;
+            }
+        }
+
+        public IGenericRepository<Rate> Rates
+        {
+            get
+            {
+                if (_rate == null)
+                {
+                    _rate = new GenericRepository<Rate>(_context);
+                }
+                return _rate;
             }
         }
 

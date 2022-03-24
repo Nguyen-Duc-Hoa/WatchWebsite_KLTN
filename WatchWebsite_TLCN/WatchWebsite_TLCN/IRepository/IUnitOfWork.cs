@@ -21,6 +21,9 @@ namespace WatchWebsite_TLCN.IRepository
         IGenericRepository<WaterResistance> WaterResistances { get; }
         IGenericRepository<Role> Roles { get; }
         IGenericRepository<User_Role> UserRole { get; }
+        IGenericRepository<SubImage> SubImages { get; }
+        IGenericRepository<Voucher> Vouchers { get; }
+        IGenericRepository<Rate> Rates { get; }
         Task Save();
     }
 }

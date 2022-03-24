@@ -14,4 +14,12 @@ namespace WatchWebsite_TLCN.Models
         public string Id { get; set; }
         public int Quantity { get; set; }
     }
+
+    public class ZaloItem
+    {
+        public string itemid { get; set; }
+        public string itemname { get; set; }
+        public float itemprice { get; set; }
+        public int itemquantity { get; set; }
+    }
 }
