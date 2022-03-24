@@ -27,7 +27,14 @@ const cardStyle = {
   },
 };
 
-function PaymentForm({ cart, orderInfo, token, idUser, onFetchCart }) {
+function PaymentForm({
+  cart,
+  orderInfo,
+  token,
+  idUser,
+  onFetchCart,
+  voucherCode,
+}) {
   const history = useHistory();
   const [clientSecret, setClientSecret] = useState("");
 
@@ -46,6 +53,7 @@ function PaymentForm({ cart, orderInfo, token, idUser, onFetchCart }) {
       return {
         id: element.Id,
         quantity: element.Quantity,
+        voucherCode: voucherCode,
       };
     });
     // Create PaymentIntent as soon as the page loads
@@ -57,6 +65,7 @@ function PaymentForm({ cart, orderInfo, token, idUser, onFetchCart }) {
       },
       body: JSON.stringify({
         products: items,
+        voucherCode: voucherCode,
       }),
     })
       .then((res) => res.json())
@@ -147,7 +156,9 @@ function PaymentForm({ cart, orderInfo, token, idUser, onFetchCart }) {
           Pay now
         </Button>
 
-        <Button size="large" onClick={history.goBack}>Return to information</Button>
+        <Button size="large" onClick={history.goBack}>
+          Return to information
+        </Button>
       </Space>
     </form>
   );
@@ -159,6 +170,7 @@ const mapStateToProps = (state) => {
     orderInfo: state.order,
     token: state.auth.token,
     idUser: state.auth.id,
+    voucherCode: state.order.voucherCode,
   };
 };
 

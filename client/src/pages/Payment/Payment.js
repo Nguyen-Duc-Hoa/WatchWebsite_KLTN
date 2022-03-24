@@ -8,7 +8,6 @@ import PaymentForm from "../../components/PaymentForm/PaymentForm";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { Button, Space } from "antd";
-import { SiStripe } from "react-icons/si";
 
 const breadCrumbRoute = [
   { link: "/", name: "Home" },

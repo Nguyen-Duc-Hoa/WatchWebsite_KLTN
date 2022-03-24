@@ -6,6 +6,11 @@
 
 .product {
     padding-top: 65px;
+    .swiper-pagination-bullet {
+        background-color: rgba(0, 0, 0, 0.8);
+        width: 10px;
+        height: 10px;
+    }
     @media (max-width: 1006px) {
         padding-top: 56px;
     }

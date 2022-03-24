@@ -22,6 +22,18 @@ import {
 import { connect } from "react-redux";
 import { notify } from "../../helper/notify";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/swiper.min.css";
+import "swiper/components/pagination/pagination.min.css";
+
+// import required modules
+import SwiperCore, { Pagination } from "swiper/core";
+
+// install Swiper modules
+SwiperCore.use([Pagination]);
+
 const { TabPane } = Tabs;
 
 function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
@@ -42,7 +54,6 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     fetchComments();
     fetchProductDetail();
   }, []);
-
 
   const fetchComments = () => {
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Comments?productId=${id}`, {
@@ -85,19 +96,49 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     }
   };
 
-  const commentTotal = comments.reduce((prev, curr) => prev + curr.Replies.length, 0) + comments.length
+  const commentTotal =
+    comments.reduce((prev, curr) => prev + curr.Replies.length, 0) +
+    comments.length;
 
   return (
     <section className="product">
       <Breadcrumbing route={breadCrumbRoute} />
       <div className="content">
         <div className="image">
-          <Image
-            width={"100%"}
-            src={`data:image/png;base64,${
-              productDetail && productDetail.Image
-            }`}
-          />
+          <Swiper
+            loop={true}
+            loopFillGroupWithBlank={true}
+            spaceBetween={10}
+            pagination={{
+              clickable: true,
+            }}
+            slidesPerView={1}
+          >
+            <SwiperSlide key={0}>
+              <Image
+                width={"100%"}
+                src={`data:image/png;base64,${
+                  productDetail && productDetail.Image
+                }`}
+              />
+            </SwiperSlide>
+            <SwiperSlide>
+              <Image
+                width={"100%"}
+                src={`data:image/png;base64,${
+                  productDetail && productDetail.Image
+                }`}
+              />
+            </SwiperSlide>
+            <SwiperSlide>
+              <Image
+                width={"100%"}
+                src={`data:image/png;base64,${
+                  productDetail && productDetail.Image
+                }`}
+              />
+            </SwiperSlide>
+          </Swiper>
         </div>
         <div className="info">
           <div className="name">{productDetail && productDetail.Name}</div>

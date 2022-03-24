@@ -30,7 +30,7 @@ function CheckoutProducts({ cart, total, amount, voucherDiscount }) {
             Show order summary{" "}
             <span>{showHeader ? <IoIosArrowDown /> : <IoIosArrowUp />}</span>
           </div>
-          <p>${total}</p>
+          <p>${total - voucherDiscount}</p>
         </div>
       )}
       <div className={`detail__body ${showHeader && "active"}`}>

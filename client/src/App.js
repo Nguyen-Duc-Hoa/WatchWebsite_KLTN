@@ -1,26 +1,13 @@
 import "./App.less";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
-// import Products from "./pages/Products/Products";
-// import Product from "./pages/Product/Product";
-// import Checkout from "./pages/Checkout/Checkout";
-// import Payment from "./pages/Payment/Payment";
-// import Login from "./pages/Login/Login";
-// import Register from "./pages/Register/Register";
-// import OrderHistory from "./pages/OrderHistory/OrderHistory";
-// import OrderDetail from "./pages/OrderDetail/OrderDetail";
-// import AdminMain from "./pages/Admin/AdminMain/AdminMain";
 import PublicRoute from "./components/Routes/PublicRoute";
 import UserLayout from "./components/Layouts/UserLayout";
-// import Profile from "./pages/Profile/Profile";
-// import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
-// import LoginAdmin from "./pages/Admin/Login/Login";
 import * as actions from "./store/actions/index";
 import { connect } from "react-redux";
 import { useEffect, useState, Suspense, lazy } from "react";
 import PrivateRoute from "./components/Routes/PrivateRoute";
 import PageLoading from "./components/PageLoading/PageLoading";
-// import ChangePassword from "./pages/ChangePassword/ChangePassword";
 
 const Home = lazy(() => import("./pages/Home/Home"));
 const Product = lazy(() => import("./pages/Product/Product"));

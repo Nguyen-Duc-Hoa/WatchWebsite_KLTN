@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useWindowDimensions } from "../../hook/useWindowDemension";
-import * as actions from "../../store/actions/index";
 import "./BrandCollection.scss";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
