@@ -16,7 +16,7 @@ using WatchWebsite_TLCN.Intefaces;
 using Microsoft.AspNetCore.Authorization;
 using ZaloPay.Helper; // HmacHelper, RSAHelper, HttpHelper, Utils (tải về ở mục DOWNLOADS)
 using ZaloPay.Helper.Crypto;
-using Newtonsoft.Json; // https://www.newtonsoft.com/json
+using System.Net.Http;
 
 namespace WatchWebsite_TLCN.Controllers
 {
@@ -38,12 +38,13 @@ namespace WatchWebsite_TLCN.Controllers
         static string key1 = "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q";
         static string createOrderUrl = "https://sandbox.zalopay.com.vn/v001/tpe/createorder";
 
-        [HttpGet]
+        [HttpPost]
+        [Route("createOrder")]
         public async Task<IActionResult> ZaloPayAsync([FromBody] PaymentZalo info)
         {
             var transid = Guid.NewGuid().ToString();
             var embeddata = new { merchantinfo = "embeddata123" };
-            object[] product = await CalculateOrderAmount(info.Products);
+            object[] product = await CalculateOrderAmount(info.Products, info.VoucherCode);
             var items = new List<ZaloItem>();
             string amount = "0";
             if(product != null && product[0] != null)
@@ -51,7 +52,7 @@ namespace WatchWebsite_TLCN.Controllers
                 amount = product[1].ToString();
                 items = (List<ZaloItem>)product[0];
             }
-            var param = new Dictionary<string, string>();
+                var param = new Dictionary<string, string>();
 
             param.Add("appid", appid);
             param.Add("appuser", info.Name);
@@ -70,11 +71,6 @@ namespace WatchWebsite_TLCN.Controllers
             param.Add("mac", HmacHelper.Compute(ZaloPayHMAC.HMACSHA256, key1, data));
 
             var result = await HttpHelper.PostFormAsync(createOrderUrl, param);
-
-            foreach (var entry in result)
-            {
-                Console.WriteLine("{0} = {1}", entry.Key, entry.Value);
-            }
 
             return Ok(result);
         }
@@ -123,10 +119,27 @@ namespace WatchWebsite_TLCN.Controllers
             return Ok(result);
         }
 
-        private async Task<object[]> CalculateOrderAmount(List<ProductItem> products)
+        private async Task<object[]> CalculateOrderAmount(List<ProductItem> products, string voucherCode)
         {
             float total = 0;
+            DateTime now = DateTime.Now;
             List<ZaloItem> items = new List<ZaloItem>();
+            float discount = 0;
+            Dictionary<string, float> dataJson;
+            Voucher voucher = new Voucher();
+            if (voucherCode.Trim() != "")
+            {
+                voucher = await _unitOfWork.Vouchers.Get(expression: v => v.Code == voucherCode && v.StartDate <= now && v.EndDate >= now && v.State == true);
+                discount = voucher.Discount;
+            }
+            using(var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("https://free.currconv.com/api/v7/convert?q=USD_VND&compact=ultra&apiKey=0850bbd4eefdb86b5aed"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    dataJson = JsonConvert.DeserializeObject<Dictionary<string, float>>(apiResponse);
+                }
+            }
             foreach (var item in products)
             {
                 var prod = await _unitOfWork.Products.Get(p => p.Id == item.Id);
@@ -135,11 +148,14 @@ namespace WatchWebsite_TLCN.Controllers
                 {
                     itemid = prod.Id,
                     itemname = prod.Name,
-                    itemprice = prod.Price,
-                    itemquantity = item.Quantity
+                    itemprice = prod.Price * dataJson["USD_VND"],
+                    itemquantity = item.Quantity,
+                    itemvouchercode = voucherCode,
+                    itemvoucherdiscount = voucher != null ? voucher.Discount : 0
                 });
-                total = total + prod.Price * item.Quantity;
+                total = total + prod.Price * item.Quantity;  
             }
+            total = (float)Math.Truncate((total - discount) * dataJson["USD_VND"]);
             return new object[] { items, total };
         }
 

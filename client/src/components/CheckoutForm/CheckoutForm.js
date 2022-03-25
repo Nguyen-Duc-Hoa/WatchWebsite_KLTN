@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Space } from "antd";
 import "./CheckoutForm.scss";
 import { connect } from "react-redux";
@@ -18,6 +18,17 @@ const formItemLayout = {
 function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   const [form] = Form.useForm();
   const history = useHistory();
+  const [vouchers, setVouchers] = useState([]);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/vouchers`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setVouchers(data);
+      });
+  }, []);
+
   useEffect(() => {
     if (orderInfo.name || orderInfo.address || orderInfo.phone) {
       form.setFieldsValue({
@@ -36,7 +47,8 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
 
   const onFinish = (values) => {
     if (values.voucherCode.trim() !== "") {
-      values["voucherDiscount"] = 8.5;
+      console.log(values)
+      values["voucherDiscount"] = vouchers.find(voucher => voucher.Code === values.voucherCode).Discount;
     }
     onSetInfoOrder(values);
     history.push("/checkout/payment");
@@ -87,38 +99,30 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
         </Form.Item>
 
         <div className="voucher-list">
-          <div className="voucher-item">
-            <div className="left">
-              <div className="name">Voucher 1</div>
-              <div className="value">Value: $8.50</div>
-              <div className="date">Date: 3/22/2022 - 4/22/2022</div>
-            </div>
-            <div className="right">
-              <div
-                className="copy"
-                title="Click to copy"
-                onClick={() => navigator.clipboard.writeText("voucher code")}
-              >
-                <BiCopy style={{ fontSize: "1.5rem" }} />
+          {vouchers.length > 0 &&
+            vouchers.map((voucher) => (
+              <div key={voucher.VoucherId} className="voucher-item">
+                <div className="left">
+                  <div className="name">{voucher.Name}</div>
+                  <div className="value">Value: ${voucher.Discount}</div>
+                  <div className="date">
+                    Start Date: {new Date(voucher.StartDate).toDateString()}
+                  </div>
+                  <div className="date">
+                    End Date: {new Date(voucher.EndDate).toDateString()}
+                  </div>
+                </div>
+                <div className="right">
+                  <div
+                    className="copy"
+                    title="Click to copy"
+                    onClick={() => navigator.clipboard.writeText(voucher.Code)}
+                  >
+                    <BiCopy style={{ fontSize: "1.5rem" }} />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="voucher-item">
-            <div className="left">
-              <div className="name">Voucher 1</div>
-              <div className="value">Value: $8.50</div>
-              <div className="date">Date: 3/22/2022 - 4/22/2022</div>
-            </div>
-            <div className="right">
-              <div
-                className="copy"
-                title="Click to copy"
-                onClick={() => navigator.clipboard.writeText("voucher code")}
-              >
-                <BiCopy style={{ fontSize: "1.5rem" }} />
-              </div>
-            </div>
-          </div>
+            ))}
         </div>
 
         <Form.Item>

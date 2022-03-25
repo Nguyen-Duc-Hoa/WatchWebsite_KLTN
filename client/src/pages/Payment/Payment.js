@@ -18,18 +18,49 @@ const breadCrumbRoute = [
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
 // loadStripe is initialized with a fake API key.
-const stripePromise = loadStripe(
-  `${process.env.REACT_APP_STRIPE_PROMISE}`
-);
+const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PROMISE}`);
 
-function Shipping({ phone, address, cart }) {
+function Shipping({ cart, orderInfo, token, idUser, voucherCode }) {
   const [payMethod, setPaymethod] = useState("");
 
-  useEffect(() => {
-    if(payMethod === "Zalopay") {
-      console.log('redirect url')
-    }
-  }, [payMethod])
+  const makeZalopayReq = () => {
+    const items = cart.map((element) => {
+      return {
+        id: element.Id,
+        quantity: element.Quantity,
+      };
+    });
+    console.log({
+      userId: idUser,
+      name: orderInfo.name,
+      address: orderInfo.address,
+      phone: orderInfo.phone,
+      products: items,
+      voucherCode: voucherCode,
+    })
+    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/zalopay/createorder`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        userId: idUser,
+        name: orderInfo.name,
+        address: orderInfo.address,
+        phone: orderInfo.phone,
+        products: items,
+        voucherCode: voucherCode,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if(data.returncode === 1) {
+          window.location.href = data.orderurl
+        }
+      });
+  }
+
 
   if (cart.length === 0) {
     return <Redirect to="/" />;
@@ -47,12 +78,12 @@ function Shipping({ phone, address, cart }) {
           <div className="content__top">
             <div className="content__item content__item--first">
               <div className="title">Contact</div>
-              <div className="text">{phone}</div>
+              <div className="text">{orderInfo.phone}</div>
               <Link to="/checkout">Change</Link>
             </div>
             <div className="content__item">
               <div className="title">Ship to</div>
-              <div className="text">{address}</div>
+              <div className="text">{orderInfo.address}</div>
               <Link to="/checkout">Change</Link>
             </div>
           </div>
@@ -63,15 +94,27 @@ function Shipping({ phone, address, cart }) {
             <div className="price">Free</div>
           </div>
           <div className="heading">Payment</div>
-          <Space style={{marginBottom: 20}} direction="horizontal">
-            <div className="paymethod" onClick={() => choosePayMethod("Stripe")}>
+          <Space style={{ marginBottom: 20 }} direction="horizontal">
+            <div
+              className="paymethod"
+              onClick={() => choosePayMethod("Stripe")}
+            >
               <div className="left">
-                <img src="https://woocommerce.com/wp-content/uploads/2011/12/stripe-logo-blue.png" alt="" />
+                <img
+                  src="https://woocommerce.com/wp-content/uploads/2011/12/stripe-logo-blue.png"
+                  alt=""
+                />
               </div>
             </div>
-            <div className="paymethod" onClick={() => choosePayMethod("Zalopay")}>
+            <div
+              className="paymethod"
+              onClick={() => makeZalopayReq()}
+            >
               <div className="left">
-                <img src="https://upload.wikimedia.org/wikipedia/vi/7/77/ZaloPay_Logo.png" alt="" />
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/vi/7/77/ZaloPay_Logo.png"
+                  alt=""
+                />
               </div>
             </div>
           </Space>
@@ -89,10 +132,18 @@ function Shipping({ phone, address, cart }) {
 
 const mapStateToProps = (state) => {
   return {
-    phone: state.order.phone,
-    address: state.order.address,
     cart: state.cart.cart,
+    orderInfo: state.order,
+    token: state.auth.token,
+    idUser: state.auth.id,
+    voucherCode: state.order.voucherCode,
   };
 };
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     onFetchCart: (idUser, token) => dispatch(actions.fetchCart(idUser, token)),
+//   };
+// };
 
 export default connect(mapStateToProps)(Shipping);

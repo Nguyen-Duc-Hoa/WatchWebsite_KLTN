@@ -39,11 +39,10 @@ namespace WatchWebsite_TLCN.Controllers
             DateTime now = DateTime.Now;
 
             var lstVoucher = await _unitOfWork.Vouchers.GetAll(
-                expression: p => p.StartDate <= now && p.EndDate >= now);
+                expression: p => p.StartDate <= now && p.EndDate >= now && p.State == true);
             if (lstVoucher == null) return NotFound();
 
             return lstVoucher;
         }
-
     }
 }

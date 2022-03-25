@@ -74,11 +74,6 @@ namespace WatchWebsite_TLCN.Controllers
             return order;
         }
 
-        private Task<bool> OrderExists(int id)
-        {
-            return _unitOfWork.Orders.IsExist<int>(id);
-        }
-
         // POST: /api/Orders/CreateOrder
         [HttpPost]
         [Authorize]
@@ -137,13 +132,20 @@ namespace WatchWebsite_TLCN.Controllers
         public async Task<IActionResult> Create(PaymentIntentCreateRequest request)
         {
             var paymentIntents = new PaymentIntentService();
+            DateTime now = DateTime.Now;
             try
             {
+                float discount = 0;
+                if (request.voucherCode.Trim() != "")
+                {
+                    var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.Code == request.voucherCode && v.StartDate >= now && v.EndDate <= now && v.State == true);
+                    discount = voucher.Discount;
+                }
                 var paymentIntent = paymentIntents.Create(new PaymentIntentCreateOptions
                 {
-                    Amount = (long?)await CalculateOrderAmount(request.Products),
+                    Amount = (long?)((long?)await CalculateOrderAmount(request.Products) - discount),
                     Currency = "usd",
-                    PaymentMethodTypes = new List<string>{"card"}
+                    PaymentMethodTypes = new List<string> { "card" }
                 });
                 return Ok(new { clientSecret = paymentIntent.ClientSecret });
             }
@@ -155,12 +157,12 @@ namespace WatchWebsite_TLCN.Controllers
         private async Task<float> CalculateOrderAmount(List<ProductItem> products)
         {
             float total = 0;
-            foreach(var item in products)
+            foreach (var item in products)
             {
                 var prod = await _unitOfWork.Products.Get(p => p.Id == item.Id);
                 total = total + prod.Price * item.Quantity;
             }
-            return total*100;
+            return total * 100;
         }
 
         [HttpGet]
@@ -180,7 +182,7 @@ namespace WatchWebsite_TLCN.Controllers
         {
 
             var result = await _unitOfWork.Orders.GetAllWithPagination(
-                expression: p=>p.UserId == userid,
+                expression: p => p.UserId == userid,
                 orderBy: x => x.OrderBy(a => a.OrderDate),
                 pagination: new Pagination { CurrentPage = currentPage }
                 );
@@ -206,21 +208,21 @@ namespace WatchWebsite_TLCN.Controllers
             // Thong tin cua order
             var order = await _unitOfWork.Orders.Get(x => x.OrderId == orderid && x.UserId == userid);
 
-            if(order != null)
+            if (order != null)
             {
-                
+
                 //Lay danh sach cac san pham trong order
                 var orderDetails = _userOrder.GetOrderDetails(orderid);
-                return Ok(new 
-                { 
+                return Ok(new
+                {
                     OrderId = order.OrderId,
                     Address = order.Address,
-                    Phone = order.Phone,                
+                    Phone = order.Phone,
                 });
             }
 
             return NotFound();
-            
+
         }
 
         [Authorize]
@@ -229,7 +231,7 @@ namespace WatchWebsite_TLCN.Controllers
         public async Task<IActionResult> GetOrderDetail(int orderid)
         {
             // Thong tin cua order
-            var order = await _unitOfWork.Orders.Get(expression: x => x.OrderId == orderid, includes: new List<string> {"OrderDetails"});
+            var order = await _unitOfWork.Orders.Get(expression: x => x.OrderId == orderid, includes: new List<string> { "OrderDetails" });
 
             if (order != null)
             {
@@ -246,7 +248,7 @@ namespace WatchWebsite_TLCN.Controllers
         public async Task<IActionResult> UpdateStatus(OrderUpdateState order)
         {
             var dbOrder = await _unitOfWork.Orders.Get(o => o.OrderId == order.OrderId);
-            if(dbOrder != null)
+            if (dbOrder != null)
             {
                 dbOrder.DeliveryStatus = order.DeliveryStatus;
                 _unitOfWork.Orders.Update(dbOrder);

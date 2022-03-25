@@ -114,14 +114,6 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
             }}
             slidesPerView={1}
           >
-            <SwiperSlide key={0}>
-              <Image
-                width={"100%"}
-                src={`data:image/png;base64,${
-                  productDetail && productDetail.Image
-                }`}
-              />
-            </SwiperSlide>
             <SwiperSlide>
               <Image
                 width={"100%"}
@@ -138,6 +130,25 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
                 }`}
               />
             </SwiperSlide>
+            <SwiperSlide>
+              <Image
+                width={"100%"}
+                src={`data:image/png;base64,${
+                  productDetail && productDetail.Image
+                }`}
+              />
+            </SwiperSlide>
+            {productDetail &&
+              productDetail.SubImages.length !== 0 &&
+              productDetail.SubImages.map((subimage) => (
+                <Image
+                  key={subimage.Id}
+                  width={"100%"}
+                  src={`data:image/png;base64,${
+                    productDetail && subimage.Image
+                  }`}
+                />
+              ))}
           </Swiper>
         </div>
         <div className="info">

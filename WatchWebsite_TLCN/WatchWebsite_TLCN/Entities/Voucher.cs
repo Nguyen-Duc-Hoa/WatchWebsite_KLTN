@@ -30,7 +30,7 @@ namespace WatchWebsite_TLCN.Entities
         public string Code { get; set; }
 
         //[Required]
-        public int State { get; set; } = 0;
+        public bool State { get; set; } = true;
 
         public virtual ICollection<Order> Orders { get; set; }
     }
