@@ -19,7 +19,7 @@ namespace WatchWebsite_TLCN.DTO
 
     public class UserRequest : UserDTO
     {
-        public new byte[] Avatar { get; set; }
+        public new string Avatar { get; set; }
     }
 
     public class UserChangePassword

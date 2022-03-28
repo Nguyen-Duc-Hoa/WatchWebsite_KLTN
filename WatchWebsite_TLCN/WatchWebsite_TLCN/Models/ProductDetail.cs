@@ -13,7 +13,7 @@ namespace WatchWebsite_TLCN.Models
 
         public int Amount { get; set; }
 
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
 
         public string Description { get; set; }
 
@@ -29,6 +29,6 @@ namespace WatchWebsite_TLCN.Models
 
         public string Energy { get; set; }
 
-        public List<byte[]> SubImage { get; set; }
+        public List<string> SubImage { get; set; }
     }
 }

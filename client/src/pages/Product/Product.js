@@ -117,25 +117,19 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
             <SwiperSlide>
               <Image
                 width={"100%"}
-                src={`data:image/png;base64,${
-                  productDetail && productDetail.Image
-                }`}
+                src={productDetail && productDetail.Image}
               />
             </SwiperSlide>
             <SwiperSlide>
               <Image
                 width={"100%"}
-                src={`data:image/png;base64,${
-                  productDetail && productDetail.Image
-                }`}
+                src={productDetail && productDetail.Image}
               />
             </SwiperSlide>
             <SwiperSlide>
               <Image
                 width={"100%"}
-                src={`data:image/png;base64,${
-                  productDetail && productDetail.Image
-                }`}
+                src={productDetail && productDetail.Image}
               />
             </SwiperSlide>
             {productDetail &&
@@ -144,9 +138,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
                 <Image
                   key={subimage.Id}
                   width={"100%"}
-                  src={`data:image/png;base64,${
-                    productDetail && subimage.Image
-                  }`}
+                  src={productDetail && productDetail.Image}
                 />
               ))}
           </Swiper>

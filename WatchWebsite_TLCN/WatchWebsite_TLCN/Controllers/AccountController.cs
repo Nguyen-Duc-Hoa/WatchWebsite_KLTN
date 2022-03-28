@@ -115,13 +115,6 @@ namespace WatchWebsite_TLCN.Controllers
                 return Unauthorized();
             }
 
-            string avatar = null;
-            try
-            {
-                avatar = Convert.ToBase64String(user.Avatar);
-            }
-            catch { }
-
             return Ok(new
             {
                 Id = user.Id,
@@ -131,7 +124,7 @@ namespace WatchWebsite_TLCN.Controllers
                 Address = user.Address,
                 Phone = user.Phone,
                 Birthday = user.Birthday,
-                Avatar = avatar,
+                Avatar = user.Avatar,
                 Role = listRole,
                 Token = token.JwtToken
             });

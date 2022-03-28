@@ -41,7 +41,7 @@ const MenuAvatar = ({ onLogout }) => {
 function AvatarUser({ onLogout, image, name }) {
   return (
     <div className="avatar">
-      <Avatar src={`data:image/png;base64,${image}`} />
+      <Avatar src={image} />
       <Dropdown overlay={() => <MenuAvatar onLogout={onLogout} />}>
         <div className="userName">
           {name} <DownOutlined />

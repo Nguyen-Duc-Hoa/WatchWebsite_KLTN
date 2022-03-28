@@ -33,7 +33,7 @@ namespace WatchWebsite_TLCN.Entities
 
         public string Birthday { get; set; }
 
-        public byte[] Avatar { get; set; }
+        public string Avatar { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
 

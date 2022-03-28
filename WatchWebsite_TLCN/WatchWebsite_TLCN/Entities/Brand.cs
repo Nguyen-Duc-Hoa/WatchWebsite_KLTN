@@ -17,7 +17,7 @@ namespace WatchWebsite_TLCN.Entities
         [Required]
         public string Name { get; set; }
         [Required]
-        public byte[] Image { get; set; } 
+        public string Image { get; set; } 
 
         public virtual ICollection<Product> Products { get; set; }
 

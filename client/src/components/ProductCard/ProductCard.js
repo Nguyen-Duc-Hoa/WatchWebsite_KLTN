@@ -10,7 +10,7 @@ function ProductCard({image, name, price, brand, addToCartHandler, productId}) {
     return (
         <div className='productCard' onClick={clickProductHandler}>
             <div className="imageAndButton">
-                <img src={`data:image/png;base64,${image}`} alt="" />
+                <img src={image} alt="" />
                 <button onClick={(event) => addToCartHandler(event, productId)}>Choose</button>
             </div>
             <div className="name">{name}</div>

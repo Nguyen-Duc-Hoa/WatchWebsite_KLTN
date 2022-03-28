@@ -14,7 +14,7 @@ function CartItem({
 }) {
   return (
     <div className="cart__card">
-      <img src={`data:image/png;base64,${image}`} alt="" />
+      <img src={image} alt="" />
       <div className="card__info">
         <div>{name}</div>
         <p>{brand}</p>

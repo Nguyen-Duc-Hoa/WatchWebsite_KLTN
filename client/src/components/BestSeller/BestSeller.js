@@ -51,7 +51,7 @@ function BestSeller() {
             <SwiperSlide key={ele.Id}>
               <Link to={`/products/${ele.Id}`}>
                 <div className="card">
-                  <img src={`data:image/png;base64,${ele.Image}`} alt="" />
+                  <img src={`${ele.Image}`} alt="" />
                   <div>{ele.Name}</div>
                   <p>{ele.Brand}</p>
                   <p>${ele.Price}</p>

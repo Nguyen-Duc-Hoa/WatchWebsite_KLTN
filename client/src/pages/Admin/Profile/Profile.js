@@ -24,7 +24,6 @@ function Profile({
     loading,
     imageBase64,
     setImageBase64,
-    setImageByteArray,
   ] = useUpdateProfile(
     form,
     name,
@@ -53,7 +52,6 @@ function Profile({
           <UploadImage
             imageBase64={imageBase64}
             setImageBase64={setImageBase64}
-            setImageByteArray={setImageByteArray}
           />
         </Col>
       </Row>

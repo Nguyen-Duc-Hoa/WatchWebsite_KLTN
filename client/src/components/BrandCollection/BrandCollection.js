@@ -41,7 +41,7 @@ function BrandCollection({ brands, loading }) {
             <SwiperSlide key={index}>
               <div className="swiper-card">
                 <img
-                  src={`data:image/svg+xml;base64,${ele.image}`}
+                  src={ele.image}
                   alt={ele.name}
                 />
               </div>

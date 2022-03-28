@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { notify } from "../helper/notify";
-import { convertToByteArray } from "../helper/convertToByteArray";
 import moment from "moment";
 
 export const useUpdateProfile = (
@@ -15,13 +14,11 @@ export const useUpdateProfile = (
   onUpdateInfo,
 ) => {
   const [imageBase64, setImageBase64] = useState("");
-  const [imageByteArray, setImageByteArray] = useState([]);
   const dateFormat = "YYYY/MM/DD";
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setImageBase64(`data:image/png;base64,${avatar}`);
-    setImageByteArray(convertToByteArray(avatar));
+    setImageBase64(avatar);
     form.setFieldsValue({
       name: (name !== "null" && name) || "",
       address: (address !== "null" && address) || "",
@@ -32,7 +29,7 @@ export const useUpdateProfile = (
   }, []);
 
   const updateAccount = (values) => {
-    if (imageByteArray.length === 0) {
+    if (imageBase64.length === 0) {
       notify(
         "CHOOSE AVATAR",
         "Please choose avatar before updating.",
@@ -46,7 +43,7 @@ export const useUpdateProfile = (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...values, avatar: imageByteArray, id: idUser }),
+      body: JSON.stringify({ ...values, avatar: imageBase64, id: idUser }),
     })
       .then((response) => {
         if (response.ok) {
@@ -69,8 +66,7 @@ export const useUpdateProfile = (
       .then((response) => response.json())
       .then((result) => {
         result.Avatar &&
-          setImageBase64(`data:image/png;base64,${result.Avatar}`);
-        result.Avatar && setImageByteArray(convertToByteArray(result.Avatar));
+          setImageBase64(result.Avatar);
         onUpdateInfo(result);
       })
       .catch(() => {
@@ -88,6 +84,5 @@ export const useUpdateProfile = (
     loading,
     imageBase64,
     setImageBase64,
-    setImageByteArray,
   ];
 };

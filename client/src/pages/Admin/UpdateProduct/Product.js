@@ -13,7 +13,6 @@ import UploadImage from "../../../components/UploadImage/UploadImage";
 import { connect } from "react-redux";
 import { useLocation, useParams } from "react-router";
 import { notify } from "../../../helper/notify";
-import { convertToByteArray } from "../../../helper/convertToByteArray";
 import * as actions from "../../../store/actions/index";
 
 const { Option } = Select;
@@ -34,10 +33,8 @@ function Product({ brands, onFetchAllBrands }) {
   const [energies, setEnergies] = useState([]);
   const [waterRes, setWaterRes] = useState([]);
   const [imageBase64, setImageBase64] = useState("");
-  const [imageByteArray, setImageByteArray] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hidden, setHidden] = useState(false);
-  // console.log(useParams())
   let { id } = useParams();
   const isAdd =
     useLocation().pathname.slice(15).toLocaleLowerCase() === "addproduct"
@@ -70,7 +67,6 @@ function Product({ brands, onFetchAllBrands }) {
           };
         });
         setMaterials(materialArray);
-        // console.log(materialArray);
       })
       .catch(() => {
         console.log("fetch all materials failed");
@@ -90,7 +86,6 @@ function Product({ brands, onFetchAllBrands }) {
           };
         });
         setSizes(sizeArray);
-        console.log(sizeArray);
       })
       .catch(() => {
         console.log("fetch all sizes failed");
@@ -110,7 +105,6 @@ function Product({ brands, onFetchAllBrands }) {
           };
         });
         setEnergies(energyArray);
-        console.log(energyArray);
       })
       .catch(() => {
         console.log("fetch all energy failed");
@@ -130,7 +124,6 @@ function Product({ brands, onFetchAllBrands }) {
           };
         });
         setWaterRes(waterResArray);
-        console.log(waterResArray);
       })
       .catch(() => {
         console.log("fetch all waterRes failed");
@@ -138,7 +131,6 @@ function Product({ brands, onFetchAllBrands }) {
   };
 
   const updateProduct = (productInfo) => {
-    console.log(productInfo);
     setLoading(true);
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Products/`, {
       method: isAdd ? "POST" : "PUT",
@@ -149,7 +141,6 @@ function Product({ brands, onFetchAllBrands }) {
       body: JSON.stringify(productInfo),
     })
       .then((response) => {
-        console.log(response);
         if (response.ok) {
           setLoading(false);
           notify(
@@ -164,7 +155,6 @@ function Product({ brands, onFetchAllBrands }) {
         }
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
         notify(
           `${isAdd ? "ADD" : "EDIT"} FAILED`,
@@ -180,8 +170,7 @@ function Product({ brands, onFetchAllBrands }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        setImageBase64(`data:image/png;base64,${result.Image} `);
-        setImageByteArray(convertToByteArray(result.Image));
+        setImageBase64(result.Image);
         setHidden(true);
         form.setFieldsValue({
           name: result.Name,
@@ -207,7 +196,7 @@ function Product({ brands, onFetchAllBrands }) {
   };
 
   const onFinish = (values) => {
-    updateProduct({ ...values, image: imageByteArray });
+    updateProduct({ ...values, image: imageBase64 });
   };
 
   return (
@@ -418,7 +407,6 @@ function Product({ brands, onFetchAllBrands }) {
           <UploadImage
             imageBase64={imageBase64}
             setImageBase64={setImageBase64}
-            setImageByteArray={setImageByteArray}
           />
         </Col>
       </Row>

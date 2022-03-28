@@ -4,7 +4,7 @@ import './CheckoutCard.scss'
 function CheckoutCard({ image, name, number, price, brand }) {
     return (
         <div className="checkout__card">
-            <img src={`data:image/png;base64,${image}`} alt="" />
+            <img src={image} alt="" />
             <div className="info">
                 <div>{name}</div>
                 <p>Brand: {brand}</p>

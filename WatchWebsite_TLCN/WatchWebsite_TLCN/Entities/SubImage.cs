@@ -14,7 +14,7 @@ namespace WatchWebsite_TLCN.Entities
         public int Id { get; set; }
         public string ProductId { get; set; }
 
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
 
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }

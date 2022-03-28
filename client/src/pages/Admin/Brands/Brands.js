@@ -36,7 +36,7 @@ function Brands({ brands, loading, onFetchBrands, totalPage, onDeleteBrands, tok
       key: "image",
       align: "center",
       render: (source) => (
-        <Image width={160} src={`data:image/svg+xml;base64,${source}`} />
+        <Image width={160} src={source} />
       ),
     },
     {

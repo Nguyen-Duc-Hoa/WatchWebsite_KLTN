@@ -12,15 +12,14 @@ namespace WatchWebsite_TLCN.Configuration
     {
         public MapperInitializer()
         {
-            CreateMap<Product, ProductDTO>().ForMember(dest => dest.Image, opt => opt.MapFrom(src => Convert.ToBase64String(src.Image))).ReverseMap();
-            CreateMap<Product, ProductResponseDTO>().ForMember(dest => dest.Image, opt => opt.MapFrom(src => Convert.ToBase64String(src.Image)))
-                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name)).ReverseMap();
+            CreateMap<Product, ProductDTO>().ReverseMap();
+            CreateMap<Product, ProductResponseDTO>().ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name)).ReverseMap();
             CreateMap<Order, OrderDTO>().ReverseMap();
-            CreateMap<User, UserDTO>().ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => Convert.ToBase64String(src.Avatar))).ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<Comment, CommentDTO>().ReverseMap();
-            CreateMap<User, UserCommentDTO>().ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => Convert.ToBase64String(src.Avatar))).ReverseMap();
+            CreateMap<User, UserCommentDTO>().ReverseMap();
             CreateMap<Energy, EnergyDTO>().ReverseMap();
-            CreateMap<Brand, BrandDTO>().ForMember(dest => dest.Image, opt => opt.MapFrom(src => Convert.ToBase64String(src.Image))).ReverseMap();
+            CreateMap<Brand, BrandDTO>().ReverseMap();
             CreateMap<Material, MaterialDTO>().ReverseMap();
             CreateMap<WaterResistance, WaterResistancesDTO>().ReverseMap();
             CreateMap<Order, ListOrderDTO>().ReverseMap();

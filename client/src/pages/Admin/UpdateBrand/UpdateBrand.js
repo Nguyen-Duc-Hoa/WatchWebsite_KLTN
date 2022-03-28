@@ -5,7 +5,6 @@ import { useLocation, useParams } from "react-router";
 import UploadImage from "../../../components/UploadImage/UploadImage";
 import * as actions from "../../../store/actions/index";
 import { notify } from "../../../helper/notify";
-import { convertToByteArray } from "../../../helper/convertToByteArray";
 
 const layout = {
   labelCol: { span: 24 },
@@ -14,7 +13,6 @@ const layout = {
 
 function UpdateBrand({ onUpdateBrand, loading, token }) {
   const [imageBase64, setImageBase64] = useState("");
-  const [imageByteArray, setImageByteArray] = useState([]);
   const [form] = Form.useForm();
   let { id } = useParams();
   const isAdd =
@@ -32,8 +30,7 @@ function UpdateBrand({ onUpdateBrand, loading, token }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        setImageBase64(`data:image/svg+xml;base64,${result.Image} `);
-        setImageByteArray(convertToByteArray(result.Image));
+        setImageBase64(`${result.Image} `);
         form.setFieldsValue({ name: result.Name });
       })
       .catch(() => {
@@ -46,16 +43,16 @@ function UpdateBrand({ onUpdateBrand, loading, token }) {
   }, [id]);
 
   const updateBrand = (values) => {
-    if (!imageByteArray) return;
+    if (!imageBase64) return;
     id
       ? onUpdateBrand(
-          { brandId: id, name: values.name, image: imageByteArray },
+          { brandId: id, name: values.name, image: imageBase64 },
           isAdd,
           notify,
           token
         )
       : onUpdateBrand(
-          { name: values.name, image: imageByteArray },
+          { name: values.name, image: imageBase64 },
           isAdd,
           notify,
           token
@@ -67,7 +64,6 @@ function UpdateBrand({ onUpdateBrand, loading, token }) {
       <UploadImage
         imageBase64={imageBase64}
         setImageBase64={setImageBase64}
-        setImageByteArray={setImageByteArray}
       />
       <Form
         {...layout}

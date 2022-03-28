@@ -9,7 +9,7 @@ namespace WatchWebsite_TLCN.DTO
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public byte[] Image { get; set; }
+        public string Image { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
         public string BrandName { get; set; }
