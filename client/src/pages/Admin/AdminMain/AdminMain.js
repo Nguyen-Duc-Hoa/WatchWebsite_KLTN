@@ -30,6 +30,8 @@ const ProductsStatistic = lazy(() =>
 const TurnoverStatistic = lazy(() =>
   import("../TurnoverStatistic/TurnoverStatistic")
 );
+const Vouchers = lazy(() => import("../Vouchers/Vouchers"));
+const UpdateVoucher = lazy(() => import("../UpdateVoucher/UpdateVoucher"));
 
 function AdminMain() {
   return (
@@ -152,6 +154,24 @@ function AdminMain() {
             exact
             component={TurnoverStatistic}
             path="/admin/TurnoverStatistic"
+            onlyAdmin
+          />
+          <PrivateRoute
+            exact
+            component={Vouchers}
+            path="/admin/Vouchers"
+            onlyAdmin
+          />
+          <PrivateRoute
+            exact
+            component={UpdateVoucher}
+            path="/admin/Vouchers/:voucherId"
+            onlyAdmin
+          />
+          <PrivateRoute
+            exact
+            component={UpdateVoucher}
+            path="/admin/Vouchers/AddVoucher"
             onlyAdmin
           />
         </Switch>
