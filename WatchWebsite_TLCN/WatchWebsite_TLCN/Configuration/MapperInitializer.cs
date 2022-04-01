@@ -24,7 +24,7 @@ namespace WatchWebsite_TLCN.Configuration
             CreateMap<WaterResistance, WaterResistancesDTO>().ReverseMap();
             CreateMap<Order, ListOrderDTO>().ReverseMap();
             CreateMap<Size, SizeDTO>().ReverseMap();
-            
+            CreateMap<Product, ProductSearchResponse>().ReverseMap();
         }
     }
 }

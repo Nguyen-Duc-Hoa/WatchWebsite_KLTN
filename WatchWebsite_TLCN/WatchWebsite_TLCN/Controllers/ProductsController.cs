@@ -24,12 +24,14 @@ namespace WatchWebsite_TLCN.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IProductsRepository _product;
+        private readonly MyDBContext _context;
 
-        public ProductsController(IUnitOfWork unitOfWork, IProductsRepository product, IMapper mapper)
+        public ProductsController(IUnitOfWork unitOfWork, IProductsRepository product, IMapper mapper, MyDBContext context)
         {
             _unitOfWork = unitOfWork;
             _product = product;
             _mapper = mapper;
+            _context = context;
         }
 
         // GET: api/Products
@@ -72,17 +74,21 @@ namespace WatchWebsite_TLCN.Controllers
             return product;
         }
 
-        //private async Task<ProductDetail> GetProductDetailLogicAsync(Product product)
-        //{
-        //    ProductDetail productDetail = new ProductDetail();
-            
-        //    List<SubImage> lstSubImage = await _unitOfWork.SubImage.GetAll(
-        //        expression: x => x.ProductId == product.Id);
-        //    foreach(var subImage in lstSubImage)
-        //    {
+        [HttpGet]
+        [Route("FullTextSearch")]
+        public async Task<IActionResult> FullTextSearch(string text)
+        {
 
-        //    }    
-        //}
+            string[] words = text.Split(' ');
+            string textsearch = words[0];
+            foreach (var word in words)
+            {
+                textsearch = textsearch + " OR (" + word + ")";
+            }
+            var results = _context.Products.FromSqlRaw("SELECT a.*  FROM [dbo].[Product] AS a JOIN CONTAINSTABLE (Product,*,'" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] ORDER BY TBL.RANK DESC;").ToList();
+            var productDTO = _mapper.Map<List<ProductSearchResponse>>(results);
+            return Ok(productDTO);
+        }
 
 
         //[Authorize(Roles = "Admin,Employee")]
