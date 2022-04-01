@@ -20,4 +20,11 @@ namespace WatchWebsite_TLCN.DTO
         public string Brand { get; set; }
         public int Gender { get; set; }
     }
+
+    public class ProductSearchResponse
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+
 }

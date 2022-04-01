@@ -44,5 +44,72 @@ namespace WatchWebsite_TLCN.Controllers
 
             return lstVoucher;
         }
+
+        [HttpGet]
+        [Route("GetVouchers")]
+        public async Task<IActionResult> GetVouchers(int currentPage)
+        {
+            var result = await _unitOfWork.Vouchers.GetAllWithPagination(
+                expression: null,
+                orderBy: x => x.OrderBy(a => a.VoucherId),
+                pagination: new Pagination { CurrentPage = currentPage }
+                );
+
+            List<Voucher> listVoucher = new List<Voucher>();
+            foreach(var item in result.Item1)
+            {
+                listVoucher.Add(item);
+            }
+            return Ok(new
+            {
+                Vouchers = listVoucher,
+                CurrentPage = result.Item2.CurrentPage,
+                TotalPage = result.Item2.TotalPage
+            });
+        }
+
+        [HttpGet("Detail")]
+        public async Task<IActionResult> GetDetail(int voucherId)
+        {
+            try
+            {
+                Voucher voucher = await _unitOfWork.Vouchers.Get(expression: v => v.VoucherId == voucherId);
+                return Ok(voucher);
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostVoucher(Voucher voucher)
+        {
+            try
+            {
+                await _unitOfWork.Vouchers.Insert(voucher);
+                await _unitOfWork.Save();
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutVoucher(Voucher voucher)
+        {
+            try
+            {
+                _unitOfWork.Vouchers.Update(voucher);
+                await _unitOfWork.Save();
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }

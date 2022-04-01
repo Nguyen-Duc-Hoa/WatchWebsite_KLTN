@@ -68,9 +68,13 @@ function Product({ brands, onFetchAllBrands }) {
         });
         setMaterials(materialArray);
       })
-      .catch(() => {
-        console.log("fetch all materials failed");
-      });
+      .catch(() =>
+        notify(
+          "LOAD FAILED",
+          "Something went wrong :( Please try again.",
+          "error"
+        )
+      );
   };
 
   const fetchAllSizes = () => {
@@ -87,9 +91,13 @@ function Product({ brands, onFetchAllBrands }) {
         });
         setSizes(sizeArray);
       })
-      .catch(() => {
-        console.log("fetch all sizes failed");
-      });
+      .catch(() =>
+        notify(
+          "LOAD FAILED",
+          "Something went wrong :( Please try again.",
+          "error"
+        )
+      );
   };
 
   const fetchAllEnergies = () => {
@@ -106,9 +114,13 @@ function Product({ brands, onFetchAllBrands }) {
         });
         setEnergies(energyArray);
       })
-      .catch(() => {
-        console.log("fetch all energy failed");
-      });
+      .catch(() =>
+        notify(
+          "LOAD FAILED",
+          "Something went wrong :( Please try again.",
+          "error"
+        )
+      );
   };
 
   const fetchAllWaterRes = () => {
@@ -125,9 +137,13 @@ function Product({ brands, onFetchAllBrands }) {
         });
         setWaterRes(waterResArray);
       })
-      .catch(() => {
-        console.log("fetch all waterRes failed");
-      });
+      .catch(() =>
+        notify(
+          "LOAD FAILED",
+          "Something went wrong :( Please try again.",
+          "error"
+        )
+      );
   };
 
   const updateProduct = (productInfo) => {
@@ -154,7 +170,7 @@ function Product({ brands, onFetchAllBrands }) {
           throw new Error();
         }
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false);
         notify(
           `${isAdd ? "ADD" : "EDIT"} FAILED`,

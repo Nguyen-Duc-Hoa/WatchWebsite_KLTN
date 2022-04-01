@@ -1,14 +1,14 @@
-.shipping {
+section.shipping {
   padding-top: 65px;
 }
 
 @media (max-width: 1006px) {
-  .shipping {
+  section.shipping {
     padding-top: 56px;
   }
 }
 
-.shipping .shipping__info {
+section.shipping .shipping__info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -16,11 +16,10 @@
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding: 35px;
-  /* Buttons and links */
 }
 
 @media (max-width: 1080px) {
-  .shipping .shipping__info {
+  section.shipping .shipping__info {
     -webkit-box-orient: vertical;
     -webkit-box-direction: reverse;
         -ms-flex-direction: column-reverse;
@@ -29,31 +28,56 @@
 }
 
 @media (max-width: 860px) {
-  .shipping .shipping__info {
+  section.shipping .shipping__info {
     padding: 2rem 0;
   }
 }
 
-.shipping .shipping__info .info__content {
+section.shipping .shipping__info .info__content {
   width: 50%;
   padding: 0 2.5rem;
 }
 
+section.shipping .shipping__info .info__content .paymethod {
+  cursor: pointer;
+  border-radius: 5px;
+  -webkit-box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+          box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 5px 20px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-bottom: 1.5rem;
+  min-height: 40px;
+}
+
+section.shipping .shipping__info .info__content .paymethod .left {
+  width: 60px;
+}
+
+section.shipping .shipping__info .info__content .paymethod .left img {
+  width: 100%;
+}
+
+section.shipping .shipping__info .info__content .paymethod .right {
+  font-size: 1rem;
+}
+
 @media (max-width: 1080px) {
-  .shipping .shipping__info .info__content {
+  section.shipping .shipping__info .info__content {
     padding: 0;
     width: 100%;
   }
 }
 
-.shipping .shipping__info .info__content .content__top {
+section.shipping .shipping__info .info__content .content__top {
   border-radius: 5px;
   border: 1px solid #ccc;
   position: relative;
   margin-bottom: 34px;
 }
 
-.shipping .shipping__info .info__content .content__top .content__item {
+section.shipping .shipping__info .info__content .content__top .content__item {
   width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -64,31 +88,31 @@
           align-items: center;
 }
 
-.shipping .shipping__info .info__content .content__top .content__item--first {
+section.shipping .shipping__info .info__content .content__top .content__item--first {
   border-bottom: 1px solid #ccc;
 }
 
-.shipping .shipping__info .info__content .content__top .content__item .title {
+section.shipping .shipping__info .info__content .content__top .content__item .title {
   padding: 10px 25px;
 }
 
-.shipping .shipping__info .info__content .content__top .content__item .text {
+section.shipping .shipping__info .info__content .content__top .content__item .text {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
   padding: 10px 0;
 }
 
-.shipping .shipping__info .info__content .content__top .content__item a {
+section.shipping .shipping__info .info__content .content__top .content__item a {
   padding: 10px 25px;
 }
 
-.shipping .shipping__info .info__content .heading {
+section.shipping .shipping__info .info__content .heading {
   font-size: 20px;
   margin-bottom: 18px;
 }
 
-.shipping .shipping__info .info__content .content__bottom {
+section.shipping .shipping__info .info__content .content__bottom {
   border-radius: 5px;
   border: 1px solid #ccc;
   display: -webkit-box;
@@ -101,7 +125,7 @@
   margin-bottom: 18px;
 }
 
-.shipping .shipping__info .info__content .content__bottom .circle {
+section.shipping .shipping__info .info__content .content__bottom .circle {
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -111,17 +135,17 @@
   margin: 0 10px 0 25px;
 }
 
-.shipping .shipping__info .info__content .content__bottom .method {
+section.shipping .shipping__info .info__content .content__bottom .method {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
 }
 
-.shipping .shipping__info .info__content .content__bottom .price {
+section.shipping .shipping__info .info__content .content__bottom .price {
   padding: 10px 25px;
 }
 
-.shipping .shipping__info #payment-message {
+section.shipping .shipping__info #payment-message {
   color: #697386;
   font-size: 16px;
   line-height: 20px;
@@ -129,11 +153,11 @@
   text-align: center;
 }
 
-.shipping .shipping__info #payment-element {
+section.shipping .shipping__info #payment-element {
   margin-bottom: 24px;
 }
 
-.shipping .shipping__info .spinner {
+section.shipping .shipping__info .spinner {
   color: #ffffff;
   font-size: 22px;
   text-indent: -99999px;
@@ -147,12 +171,12 @@
   transform: translateZ(0);
 }
 
-.shipping .shipping__info .spinner::before, .shipping .shipping__info .spinner::after {
+section.shipping .shipping__info .spinner::before, section.shipping .shipping__info .spinner::after {
   position: absolute;
   content: "";
 }
 
-.shipping .shipping__info .spinner::before {
+section.shipping .shipping__info .spinner::before {
   width: 10.4px;
   height: 20.4px;
   background: #5469d4;
@@ -165,7 +189,7 @@
   animation: loading 2s infinite ease 1.5s;
 }
 
-.shipping .shipping__info .spinner::after {
+section.shipping .shipping__info .spinner::after {
   width: 10.4px;
   height: 10.2px;
   background: #5469d4;

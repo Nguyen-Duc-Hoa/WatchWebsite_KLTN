@@ -91,7 +91,12 @@ function AdminMenu({ isAdmin }) {
           >
             Employees
           </Menu.Item>
-          {/* <Menu.Item key="Statistic" onClick={() => clickMenuHandler('/admin/Statistic')}>Statistic</Menu.Item> */}
+          <Menu.Item
+            key="Vouchers"
+            onClick={() => clickMenuHandler("/admin/Vouchers")}
+          >
+            Vouchers
+          </Menu.Item>
           <SubMenu title="Statistic" key="Statistic">
             <Menu.Item
               key="turnoverStatistic"

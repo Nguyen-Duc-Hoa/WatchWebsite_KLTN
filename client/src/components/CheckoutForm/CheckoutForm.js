@@ -46,8 +46,7 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   }, []);
 
   const onFinish = (values) => {
-    if (values.voucherCode.trim() !== "") {
-      console.log(values)
+    if (values.voucherCode && values.voucherCode.trim() !== "") {
       values["voucherDiscount"] = vouchers.find(voucher => voucher.Code === values.voucherCode).Discount;
     }
     onSetInfoOrder(values);
@@ -95,7 +94,7 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
         </Form.Item>
 
         <Form.Item name="voucherCode">
-          <Input placeholder="Your voucher" />
+          <Input placeholder="Your voucher" defaultValue="" />
         </Form.Item>
 
         <div className="voucher-list">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Menu from "./Menu/Menu";
 import { FaRegUser } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
@@ -12,19 +12,38 @@ import * as actions from "../../store/actions/index";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
-export function Header({ onOpenCart, onOpenOverlay, isAuth, onLogout, onSetSearch, numberOfCart }) {
+const DEBOUNCE_TIME = 500;
+
+export function Header({
+  onOpenCart,
+  onOpenOverlay,
+  isAuth,
+  onLogout,
+  numberOfCart,
+}) {
   const history = useHistory();
   const [showSearchArea, setShowSearchArea] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchValue.trim() !== "") {
+        fetch(
+          `${process.env.REACT_APP_HOST_DOMAIN}/api/products/FullTextSearch?text=${searchValue}`
+        )
+          .then((res) => res.json())
+          .then((data) => setProducts(data))
+          .catch(() => console.warn("fetch search product fail"));
+      }
+    }, DEBOUNCE_TIME);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchValue]);
 
   const openCartHandler = () => {
     onOpenOverlay();
     onOpenCart();
-  };
-
-  const searchHandler = () => {
-    onSetSearch(searchValue);
-    history.push("/products");
   };
 
   return (
@@ -39,7 +58,10 @@ export function Header({ onOpenCart, onOpenOverlay, isAuth, onLogout, onSetSearc
           <span>
             <FaRegUser />
           </span>
-          <div className="dropdown-account" style={{ bottom: isAuth ? "-140%" : "-90%" }}>
+          <div
+            className="dropdown-account"
+            style={{ bottom: isAuth ? "-140%" : "-90%" }}
+          >
             {isAuth ? (
               <>
                 <div>
@@ -71,7 +93,7 @@ export function Header({ onOpenCart, onOpenOverlay, isAuth, onLogout, onSetSearc
               showSearchArea && "search__area--active"
             }`}
           >
-            <div className="search__icon" onClick={searchHandler}>
+            <div className="search__icon">
               <FiSearch />
             </div>
             <input
@@ -86,6 +108,17 @@ export function Header({ onOpenCart, onOpenOverlay, isAuth, onLogout, onSetSearc
             >
               <IoMdClose />
             </div>
+            <section className="search-drop-down">
+              {products.length !== 0 &&
+                products.map((prod) => (
+                  <div
+                    key={prod.Id}
+                    onClick={() => history.push(`/products/${prod.Id}`)}
+                  >
+                    {prod.Name}
+                  </div>
+                ))}
+            </section>
           </section>
         </div>
         <div className="icons__item item__cart" onClick={openCartHandler}>
@@ -102,7 +135,7 @@ export function Header({ onOpenCart, onOpenOverlay, isAuth, onLogout, onSetSearc
 const mapStateToProps = (state) => {
   return {
     isAuth: state.auth.token !== null,
-    numberOfCart: state.cart.cart.length
+    numberOfCart: state.cart.cart.length,
   };
 };
 
@@ -111,8 +144,8 @@ const mapDispatchToProps = (dispatch) => {
     onOpenCart: () => dispatch({ type: actionTyes.OPEN_CART }),
     onOpenOverlay: () => dispatch({ type: actionTyes.OPEN_OVERLAY }),
     onLogout: () => dispatch(actions.logout()),
-    onSetSearch: (search) =>
-      dispatch({ type: actionTyes.FILTER_SEARCH, payload: search }),
+    // onSetSearch: (search) =>
+    //   dispatch({ type: actionTyes.FILTER_SEARCH, payload: search }),
   };
 };
 

@@ -62,7 +62,7 @@ function CheckoutProducts({ cart, total, amount, voucherDiscount }) {
         <div className="underline"></div>
         <div className="total">
           <div>Total</div>
-          <p>${total - voucherDiscount}</p>
+          <p>${(total - voucherDiscount) === 0 ? 1 : (total - voucherDiscount)}</p>
         </div>
       </div>
     </div>

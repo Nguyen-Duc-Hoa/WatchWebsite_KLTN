@@ -31,7 +31,5 @@ namespace WatchWebsite_TLCN.Entities
 
         //[Required]
         public bool State { get; set; } = true;
-
-        public virtual ICollection<Order> Orders { get; set; }
     }
 }

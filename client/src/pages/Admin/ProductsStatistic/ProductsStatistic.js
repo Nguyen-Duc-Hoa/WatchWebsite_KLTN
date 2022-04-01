@@ -10,7 +10,6 @@ import {
   Table,
   Divider,
 } from "antd";
-import LineChart from "../../../components/LineChart/LineChart";
 import ColumnChart from "../../../components/ColumnChart/ColumnChart";
 import { connect } from "react-redux";
 
@@ -22,15 +21,6 @@ const layout = {
   wrapperCol: { span: 24 },
 };
 
-// const turnOverChartData = [
-//     { year: '2014', turnover: 3.5 },
-//     { year: '2015', turnover: 5 },
-//     { year: '2016', turnover: 4.9 },
-//     { year: '2017', turnover: 6 },
-//     { year: '2018', turnover: 7 },
-//     { year: '2019', turnover: 9 },
-//     { year: '2020', turnover: 13 },
-// ];
 
 const productChartData = [
   {

@@ -53,7 +53,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     if (!id) return;
     fetchComments();
     fetchProductDetail();
-  }, []);
+  }, [id]);
 
   const fetchComments = () => {
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Comments?productId=${id}`, {
@@ -120,26 +120,15 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
                 src={productDetail && productDetail.Image}
               />
             </SwiperSlide>
-            <SwiperSlide>
-              <Image
-                width={"100%"}
-                src={productDetail && productDetail.Image}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Image
-                width={"100%"}
-                src={productDetail && productDetail.Image}
-              />
-            </SwiperSlide>
             {productDetail &&
               productDetail.SubImages.length !== 0 &&
               productDetail.SubImages.map((subimage) => (
-                <Image
-                  key={subimage.Id}
-                  width={"100%"}
-                  src={productDetail && productDetail.Image}
-                />
+                <SwiperSlide key={subimage.Id}>
+                  <Image
+                    width={"100%"}
+                    src={subimage.Image}
+                  />
+                </SwiperSlide>
               ))}
           </Swiper>
         </div>
