@@ -141,9 +141,18 @@ namespace WatchWebsite_TLCN.Controllers
                     var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.Code == request.voucherCode && v.StartDate >= now && v.EndDate <= now && v.State == true);
                     discount = voucher.Discount;
                 }
+                float amount = await CalculateOrderAmount(request.Products);
+                if(amount <= discount)
+                {
+                    amount = 1;
+                }
+                else
+                {
+                    amount = amount - discount;
+                }
                 var paymentIntent = paymentIntents.Create(new PaymentIntentCreateOptions
                 {
-                    Amount = (long?)((long?)await CalculateOrderAmount(request.Products) - discount),
+                    Amount = (long?)amount,
                     Currency = "usd",
                     PaymentMethodTypes = new List<string> { "card" }
                 });

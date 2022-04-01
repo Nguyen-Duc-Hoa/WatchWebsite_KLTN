@@ -30,14 +30,6 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode }) {
         quantity: element.Quantity,
       };
     });
-    console.log({
-      userId: idUser,
-      name: orderInfo.name,
-      address: orderInfo.address,
-      phone: orderInfo.phone,
-      products: items,
-      voucherCode: voucherCode,
-    })
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/zalopay/createorder`, {
       method: "POST",
       headers: {

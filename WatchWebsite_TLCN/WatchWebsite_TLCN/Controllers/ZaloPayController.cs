@@ -156,6 +156,10 @@ namespace WatchWebsite_TLCN.Controllers
                 total = total + prod.Price * item.Quantity;  
             }
             total = (float)Math.Truncate((total - discount) * dataJson["USD_VND"]);
+            if(total <= 0)
+            {
+                total = dataJson["USD_VND"];
+            }
             return new object[] { items, total };
         }
 
