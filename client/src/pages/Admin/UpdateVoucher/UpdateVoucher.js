@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, DatePicker, Select } from "antd";
+import { Button, Form, Input, DatePicker, Select, InputNumber } from "antd";
 import { notify } from "../../../helper/notify";
 import { useLocation, useParams } from "react-router";
 import moment from "moment";
@@ -35,7 +35,6 @@ const UpdateVoucher = () => {
     )
       .then((res) => res.json())
       .then((result) => {
-          console.log('aaaaaaaaaaaaaaaaaa')
         form.setFieldsValue({
           name: result.Name,
           voucherId: result.VoucherId,
@@ -125,9 +124,9 @@ const UpdateVoucher = () => {
         <Form.Item
           label="Discount"
           name="discount"
-          rules={[{ required: true, type: "number" }]}
+          rules={[{ required: true }]}
         >
-          <Input />
+          <InputNumber min={0} parser={(value) => Math.round(value)} />
         </Form.Item>
 
         <Form.Item name="date" label="Date" rules={[{ required: true }]}>
@@ -135,7 +134,7 @@ const UpdateVoucher = () => {
         </Form.Item>
 
         <Form.Item name="state" label="State" rules={[{ required: true }]}>
-          <Select defaultValue={true}>
+          <Select>
             <Option value={true}>Enable</Option>
             <Option value={false}>Disable</Option>
           </Select>
