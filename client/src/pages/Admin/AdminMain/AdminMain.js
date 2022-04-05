@@ -23,7 +23,6 @@ const Profile = lazy(() => import("../Profile/Profile"));
 const Employee = lazy(() => import("../Employee/Employee"));
 const CreateAccount = lazy(() => import("../CreateAccount/CreateAccount"));
 const ChangePassword = lazy(() => import("../ChangePassword/ChangePassword"));
-const Statistic = lazy(() => import("../Statistic/Statistic"));
 const ProductsStatistic = lazy(() =>
   import("../ProductsStatistic/ProductsStatistic")
 );
@@ -137,12 +136,6 @@ function AdminMain() {
             exact={true}
             component={ChangePassword}
             path="/admin/ChangePassword"
-          />
-          <PrivateRoute
-            exact={true}
-            component={Statistic}
-            path="/admin/Statistic"
-            onlyAdmin
           />
           <PrivateRoute
             exact
