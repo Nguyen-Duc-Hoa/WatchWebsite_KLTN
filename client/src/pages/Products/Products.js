@@ -63,7 +63,6 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
         setSpinning(false);
       })
       .catch((error) => {
-        console.log(error);
         setSpinning(false);
         notify("ERROR", "Something went wrong!", "error");
       });

@@ -44,7 +44,6 @@ const cartReducer = (state = initialState, action) => {
         });
       }
       const updateTotal = newData.reduce((prev, curr) => prev + curr.Price, 0);
-      console.log(updateTotal)
       return {
         ...state,
         cart: newData,

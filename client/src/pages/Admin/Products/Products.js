@@ -49,7 +49,6 @@ function Products({ token }) {
   };
 
   const deleteHandler = () => {
-    // console.log(deletiveArray.current)
     if (deletiveArray.current.length === 0) return;
     deleteReq();
   };

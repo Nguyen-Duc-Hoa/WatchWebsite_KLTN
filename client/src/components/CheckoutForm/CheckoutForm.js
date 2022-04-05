@@ -24,7 +24,6 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/vouchers`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setVouchers(data);
       });
   }, []);

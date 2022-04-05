@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 function Order({ token }) {
-  // console.log(token);
   const updateData = (result) => {
     const dataArray = result.Orders.map((element) => {
       return {

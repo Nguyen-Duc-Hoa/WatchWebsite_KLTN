@@ -76,8 +76,7 @@ function OrderDetail({token}) {
         setData(newData);
         setTableDataSrc(result.OrderDetails);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         notify(
           "LOAD FAILED",
           "Something went wrong :( Please try again.",

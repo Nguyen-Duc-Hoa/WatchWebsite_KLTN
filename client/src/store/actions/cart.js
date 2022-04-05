@@ -15,8 +15,7 @@ export const fetchCart = (idUser, token) => {
         dispatch(cartStopLoading());
         dispatch(fetchCartSuccess(result));
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         dispatch(cartStopLoading());
       });
   };
@@ -41,7 +40,6 @@ export const updateCart = (productId, quantity, userId, token) => {
           dispatch(updateQuantity(productId, quantity));
         }
       })
-      .catch((err) => console.log(err));
   };
 };
 
@@ -73,7 +71,6 @@ export const addToCart = (productId, quantity, userId, token, notify) => {
           "Something went wrong :( Please try again.",
           "error"
         );
-        console.log(err);
       });
   };
 };

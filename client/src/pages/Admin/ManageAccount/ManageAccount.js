@@ -7,7 +7,6 @@ import { useFetchData } from "../../../hook/useFetchData";
 import { connect } from "react-redux";
 
 function ManageAccount({ token }) {
-  // console.log(token);
   const updateData = (result) => {
     const dataArray = result.Users.map((element) => {
       return {

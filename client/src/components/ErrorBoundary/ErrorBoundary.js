@@ -12,7 +12,7 @@ export default class ErrorBoundary extends Component {
     }
 
     componentDidCatch(error, info) {
-        console.log(error);
+        console.warn(error);
     }
 
     render() {

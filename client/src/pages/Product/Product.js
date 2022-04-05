@@ -76,7 +76,6 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
       .then((result) => {
         setProductDetail({ ...result });
       })
-      .catch((err) => console.log(err));
   };
 
   const handleReply = (id, author, replyFrom) => {

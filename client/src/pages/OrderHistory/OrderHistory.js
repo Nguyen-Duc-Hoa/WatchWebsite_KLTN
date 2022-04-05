@@ -35,7 +35,6 @@ function OrderHistory({ token, userId }) {
     )
       .then((response) => response.json())
       .then((result) => {
-          console.log(result)
         setData(
           result.Histories.map((ele) => {
             return {
@@ -47,7 +46,6 @@ function OrderHistory({ token, userId }) {
         setCurrentPage(result.CurrentPage);
         setTotalPage(result.TotalPage);
       })
-      .catch((err) => console.log(err));
     setSpinning(false);
   }, [currentPage]);
 

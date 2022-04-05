@@ -20,6 +20,7 @@ export function Header({
   isAuth,
   onLogout,
   numberOfCart,
+  onSetSearch,
 }) {
   const history = useHistory();
   const [showSearchArea, setShowSearchArea] = useState(false);
@@ -44,6 +45,13 @@ export function Header({
   const openCartHandler = () => {
     onOpenOverlay();
     onOpenCart();
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchValue.trim() !== "") {
+      onSetSearch(searchValue);
+      history.push("/products");
+    }
   };
 
   return (
@@ -101,6 +109,7 @@ export function Header({
               placeholder="Search our store"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <div
               className="search__close"
@@ -144,8 +153,8 @@ const mapDispatchToProps = (dispatch) => {
     onOpenCart: () => dispatch({ type: actionTyes.OPEN_CART }),
     onOpenOverlay: () => dispatch({ type: actionTyes.OPEN_OVERLAY }),
     onLogout: () => dispatch(actions.logout()),
-    // onSetSearch: (search) =>
-    //   dispatch({ type: actionTyes.FILTER_SEARCH, payload: search }),
+    onSetSearch: (search) =>
+      dispatch({ type: actionTyes.FILTER_SEARCH, payload: search }),
   };
 };
 

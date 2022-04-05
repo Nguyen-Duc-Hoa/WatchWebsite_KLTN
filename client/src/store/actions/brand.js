@@ -143,8 +143,5 @@ export const fetchAllBrands = () => {
           throw Error
         }
       })
-      .catch((err) => {
-        console.log("fetch all brands error", err);
-      });
   };
 };

@@ -71,10 +71,8 @@ function Statistic({ token }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTurnOverChartData(result);
       })
-      .catch((err) => console.log(err));
   };
 
   return (

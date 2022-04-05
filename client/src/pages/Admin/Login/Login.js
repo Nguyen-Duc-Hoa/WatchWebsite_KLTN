@@ -21,7 +21,6 @@ const validataMessage = {
 
 const Login = ({ history, onLogin }) => {
   const onFinish = (values) => {
-    // console.log(values);
     onLogin(notify, values, () => {
       history.push("/admin/home");
     });

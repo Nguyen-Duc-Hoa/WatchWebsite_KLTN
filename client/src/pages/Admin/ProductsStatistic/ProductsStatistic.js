@@ -207,10 +207,6 @@ function Statistic({ token }) {
   };
 
   const onFinish = (values) => {
-    // console.log({
-    //   typeDate: typeDate,
-    //   date: [values.date.format("MM/DD/yyyy")],
-    // });
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/statis/chart2`, {
       method: "POST",
       headers: {
@@ -224,10 +220,8 @@ function Statistic({ token }) {
     })
       .then((response) => response.json())
       .then((result) => {
-        // console.log(result);
         setProductChartData(result);
       })
-      .catch((err) => console.log(err));
   };
 
   return (

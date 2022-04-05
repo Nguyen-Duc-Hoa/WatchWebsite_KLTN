@@ -39,8 +39,6 @@ const columns = [
 ];
 
 function OrderDetail({ token }) {
-  // console.log(token);
-
   let { id } = useParams();
   const [currentStep, setCurrentStep] = useState(null);
   const [data, setData] = useState(null);
@@ -55,8 +53,6 @@ function OrderDetail({ token }) {
   }, []);
 
   const updateOrder = () => {
-    // console.log(token);
-    // console.log({ orderId: data.orderId, deliveryStatus: currentStep });
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/orders/updatestatus`, {
       method: "PUT",
       headers: {
@@ -82,8 +78,7 @@ function OrderDetail({ token }) {
             "error"
           );
         }
-      })
-      .catch((err) => console.log(err));
+      });
   };
 
   const fetchOrderDetail = () => {
@@ -117,14 +112,11 @@ function OrderDetail({ token }) {
             };
           }),
         };
-        // console.log(newData)
         setData(newData);
         setTableDataSrc([...newData.products]);
         setCurrentStep(newData.deliveryStatus);
-        // console.log(newData.deliveryStatus);
       })
-      .catch((err) => {
-        // console.log(err);
+      .catch(() => {
         notify(
           "LOAD FAILED",
           "Something went wrong :( Please try again.",

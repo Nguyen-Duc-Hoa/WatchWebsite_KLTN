@@ -67,7 +67,6 @@ const waiting = () => {
 };
 
 const checkAuthTimeOut = (expire) => {
-  // console.log(expire);
   return (dispatch) => {
     setTimeout(() => {
       dispatch(logout());
@@ -131,7 +130,6 @@ export const register = (notify, { confirm, ...registerInfo }, history) => {
 };
 
 export const reset = (notify, email) => {
-  // console.log(email);
   return (dispatch) => {
     dispatch(waiting());
     fetch(
@@ -167,7 +165,6 @@ export const authCheckState = () => {
   return (dispatch) => {
     const token = localStorage.getItem("token");
     if (!token) {
-      // console.log("token null");
       dispatch(logout());
     } else {
       const expirationDate = new Date(localStorage.getItem("expire"));
@@ -208,7 +205,6 @@ export const authCheckState = () => {
 };
 
 export const authUpdateInfo = (userInfo) => {
-  // console.log(userInfo)
   return (dispatch) => {
     localStorage.setItem("name", userInfo.Name);
     localStorage.setItem("email", userInfo.Email);
@@ -216,14 +212,6 @@ export const authUpdateInfo = (userInfo) => {
     localStorage.setItem("phone", userInfo.Phone);
     localStorage.setItem("birthday", userInfo.Birthday);
     localStorage.setItem("avatar", userInfo.Avatar);
-    // console.log({
-    //   name: userInfo.name,
-    //   email: userInfo.email,
-    //   address: userInfo.address,
-    //   phone: userInfo.phone,
-    //   birthday: userInfo.birthday,
-    //   avatar: userInfo.avatar
-    // })
     dispatch(loginSuccess({
       name: userInfo.Name,
       email: userInfo.Email,

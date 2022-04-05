@@ -23,7 +23,6 @@ const Vouchers = () => {
           setVouchers(data.Vouchers);
           setTotalPage(data.TotalPage);
           setCurrentPage(data.CurrentPage);
-          console.log(data);
         })
         .catch(() =>
           notify(

@@ -48,7 +48,7 @@ function AddComment({
         setComments && setComments(result);
         setLoading(false);
         form.resetFields();
-      }).catch(err => console.log(err));
+      });
       forceUpdate && forceUpdate()
   };
 

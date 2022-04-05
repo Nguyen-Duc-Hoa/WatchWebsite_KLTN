@@ -29,8 +29,7 @@ function BestSeller() {
       method: "GET",
     })
       .then((response) => response.json())
-      .then((result) => setData([...result]))
-      .catch((err) => console.log(err));
+      .then((result) => setData([...result]));
   }, []);
 
   return (

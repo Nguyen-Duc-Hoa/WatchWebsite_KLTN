@@ -27,7 +27,6 @@ function PrivateRoute({
           );
         }
         if (isAuth && onlyAdmin && roles.includes("Admin")) {
-          // console.log("route only admin");
           return Layout ? (
             <Layout>
               <Component {...props} />
@@ -40,7 +39,6 @@ function PrivateRoute({
           !onlyAdmin &&
           (roles.includes("Admin") || roles.includes("Employee"))
         ) {
-          // console.log("route employee admin");
           return Layout ? (
             <Layout>
               <Component {...props} />
@@ -49,7 +47,6 @@ function PrivateRoute({
             <Component {...props} />
           );
         } else {
-          // console.log("route redirect");
           return <Redirect to="/" />;
         }
       }}

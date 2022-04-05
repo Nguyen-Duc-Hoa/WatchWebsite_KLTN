@@ -11,11 +11,6 @@ const { SubMenu } = Menu;
 function AdminMenu({ isAdmin }) {
   const history = useHistory();
 
-  // useEffect(() => {
-  //     console.log('abc')
-  //     clickMenuHandler('/admin/Home')
-  // }, [])
-
   const clickMenuHandler = (value) => {
     history.push(value);
   };

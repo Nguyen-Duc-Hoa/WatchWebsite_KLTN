@@ -188,86 +188,79 @@ function Statistic() {
     setTypeDate(value);
   };
 
-  const onFinish = (values) => {
-    //     console.log(values)
-    //     console.log(values.date[0])
-    //     console.log(values.date[1])
-    // }
+  return (
+    <section className="admin">
+      <div className="heading">Statistic</div>
+      <Form
+        {...layout}
+        onFinish={onFinish}
+        initialValues={{ typeDate: "day" }}
+      >
+        <Space>
+          <Form.Item name="typeDate">
+            <Select style={{ minWidth: 150 }} onChange={selectOnChange}>
+              <Option value="day">Day</Option>
+              <Option value="month">Month</Option>
+              <Option value="year">Year</Option>
+            </Select>
+          </Form.Item>
 
-    return (
-      <section className="admin">
-        <div className="heading">Statistic</div>
-        <Form
-          {...layout}
-          onFinish={onFinish}
-          initialValues={{ typeDate: "day" }}
-        >
-          <Space>
-            <Form.Item name="typeDate">
-              <Select style={{ minWidth: 150 }} onChange={selectOnChange}>
-                <Option value="day">Day</Option>
-                <Option value="month">Month</Option>
-                <Option value="year">Year</Option>
-              </Select>
-            </Form.Item>
+          <Form.Item
+            name="date"
+            rules={[{ required: true, message: "Date is required!" }]}
+          >
+            <RangePicker picker={typeDate} />
+          </Form.Item>
 
-            <Form.Item
-              name="date"
-              rules={[{ required: true, message: "Date is required!" }]}
-            >
-              <RangePicker picker={typeDate} />
-            </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Space>
+      </Form>
 
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Space>
-        </Form>
+      <div style={titleStyle}>Turnover</div>
+      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Col span={14}>
+          <LineChart
+            data={turnOverChartData}
+            xField={"year"}
+            yField={"turnover"}
+            size={5}
+          />
+        </Col>
+        <Col span={10}>
+          <Table
+            columns={turnOverColumns}
+            dataSource={turnOverChartData}
+            pagination={{ position: ["none", "none"] }}
+            bordered={true}
+          />
+        </Col>
+      </Row>
 
-        <div style={titleStyle}>Turnover</div>
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-          <Col span={14}>
-            <LineChart
-              data={turnOverChartData}
-              xField={"year"}
-              yField={"turnover"}
-              size={5}
-            />
-          </Col>
-          <Col span={10}>
-            <Table
-              columns={turnOverColumns}
-              dataSource={turnOverChartData}
-              pagination={{ position: ["none", "none"] }}
-              bordered={true}
-            />
-          </Col>
-        </Row>
-
-        <div style={titleStyle}>Product</div>
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-          <Col span={14}>
-            <ColumnChart
-              xField="year"
-              yField="value"
-              seriesField="name"
-              data={productChartData}
-            />
-          </Col>
-          <Col span={10}>
-            <Table
-              columns={productColumns}
-              dataSource={productChartData}
-              pagination={{ position: ["none", "none"] }}
-              bordered={true}
-            />
-          </Col>
-        </Row>
-      </section>
-    );
-  };
+      <div style={titleStyle}>Product</div>
+      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Col span={14}>
+          <ColumnChart
+            xField="year"
+            yField="value"
+            seriesField="name"
+            data={productChartData}
+          />
+        </Col>
+        <Col span={10}>
+          <Table
+            columns={productColumns}
+            dataSource={productChartData}
+            pagination={{ position: ["none", "none"] }}
+            bordered={true}
+          />
+        </Col>
+      </Row>
+    </section>
+  );
 }
 
 export default Statistic;
