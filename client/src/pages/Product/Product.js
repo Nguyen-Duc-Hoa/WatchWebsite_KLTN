@@ -133,6 +133,17 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
                     <Image width={"100%"} src={subimage.Image} />
                   </SwiperSlide>
                 ))}
+              <SwiperSlide
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  transform: "translateY(50%)",
+                }}
+              >
+                <Image
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${url}`}
+                />
+              </SwiperSlide>
             </Swiper>
           </div>
           <div className="info">
