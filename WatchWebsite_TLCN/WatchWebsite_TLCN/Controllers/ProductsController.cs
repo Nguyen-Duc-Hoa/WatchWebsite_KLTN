@@ -47,7 +47,7 @@ namespace WatchWebsite_TLCN.Controllers
         public async Task<ActionResult<Product>> GetProduct(string id)
         {
             var product = await _unitOfWork.Products.Get(p => p.Id == id);
-            
+
             if (product == null)
             {
                 return NotFound();
@@ -62,8 +62,8 @@ namespace WatchWebsite_TLCN.Controllers
         {
 
             var product = await _unitOfWork.Products.Get(
-                expression: p => p.Id == id, 
-                includes: new List<string> { "Brand", "Size", "Energy", "GetWaterResistance", "Material", "SubImages" }) ;
+                expression: p => p.Id == id,
+                includes: new List<string> { "Brand", "Size", "Energy", "GetWaterResistance", "Material", "SubImages" });
 
             if (product == null)
             {
@@ -83,9 +83,10 @@ namespace WatchWebsite_TLCN.Controllers
             string textsearch = words[0];
             foreach (var word in words)
             {
-                textsearch = textsearch + " OR (" + word + ")";
+                if (word != "")
+                    textsearch = textsearch + " OR (" + word + ")";
             }
-            var results = _context.Products.FromSqlRaw("SELECT a.*  FROM [dbo].[Product] AS a JOIN CONTAINSTABLE (Product,*,'" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] ORDER BY TBL.RANK DESC;").ToList();
+            var results = _context.Products.FromSqlRaw("SELECT a.*  FROM [dbo].[Product] AS a INNER JOIN Brand b ON a.BrandId = b.BrandId JOIN CONTAINSTABLE (Product,(Name , Description ),'" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] INNER JOIN CONTAINSTABLE(Brand, Name, '" + textsearch + "') akt ON b.BrandId = akt.[Key] ORDER BY (TBL.RANK + akt.RANK)/2 DESC;").ToList();
             var productDTO = _mapper.Map<List<ProductSearchResponse>>(results);
             return Ok(productDTO);
         }
@@ -184,7 +185,7 @@ namespace WatchWebsite_TLCN.Controllers
             var result = await _unitOfWork.Products.GetAllWithPagination(
                 expression: expression,
                 orderBy: p => p.OrderBy(x => x.Name),
-                includes: new List<string> { "Brand"},
+                includes: new List<string> { "Brand" },
                 pagination: new Pagination { CurrentPage = currentPage });
 
             var listProductDTO = _mapper.Map<List<ProductResponseDTO>>(result.Item1);
@@ -209,8 +210,30 @@ namespace WatchWebsite_TLCN.Controllers
                 filter.Search = "";
             }
 
+            if (filter.Search.Trim() != "")
+            {
+                string[] words = filter.Search.Split(' ');
+                string textsearch = words[0];
+                foreach (var word in words)
+                {
+                    if (word != "")
+                        textsearch = textsearch + " OR (" + word + ")";
+                }
+                var results = _context.Products.FromSqlRaw("SELECT a.*  FROM [dbo].[Product] AS a INNER JOIN Brand b ON a.BrandId = b.BrandId JOIN CONTAINSTABLE (Product,(Name , Description ),'" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] INNER JOIN CONTAINSTABLE(Brand, Name, '" + textsearch + "') akt ON b.BrandId = akt.[Key] ORDER BY (TBL.RANK + akt.RANK)/2 DESC;").ToList();
+                var productDTO = _mapper.Map<List<ProductSearchResponse>>(results);
+                if(productDTO.Count > 0)
+                {
+                    var lstIDProduct = new List<String> { };
+                    foreach(var item in productDTO)
+                    {
+                        lstIDProduct.Add(item.Id);
+                    }
+                    expression = expression.And(p => lstIDProduct.Contains(p.Id));
+                }
+            }
+
             // Filter search
-            expression = expression.And(p => p.Name.Contains(filter.Search));
+            //expression = expression.And(p => p.Name.Contains(filter.Search));
 
             // Specify Max, Min
             double[] limit = new double[2];
@@ -272,11 +295,11 @@ namespace WatchWebsite_TLCN.Controllers
 
             List<Product> productList = new List<Product>();
 
-            if(filter.Brands != null && filter.Brands.Length != 0 )
+            if (filter.Brands != null && filter.Brands.Length != 0)
             {
-                foreach(var item in result)
+                foreach (var item in result)
                 {
-                    if(CheckBrands(item, filter.Brands))
+                    if (CheckBrands(item, filter.Brands))
                     {
                         productList.Add(item);
                     }
@@ -302,9 +325,9 @@ namespace WatchWebsite_TLCN.Controllers
 
         private bool CheckBrands(Product product, string[] filter)
         {
-            foreach(var f in filter)
+            foreach (var f in filter)
             {
-                if(f == product.Brand.Name)
+                if (f == product.Brand.Name)
                 {
                     return true;
                 }
