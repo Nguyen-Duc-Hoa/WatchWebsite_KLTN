@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./FilterBar.scss";
-import { Form, Select, Radio, Checkbox, Space, Button, Spin } from "antd";
+import { Form, Select, Radio, Checkbox, Space, Button } from "antd";
 import { useWindowDimensions } from "../../hook/useWindowDemension";
 import { RiFilter3Fill } from "react-icons/ri";
 import { connect } from "react-redux";

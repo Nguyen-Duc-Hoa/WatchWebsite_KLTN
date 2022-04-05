@@ -86,7 +86,7 @@ namespace WatchWebsite_TLCN.Controllers
                 if (word != "")
                     textsearch = textsearch + " OR (" + word + ")";
             }
-            var results = _context.Products.FromSqlRaw("SELECT a.*  FROM [dbo].[Product] AS a INNER JOIN Brand b ON a.BrandId = b.BrandId JOIN CONTAINSTABLE (Product,(Name , Description ),'" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] INNER JOIN CONTAINSTABLE(Brand, Name, '" + textsearch + "') akt ON b.BrandId = akt.[Key] ORDER BY (TBL.RANK + akt.RANK)/2 DESC;").ToList();
+            var results = _context.Products.FromSqlRaw("SELECT a.* FROM[dbo].[Product] AS a FULL JOIN Brand b ON a.BrandId = b.BrandId FULL JOIN CONTAINSTABLE(Product, (Name, Description), '" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] FULL JOIN CONTAINSTABLE(Brand, Name, '" + textsearch + "') akt ON b.BrandId = akt.[Key] WHERE TBL.RANK is not null OR  akt.RANK is not null ORDER BY(TBL.RANK + akt.RANK) / 2 DESC, TBL.RANK DESC, akt.RANK DESC").ToList();
             var productDTO = _mapper.Map<List<ProductSearchResponse>>(results);
             return Ok(productDTO);
         }
@@ -219,7 +219,7 @@ namespace WatchWebsite_TLCN.Controllers
                     if (word != "")
                         textsearch = textsearch + " OR (" + word + ")";
                 }
-                var results = _context.Products.FromSqlRaw("SELECT a.*  FROM [dbo].[Product] AS a INNER JOIN Brand b ON a.BrandId = b.BrandId JOIN CONTAINSTABLE (Product,(Name , Description ),'" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] INNER JOIN CONTAINSTABLE(Brand, Name, '" + textsearch + "') akt ON b.BrandId = akt.[Key] ORDER BY (TBL.RANK + akt.RANK)/2 DESC;").ToList();
+                var results = _context.Products.FromSqlRaw("SELECT a.* FROM[dbo].[Product] AS a FULL JOIN Brand b ON a.BrandId = b.BrandId FULL JOIN CONTAINSTABLE(Product, (Name, Description), '" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] FULL JOIN CONTAINSTABLE(Brand, Name, '" + textsearch + "') akt ON b.BrandId = akt.[Key] WHERE TBL.RANK is not null OR  akt.RANK is not null ORDER BY(TBL.RANK + akt.RANK) / 2 DESC, TBL.RANK DESC, akt.RANK DESC").ToList();
                 var productDTO = _mapper.Map<List<ProductSearchResponse>>(results);
                 if(productDTO.Count > 0)
                 {

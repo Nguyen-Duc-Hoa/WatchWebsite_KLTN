@@ -45,6 +45,8 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
 
   const filterReq = (values, currPage = 1) => {
     setSpinning(true);
+    const searchValue = document.querySelector(".search__area input").value;
+    values["search"] = searchValue;
     fetch(
       `${process.env.REACT_APP_HOST_DOMAIN}/api/products/FilterProduct?currentPage=${currPage}`,
       {
@@ -62,7 +64,7 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
         setTotalPage(result.TotalPage);
         setSpinning(false);
       })
-      .catch((error) => {
+      .catch(() => {
         setSpinning(false);
         notify("ERROR", "Something went wrong!", "error");
       });
