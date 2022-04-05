@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbing from "../../components/Breadcrumb/Breadcrumb";
-import { Button, Image, InputNumber, Space } from "antd";
+import { Button, Image, InputNumber, Space, Spin } from "antd";
 import "./Product.scss";
 import { CgFacebook } from "react-icons/cg";
 import { AiOutlineTwitter } from "react-icons/ai";
@@ -41,6 +41,8 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
   const [productDetail, setProductDetail] = useState(null);
   const [replyUserName, setReplyUserName] = useState();
   const [replyCommentId, setReplyCommentId] = useState();
+  const [loadingProductDetail, setLoadingProductDetail] = useState(false);
+  const [loadingComments, setLoadingComments] = useState(false);
   const { id } = useParams();
   const breadCrumbRoute = [
     { link: "/", name: "Home" },
@@ -56,16 +58,19 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
   }, [id]);
 
   const fetchComments = () => {
+    setLoadingComments(true);
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Comments?productId=${id}`, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((result) => {
         setComments(result);
-      });
+      })
+      .finally(() => setLoadingComments(false));
   };
 
   const fetchProductDetail = () => {
+    setLoadingProductDetail(true);
     fetch(
       `${process.env.REACT_APP_HOST_DOMAIN}/api/products/ProductDetail?id=${id}`,
       {
@@ -76,6 +81,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
       .then((result) => {
         setProductDetail({ ...result });
       })
+      .finally(() => setLoadingProductDetail(false));
   };
 
   const handleReply = (id, author, replyFrom) => {
@@ -102,155 +108,156 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
   return (
     <section className="product">
       <Breadcrumbing route={breadCrumbRoute} />
-      <div className="content">
-        <div className="image">
-          <Swiper
-            loop={true}
-            loopFillGroupWithBlank={true}
-            spaceBetween={10}
-            pagination={{
-              clickable: true,
-            }}
-            slidesPerView={1}
-          >
-            <SwiperSlide>
-              <Image
-                width={"100%"}
-                src={productDetail && productDetail.Image}
-              />
-            </SwiperSlide>
-            {productDetail &&
-              productDetail.SubImages.length !== 0 &&
-              productDetail.SubImages.map((subimage) => (
-                <SwiperSlide key={subimage.Id}>
-                  <Image
-                    width={"100%"}
-                    src={subimage.Image}
-                  />
-                </SwiperSlide>
-              ))}
-          </Swiper>
-        </div>
-        <div className="info">
-          <div className="name">{productDetail && productDetail.Name}</div>
-          <div className="price">${productDetail && productDetail.Price}</div>
-          <div className="stock">
-            Only <span>{productDetail && productDetail.Amount}</span> item(s)
-            left in stock!
-          </div>
-          <Space direction="vertical">
-            <Form onFinish={onFinish}>
-              <Form.Item name="quantity">
-                <InputNumber
-                  min={1}
-                  max={productDetail && productDetail.Amount}
-                  parser={(value) => Math.round(value)}
-                  defaultValue={1}
+      <Spin spinning={loadingComments || loadingProductDetail}>
+        <div className="content">
+          <div className="image">
+            <Swiper
+              loop={true}
+              loopFillGroupWithBlank={true}
+              spaceBetween={10}
+              pagination={{
+                clickable: true,
+              }}
+              slidesPerView={1}
+            >
+              <SwiperSlide>
+                <Image
+                  width={"100%"}
+                  src={productDetail && productDetail.Image}
                 />
-              </Form.Item>
-              <Form.Item>
-                <Button size="large" htmlType="submit">
-                  Add to cart
-                </Button>
-              </Form.Item>
-            </Form>
-          </Space>
-          <div>
-            Case material:{" "}
-            {productDetail && productDetail.Material.MaterialValue}
+              </SwiperSlide>
+              {productDetail &&
+                productDetail.SubImages.length !== 0 &&
+                productDetail.SubImages.map((subimage) => (
+                  <SwiperSlide key={subimage.Id}>
+                    <Image width={"100%"} src={subimage.Image} />
+                  </SwiperSlide>
+                ))}
+            </Swiper>
           </div>
-          <div>
-            Gender:{" "}
-            {productDetail && productDetail.Gender === 1 ? "Mens" : "Ladies"}
-          </div>
-          <div>
-            Water resistence:{" "}
-            {productDetail && productDetail.GetWaterResistance.WaterValue}
-          </div>
-          <div>Size: {productDetail && productDetail.Size.SizeId}</div>
-          <div>Energy: {productDetail && productDetail.Energy.EnergyValue}</div>
-          <div>Share:</div>
+          <div className="info">
+            <div className="name">{productDetail && productDetail.Name}</div>
+            <div className="price">${productDetail && productDetail.Price}</div>
+            <div className="stock">
+              Only <span>{productDetail && productDetail.Amount}</span> item(s)
+              left in stock!
+            </div>
+            <Space direction="vertical">
+              <Form onFinish={onFinish}>
+                <Form.Item name="quantity">
+                  <InputNumber
+                    min={1}
+                    max={productDetail && productDetail.Amount}
+                    parser={(value) => Math.round(value)}
+                    defaultValue={1}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button size="large" htmlType="submit">
+                    Add to cart
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Space>
+            <div>
+              Case material:{" "}
+              {productDetail && productDetail.Material.MaterialValue}
+            </div>
+            <div>
+              Gender:{" "}
+              {productDetail && productDetail.Gender === 1 ? "Mens" : "Ladies"}
+            </div>
+            <div>
+              Water resistence:{" "}
+              {productDetail && productDetail.GetWaterResistance.WaterValue}
+            </div>
+            <div>Size: {productDetail && productDetail.Size.SizeId}</div>
+            <div>
+              Energy: {productDetail && productDetail.Energy.EnergyValue}
+            </div>
+            <div>Share:</div>
 
-          <span className="icon-social">
-            <FacebookShareButton url={url}>
-              <CgFacebook />
-            </FacebookShareButton>
-          </span>
-          <span className="icon-social">
-            <TwitterShareButton url={url}>
-              <AiOutlineTwitter />
-            </TwitterShareButton>
-          </span>
-          <span className="icon-social">
-            <TelegramShareButton url={url}>
-              <FaTelegramPlane />
-            </TelegramShareButton>
-          </span>
-          <span className="icon-social">
-            <RedditShareButton url={url}>
-              <ImReddit />
-            </RedditShareButton>
-          </span>
+            <span className="icon-social">
+              <FacebookShareButton url={url}>
+                <CgFacebook />
+              </FacebookShareButton>
+            </span>
+            <span className="icon-social">
+              <TwitterShareButton url={url}>
+                <AiOutlineTwitter />
+              </TwitterShareButton>
+            </span>
+            <span className="icon-social">
+              <TelegramShareButton url={url}>
+                <FaTelegramPlane />
+              </TelegramShareButton>
+            </span>
+            <span className="icon-social">
+              <RedditShareButton url={url}>
+                <ImReddit />
+              </RedditShareButton>
+            </span>
+          </div>
         </div>
-      </div>
-      <section className="descriptionAndComments">
-        <Tabs defaultActiveKey="1" centered size="large">
-          <TabPane tab="Description" key="1">
-            <Text strong>{productDetail && productDetail.Description}</Text>
-          </TabPane>
-          <TabPane tab="Reviews" key="2">
-            {
-              <List
-                className="comment-list"
-                header={`${commentTotal} comments`}
-                itemLayout="horizontal"
-                dataSource={comments}
-                renderItem={(item) => (
-                  <li>
-                    <Commenting
-                      key={item.Id}
-                      id={item.Id}
-                      author={item.User.UserName}
-                      avatar={item.User.Avatar}
-                      content={item.Content}
-                      datetime={new Date(item.Date).toLocaleDateString()}
-                      onReply={handleReply}
-                    >
-                      {item.Replies &&
-                        item.Replies.map((rep) => (
-                          <Commenting
-                            key={rep.Id}
-                            id={rep.Id}
-                            author={rep.User.UserName}
-                            avatar={rep.User.Avatar}
-                            content={rep.Content}
-                            datetime={new Date(rep.Date).toLocaleDateString()}
-                            replyFrom={rep.ReplyFrom}
-                            onReply={handleReply}
-                          />
-                        ))}
-                    </Commenting>
-                  </li>
-                )}
-              />
-            }
-            {isAuth && (
-              <AddComment
-                setComments={setComments}
-                replyUserName={replyUserName}
-                replyCommentId={replyCommentId}
-                productId={id}
-                setReplyCommentId={setReplyCommentId}
-                setReplyUserName={setReplyUserName}
-                userId={userId}
-                token={token}
-                username={username}
-                avatarUser={avatarUser}
-              />
-            )}
-          </TabPane>
-        </Tabs>
-      </section>
+        <section className="descriptionAndComments">
+          <Tabs defaultActiveKey="1" centered size="large">
+            <TabPane tab="Description" key="1">
+              <Text strong>{productDetail && productDetail.Description}</Text>
+            </TabPane>
+            <TabPane tab="Reviews" key="2">
+              {
+                <List
+                  className="comment-list"
+                  header={`${commentTotal} comments`}
+                  itemLayout="horizontal"
+                  dataSource={comments}
+                  renderItem={(item) => (
+                    <li>
+                      <Commenting
+                        key={item.Id}
+                        id={item.Id}
+                        author={item.User.UserName}
+                        avatar={item.User.Avatar}
+                        content={item.Content}
+                        datetime={new Date(item.Date).toLocaleDateString()}
+                        onReply={handleReply}
+                      >
+                        {item.Replies &&
+                          item.Replies.map((rep) => (
+                            <Commenting
+                              key={rep.Id}
+                              id={rep.Id}
+                              author={rep.User.UserName}
+                              avatar={rep.User.Avatar}
+                              content={rep.Content}
+                              datetime={new Date(rep.Date).toLocaleDateString()}
+                              replyFrom={rep.ReplyFrom}
+                              onReply={handleReply}
+                            />
+                          ))}
+                      </Commenting>
+                    </li>
+                  )}
+                />
+              }
+              {isAuth && (
+                <AddComment
+                  setComments={setComments}
+                  replyUserName={replyUserName}
+                  replyCommentId={replyCommentId}
+                  productId={id}
+                  setReplyCommentId={setReplyCommentId}
+                  setReplyUserName={setReplyUserName}
+                  userId={userId}
+                  token={token}
+                  username={username}
+                  avatarUser={avatarUser}
+                />
+              )}
+            </TabPane>
+          </Tabs>
+        </section>
+      </Spin>
     </section>
   );
 }
