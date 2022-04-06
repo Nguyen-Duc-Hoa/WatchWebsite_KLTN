@@ -11,10 +11,11 @@ namespace WatchWebsite_TLCN.DTO
         public int UserId { get; set; }
         public DateTime OrderDate { get; set; }
         public string Transaction { get; set; }
-        public string PaymentStatus { get; set; }
+        public string PaymentStatus { get; set; } = "succeeded";
         public string Address { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
+        public int CodeVoucher { get; set; }
         public List<ProductItem> Products { get; set; }
     }
     public class OrderUpdateState
@@ -30,6 +31,7 @@ namespace WatchWebsite_TLCN.DTO
         public string Name { get; set; }
         public string Phone { get; set; }
         public List<ProductItem> Products { get; set; }
-        public string VoucherCode { get; set; } = "";
+        public string VoucherCode { get; set; }
+        public int VoucherId { get; set; }
     }
 }

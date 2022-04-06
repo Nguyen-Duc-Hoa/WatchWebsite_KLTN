@@ -20,7 +20,7 @@ const breadCrumbRoute = [
 // loadStripe is initialized with a fake API key.
 const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PROMISE}`);
 
-function Shipping({ cart, orderInfo, token, idUser, voucherCode }) {
+function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
   const [payMethod, setPaymethod] = useState("");
 
   const makeZalopayReq = () => {
@@ -43,6 +43,7 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode }) {
         phone: orderInfo.phone,
         products: items,
         voucherCode: voucherCode,
+        voucherId: voucherId
       }),
     })
       .then((res) => res.json())
@@ -129,6 +130,7 @@ const mapStateToProps = (state) => {
     token: state.auth.token,
     idUser: state.auth.id,
     voucherCode: state.order.voucherCode,
+    voucherId: state.order.voucherId,
   };
 };
 

@@ -47,7 +47,9 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   const onFinish = (values) => {
     if (values.voucherCode && values.voucherCode.trim() !== "") {
       values["voucherDiscount"] = vouchers.find(voucher => voucher.Code === values.voucherCode).Discount;
+      values["voucherId"] = vouchers.find(voucher => voucher.Code === values.voucherCode).VoucherId;
     }
+    console.log(values)
     onSetInfoOrder(values);
     history.push("/checkout/payment");
   };

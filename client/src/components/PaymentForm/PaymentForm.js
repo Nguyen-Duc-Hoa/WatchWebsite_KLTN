@@ -34,6 +34,7 @@ function PaymentForm({
   idUser,
   onFetchCart,
   voucherCode,
+  voucherId,
 }) {
   const history = useHistory();
   const [clientSecret, setClientSecret] = useState("");
@@ -66,6 +67,7 @@ function PaymentForm({
       body: JSON.stringify({
         products: items,
         voucherCode: voucherCode,
+        voucherId: voucherId,
       }),
     })
       .then((res) => res.json())
@@ -105,6 +107,7 @@ function PaymentForm({
           address: orderInfo.address,
           name: orderInfo.name,
           phone: orderInfo.phone,
+          codeVoucher: voucherId,
           products: items,
         }),
       }).then((response) => {
@@ -171,6 +174,7 @@ const mapStateToProps = (state) => {
     token: state.auth.token,
     idUser: state.auth.id,
     voucherCode: state.order.voucherCode,
+    voucherId: state.order.voucherId,
   };
 };
 
