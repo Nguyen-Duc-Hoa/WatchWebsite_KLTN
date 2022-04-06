@@ -310,7 +310,7 @@ namespace WatchWebsite_TLCN.Controllers
                 productList = result;
             }
 
-            var listProductPaging = productList.Skip((currentPage - 1) * 5).Take(5);
+            var listProductPaging = productList.Skip((currentPage - 1) * 8).Take(8);
 
             var listProductDTO = _mapper.Map<List<ProductResponseDTO>>(listProductPaging);
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbing from "../../components/Breadcrumb/Breadcrumb";
-import { Button, Image, InputNumber, Space, Spin } from "antd";
+import { Button, Image, InputNumber, Rate, Space, Spin } from "antd";
 import "./Product.scss";
 import { CgFacebook } from "react-icons/cg";
 import { AiOutlineTwitter } from "react-icons/ai";
@@ -38,6 +38,9 @@ const { TabPane } = Tabs;
 
 function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
   const [comments, setComments] = useState([]);
+  const [rate, setRate] = useState(0);
+  const [numOfRate, setNumOfRate] = useState(0);
+  const [ratable, setRatable] = useState(false);
   const [productDetail, setProductDetail] = useState(null);
   const [replyUserName, setReplyUserName] = useState();
   const [replyCommentId, setReplyCommentId] = useState();
@@ -54,14 +57,38 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
   useEffect(() => {
     if (!id) return;
     fetchComments();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
     fetchProductDetail();
   }, [id]);
 
+  useEffect(() => {
+    if (!id) return;
+    fetchRate();
+  }, [id]);
+
+  const fetchRate = () => {
+    fetch(
+      `${process.env.REACT_APP_HOST_DOMAIN}/api/rates?userId=${userId ? userId : -1}&productId=${id}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        if ("rateValue" in data && "numOfRate" in data) {
+          console.log('aaaaaaaaaaaaaaa')
+          setRate(data["rateValue"]);
+          setNumOfRate(data["numOfRate"]);
+        } else {
+          setRatable(true);
+        }
+      });
+  };
+
   const fetchComments = () => {
     setLoadingComments(true);
-    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Comments?productId=${id}`, {
-      method: "GET",
-    })
+    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Comments?productId=${id}`)
       .then((response) => response.json())
       .then((result) => {
         setComments(result);
@@ -72,10 +99,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
   const fetchProductDetail = () => {
     setLoadingProductDetail(true);
     fetch(
-      `${process.env.REACT_APP_HOST_DOMAIN}/api/products/ProductDetail?id=${id}`,
-      {
-        method: "GET",
-      }
+      `${process.env.REACT_APP_HOST_DOMAIN}/api/products/ProductDetail?id=${id}`
     )
       .then((response) => response.json())
       .then((result) => {
@@ -149,6 +173,10 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
           <div className="info">
             <div className="name">{productDetail && productDetail.Name}</div>
             <div className="price">${productDetail && productDetail.Price}</div>
+            <Space>
+              <Rate value={rate} disabled={!ratable} />
+              <span>{ratable ? "Rate now" : `${numOfRate} rates`}</span>
+            </Space>
             <div className="stock">
               Only <span>{productDetail && productDetail.Amount}</span> item(s)
               left in stock!

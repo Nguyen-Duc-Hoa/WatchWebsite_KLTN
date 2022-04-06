@@ -1,0 +1,65 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using WatchWebsite_TLCN.IRepository;
+
+namespace WatchWebsite_TLCN.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RatesController : ControllerBase
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        public RatesController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetRate(int userId, string productId)
+        {
+            if (userId == -1 || !(await IsExist(userId, productId)))
+            {
+                var rates = await _unitOfWork.Rates.GetAll(expression: r => r.ProductId == productId);
+                if(rates.Count == 0)
+                {
+                    return Ok(new
+                    {
+                        rateValue = 0,
+                        numOfRate = rates.Count
+                    });
+                }
+                var totalStar = 0;
+                var numOfRate = 0;
+                foreach (var item in rates)
+                {
+                    if (item.Value >= 0)
+                    {
+                        totalStar = totalStar + item.Value;
+                        numOfRate++;
+                    }
+                }
+                var finalRate = totalStar / rates.Count;
+                return Ok(new
+                {
+                    rateValue = finalRate,
+                    numOfRate = numOfRate
+                });
+            }
+            return Ok(new {
+                ratable = true
+            });
+        }
+        private async Task<bool> IsExist(int userId, string productId)
+        {
+            var rate = await _unitOfWork.Rates.Get(expression: r => r.UserId == userId && r.ProductId == productId && r.LimitDate > DateTime.Now);
+            if(rate != null)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+}

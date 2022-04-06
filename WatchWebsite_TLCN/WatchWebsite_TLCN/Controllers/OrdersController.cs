@@ -117,7 +117,10 @@ namespace WatchWebsite_TLCN.Controllers
                         Price = product.Price,
                         ProductName = product.Name
                     };
+                    var rate = new Rate() { ProductId = item.Id, UserId = order.UserId };
+
                     await _unitOfWork.OrderDetails.Insert(orderDetail);
+                    await _unitOfWork.Rates.Insert(rate);
                 }
 
                 // Delete all cart items of user

@@ -15,6 +15,7 @@ namespace WatchWebsite_TLCN.Entities
         public string ProductId { get; set; }
 
         public int Value { get; set; } = -1;
+        public DateTime LimitDate { get; set; } = DateTime.Now.AddDays(7);
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
