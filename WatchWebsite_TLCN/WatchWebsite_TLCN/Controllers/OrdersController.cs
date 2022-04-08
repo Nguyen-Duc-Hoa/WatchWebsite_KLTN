@@ -87,7 +87,7 @@ namespace WatchWebsite_TLCN.Controllers
                 DateTime timeVN = now.AddHours(15);
                 orderDTO.OrderDate = timeVN;
                 var order = _mapper.Map<Entities.Order>(orderDTO);
-                if(orderDTO.CodeVoucher != 0)
+                if(orderDTO.CodeVoucher != -1)
                 {
                     var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.VoucherId == orderDTO.CodeVoucher);
                     if(voucher != null)
@@ -120,7 +120,16 @@ namespace WatchWebsite_TLCN.Controllers
                     var rate = new Rate() { ProductId = item.Id, UserId = order.UserId };
 
                     await _unitOfWork.OrderDetails.Insert(orderDetail);
-                    await _unitOfWork.Rates.Insert(rate);
+
+                    var dbRate = await _unitOfWork.Rates.Get(expression: r => r.UserId == rate.UserId && r.ProductId == rate.ProductId);
+                    if(dbRate != null)
+                    {
+                        _unitOfWork.Rates.Update(rate);
+                    }
+                    else
+                    {
+                        await _unitOfWork.Rates.Insert(rate);
+                    }
                 }
 
                 // Delete all cart items of user
@@ -131,7 +140,7 @@ namespace WatchWebsite_TLCN.Controllers
 
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error. Please  try again error!!");
             }

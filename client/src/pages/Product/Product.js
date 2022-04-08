@@ -71,13 +71,13 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
 
   const fetchRate = () => {
     fetch(
-      `${process.env.REACT_APP_HOST_DOMAIN}/api/rates?userId=${userId ? userId : -1}&productId=${id}`
+      `${process.env.REACT_APP_HOST_DOMAIN}/api/rates?userId=${
+        userId ? userId : -1
+      }&productId=${id}`
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         if ("rateValue" in data && "numOfRate" in data) {
-          console.log('aaaaaaaaaaaaaaa')
           setRate(data["rateValue"]);
           setNumOfRate(data["numOfRate"]);
         } else {
@@ -129,6 +129,40 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     comments.reduce((prev, curr) => prev + curr.Replies.length, 0) +
     comments.length;
 
+  const handleRate = async (value) => {
+    console.log(value)
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_HOST_DOMAIN}/api/rates`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            userId: userId,
+            productId: id,
+            value: value,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        if ("rateValue" in data && "numOfRate" in data) {
+          setRate(data["rateValue"]);
+          setNumOfRate(data["numOfRate"]);
+          setRatable(false)
+        }
+      }
+      else {
+        throw Error();
+      }
+    } catch {
+      notify("RATE FAIL", "Something went wrong :( Please try again.", "error");
+    }
+  };
+
   return (
     <section className="product">
       <Breadcrumbing route={breadCrumbRoute} />
@@ -174,8 +208,8 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
             <div className="name">{productDetail && productDetail.Name}</div>
             <div className="price">${productDetail && productDetail.Price}</div>
             <Space>
-              <Rate value={rate} disabled={!ratable} />
-              <span>{ratable ? "Rate now" : `${numOfRate} rates`}</span>
+              <Rate onChange={handleRate} value={rate} disabled={!ratable} />
+              <span>{ratable ? "Rate now" : `${numOfRate} review(s)`}</span>
             </Space>
             <div className="stock">
               Only <span>{productDetail && productDetail.Amount}</span> item(s)

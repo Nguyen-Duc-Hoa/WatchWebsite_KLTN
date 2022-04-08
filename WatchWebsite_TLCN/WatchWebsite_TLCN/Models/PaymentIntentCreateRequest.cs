@@ -8,8 +8,8 @@ namespace WatchWebsite_TLCN.Models
     public class PaymentIntentCreateRequest
     {
         public List<ProductItem> Products { get; set; }
-        public string voucherCode { get; set; }
-        public int voucherId { get; set; }
+        public string voucherCode { get; set; } = "";
+        public int? voucherId { get; set; }
     }
     public class ProductItem
     {

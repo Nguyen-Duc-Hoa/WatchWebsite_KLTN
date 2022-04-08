@@ -4,7 +4,7 @@ const intialState = {
   address: null,
   name: null,
   phone: null,
-  voucherCode: null,
+  voucherCode: '',
   voucherDiscount: 0,
   voucherId: null
 };
