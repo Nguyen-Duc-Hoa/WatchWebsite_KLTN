@@ -25,6 +25,7 @@ namespace WatchWebsite_TLCN.Configuration
             CreateMap<Order, ListOrderDTO>().ReverseMap();
             CreateMap<Size, SizeDTO>().ReverseMap();
             CreateMap<Product, ProductSearchResponse>().ReverseMap();
+            CreateMap<Rate, RateDTO>().ReverseMap();
         }
     }
 }
