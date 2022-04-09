@@ -44,22 +44,27 @@ namespace WatchWebsite_TLCN.Controllers
         {
             var transid = Guid.NewGuid().ToString();
             var embeddata = new { merchantinfo = "embeddata123" };
-            object[] product = await CalculateOrderAmount(info.Products, info.VoucherCode);
+            object[] product = await CalculateOrderAmount(info.Products, info.VoucherCode, info.VoucherId);
             var items = new List<ZaloItem>();
             string amount = "0";
-            if(product != null && product[0] != null)
+            if (product != null && product[0] != null)
             {
                 amount = product[1].ToString();
                 items = (List<ZaloItem>)product[0];
             }
-                var param = new Dictionary<string, string>();
+            var param = new Dictionary<string, string>();
 
             param.Add("appid", appid);
             param.Add("appuser", info.Name);
             param.Add("apptime", Utils.GetTimeStamp().ToString());
             param.Add("amount", amount);
             param.Add("apptransid", DateTime.Now.ToString("yyMMdd") + "_" + transid); // mã giao dich có định dạng yyMMdd_xxxx
-            param.Add("embeddata", JsonConvert.SerializeObject(embeddata));
+            param.Add("embeddata", JsonConvert.SerializeObject(new { 
+                userid = info.UserId,
+                voucherid = info.VoucherId,
+                phone = info.Phone,
+                address = info.Address
+            }));
             param.Add("item", JsonConvert.SerializeObject(items));
             param.Add("description", "MiniMix Payment");
             param.Add("bankcode", "zalopayapp");
@@ -104,7 +109,6 @@ namespace WatchWebsite_TLCN.Controllers
                     // merchant cập nhật trạng thái cho đơn hàng
                     var dataJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataStr);
                     Console.WriteLine("update order's status = success where apptransid = {0}", dataJson["apptransid"]);
-
                     result["returncode"] = 1;
                     result["returnmessage"] = "success";
                 }
@@ -119,26 +123,37 @@ namespace WatchWebsite_TLCN.Controllers
             return Ok(result);
         }
 
-        private async Task<object[]> CalculateOrderAmount(List<ProductItem> products, string voucherCode)
+        private async Task<object[]> CalculateOrderAmount(List<ProductItem> products, string voucherCode, int voucherId)
         {
             float total = 0;
             DateTime now = DateTime.Now;
             List<ZaloItem> items = new List<ZaloItem>();
             float discount = 0;
-            Dictionary<string, float> dataJson;
+            Dictionary<string, float> dataJson = new Dictionary<string, float>();
             Voucher voucher = new Voucher();
             if (voucherCode.Trim() != "")
             {
-                voucher = await _unitOfWork.Vouchers.Get(expression: v => v.Code == voucherCode && v.StartDate <= now && v.EndDate >= now && v.State == true);
-                discount = voucher.Discount;
-            }
-            using(var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync("https://free.currconv.com/api/v7/convert?q=USD_VND&compact=ultra&apiKey=0850bbd4eefdb86b5aed"))
+                voucher = await _unitOfWork.Vouchers.Get(expression: v => v.Code == voucherCode && v.VoucherId == voucherId && v.StartDate <= now && v.EndDate >= now && v.State == true);
+                if (voucher != null)
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    dataJson = JsonConvert.DeserializeObject<Dictionary<string, float>>(apiResponse);
+                    discount = voucher.Discount;
                 }
+            }
+            try
+            {
+                //using (var httpClient = new HttpClient())
+                //{
+                //    using (var response = await httpClient.GetAsync("https://free.currconv.com/api/v7/convert?q=USD_VND&compact=ultra&apiKey=0850bbd4eefdb86b5aed"))
+                //    {
+                //        string apiResponse = await response.Content.ReadAsStringAsync();
+                //        dataJson = JsonConvert.DeserializeObject<Dictionary<string, float>>(apiResponse);
+                //    }
+                //}
+                dataJson.Add("USD_VND", 23000);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             foreach (var item in products)
             {
@@ -153,10 +168,10 @@ namespace WatchWebsite_TLCN.Controllers
                     itemvouchercode = voucherCode,
                     itemvoucherdiscount = voucher != null ? voucher.Discount : 0
                 });
-                total = total + prod.Price * item.Quantity;  
+                total = total + prod.Price * item.Quantity;
             }
             total = (float)Math.Truncate((total - discount) * dataJson["USD_VND"]);
-            if(total <= 0)
+            if (total <= 0)
             {
                 total = dataJson["USD_VND"];
             }

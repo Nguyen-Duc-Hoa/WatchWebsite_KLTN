@@ -310,7 +310,8 @@ namespace WatchWebsite_TLCN.Controllers
                 productList = result;
             }
 
-            var listProductPaging = productList.Skip((currentPage - 1) * 5).Take(5);
+            Pagination pagination = new Pagination();
+            var listProductPaging = productList.Skip((currentPage - 1) * pagination.ItemsPerPage).Take(pagination.ItemsPerPage);
 
             var listProductDTO = _mapper.Map<List<ProductResponseDTO>>(listProductPaging);
 
@@ -319,7 +320,7 @@ namespace WatchWebsite_TLCN.Controllers
             {
                 Products = listProductDTO,
                 CurrentPage = currentPage,
-                TotalPage = Math.Ceiling((double)productList.Count / 5)
+                TotalPage = Math.Ceiling((double)productList.Count / pagination.ItemsPerPage)
             });
         }
 

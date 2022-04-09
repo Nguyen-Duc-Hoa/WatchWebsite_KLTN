@@ -82,11 +82,20 @@ namespace WatchWebsite_TLCN.Controllers
         {
             try
             {
+                float discount = 0;
                 DateTime now = DateTime.Now;
                 DateTime timeVN = now.AddHours(15);
                 orderDTO.OrderDate = timeVN;
                 var order = _mapper.Map<Entities.Order>(orderDTO);
-                order.Total = await CalculateOrderAmount(orderDTO.Products) / 100;
+                if(orderDTO.CodeVoucher != -1)
+                {
+                    var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.VoucherId == orderDTO.CodeVoucher);
+                    if(voucher != null)
+                    {
+                        discount = voucher.Discount;
+                    }
+                }
+                order.Total = await CalculateOrderAmount(orderDTO.Products) / 100 - discount;
 
                 // Create order
                 await _unitOfWork.Orders.Insert(order);
@@ -108,7 +117,19 @@ namespace WatchWebsite_TLCN.Controllers
                         Price = product.Price,
                         ProductName = product.Name
                     };
+                    var rate = new Rate() { ProductId = item.Id, UserId = order.UserId };
+
                     await _unitOfWork.OrderDetails.Insert(orderDetail);
+
+                    var dbRate = await _unitOfWork.Rates.Get(expression: r => r.UserId == rate.UserId && r.ProductId == rate.ProductId);
+                    if(dbRate != null)
+                    {
+                        _unitOfWork.Rates.Update(rate);
+                    }
+                    else
+                    {
+                        await _unitOfWork.Rates.Insert(rate);
+                    }
                 }
 
                 // Delete all cart items of user
@@ -119,7 +140,7 @@ namespace WatchWebsite_TLCN.Controllers
 
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error. Please  try again error!!");
             }
@@ -138,8 +159,11 @@ namespace WatchWebsite_TLCN.Controllers
                 float discount = 0;
                 if (request.voucherCode.Trim() != "")
                 {
-                    var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.Code == request.voucherCode && v.StartDate >= now && v.EndDate <= now && v.State == true);
-                    discount = voucher.Discount;
+                    var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.Code == request.voucherCode && v.VoucherId == request.voucherId && v.StartDate >= now && v.EndDate <= now && v.State == true);
+                    if(voucher != null)
+                    {
+                        discount = voucher.Discount;
+                    }
                 }
                 float amount = await CalculateOrderAmount(request.Products);
                 if(amount <= discount)
