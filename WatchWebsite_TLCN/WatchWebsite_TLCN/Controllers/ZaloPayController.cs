@@ -43,8 +43,8 @@ namespace WatchWebsite_TLCN.Controllers
         public async Task<IActionResult> ZaloPayAsync([FromBody] PaymentZalo info)
         {
             var transid = Guid.NewGuid().ToString();
-            var embeddata = new { merchantinfo = "embeddata123" };
-            object[] product = await CalculateOrderAmount(info.Products, info.VoucherCode, info.VoucherId);
+            object[] product = await CalculateOrderAmount(info.Products, 
+                info.VoucherCode, info.VoucherId);
             var items = new List<ZaloItem>();
             string amount = "0";
             if (product != null && product[0] != null)
@@ -123,7 +123,8 @@ namespace WatchWebsite_TLCN.Controllers
             return Ok(result);
         }
 
-        private async Task<object[]> CalculateOrderAmount(List<ProductItem> products, string voucherCode, int voucherId)
+        private async Task<object[]> CalculateOrderAmount(List<ProductItem> products, 
+            string voucherCode, int? voucherId)
         {
             float total = 0;
             DateTime now = DateTime.Now;
