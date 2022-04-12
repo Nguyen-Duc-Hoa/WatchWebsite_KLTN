@@ -94,6 +94,7 @@ function PaymentForm({
           quantity: element.Quantity,
         };
       });
+
       fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Orders/CreateOrder`, {
         method: "POST",
         headers: {

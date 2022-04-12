@@ -101,7 +101,7 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
             </div>
             <div
               className="paymethod"
-              onClick={() => makeZalopayReq()}
+              onClick={makeZalopayReq}
             >
               <div className="left">
                 <img

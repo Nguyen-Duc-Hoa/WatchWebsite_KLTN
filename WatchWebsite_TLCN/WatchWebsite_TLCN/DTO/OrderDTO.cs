@@ -32,6 +32,6 @@ namespace WatchWebsite_TLCN.DTO
         public string Phone { get; set; }
         public List<ProductItem> Products { get; set; }
         public string VoucherCode { get; set; } = "";
-        public int VoucherId { get; set; }
+        public int? VoucherId { get; set; }
     }
 }
