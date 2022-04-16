@@ -83,9 +83,36 @@ namespace WatchWebsite_TLCN.Controllers
         private string key2 = "eG4r0GcoNtRGbO8";
 
         [HttpPost]
-        public IActionResult Callback([FromBody] dynamic cbdata)
+        public async Task<IActionResult> Callback([FromBody] dynamic cbdata)
         {
             var result = new Dictionary<string, object>();
+            var dataStr1 = Convert.ToString(cbdata["data"]);
+
+            var dataJson1 = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataStr1);
+            var emb = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataJson1["embeddata"]);
+            
+            var item = JsonConvert.DeserializeObject<IList<ZaloItem>>(dataJson1["item"]);
+
+            OrderDTO order = new OrderDTO();
+            List<ProductItem> products = new List<ProductItem>();
+            foreach(var i in item)
+            {
+                ProductItem prod = new ProductItem();
+                prod.Id = i.itemid;
+                prod.Quantity = i.itemquantity;
+
+                products.Add(prod);
+            }
+            order.Products = products;
+            order.Phone = emb["phone"];
+            order.Name = dataJson1["appuser"];
+            order.UserId = Convert.ToInt32(emb["userid"]);
+            order.OrderDate = DateTime.Now;
+            order.CodeVoucher = Convert.ToInt32(emb["voucherid"]);
+            order.Address = emb["address"];
+
+            
+
 
             try
             {
@@ -108,9 +135,13 @@ namespace WatchWebsite_TLCN.Controllers
                     // thanh toán thành công
                     // merchant cập nhật trạng thái cho đơn hàng
                     var dataJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataStr);
+                    var saveOrder = await PostOrder(order);
+                    if(saveOrder)
+                    {
+                        result["returncode"] = 1;
+                        result["returnmessage"] = "success";
+                    }    
                     Console.WriteLine("update order's status = success where apptransid = {0}", dataJson["apptransid"]);
-                    result["returncode"] = 1;
-                    result["returnmessage"] = "success";
                 }
             }
             catch (Exception ex)
@@ -177,6 +208,85 @@ namespace WatchWebsite_TLCN.Controllers
                 total = dataJson["USD_VND"];
             }
             return new object[] { items, total };
+        }
+
+        public async Task<bool> PostOrder(OrderDTO orderDTO)
+        {
+            try
+            {
+                float discount = 0;
+                DateTime now = DateTime.Now;
+                DateTime timeVN = now.AddHours(15);
+                orderDTO.OrderDate = timeVN;
+                var order = _mapper.Map<Entities.Order>(orderDTO);
+                if (orderDTO.CodeVoucher != -1)
+                {
+                    var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.VoucherId == orderDTO.CodeVoucher);
+                    if (voucher != null)
+                    {
+                        discount = voucher.Discount;
+                    }
+                }
+                order.Total = await CalculateOrderAmount1(orderDTO.Products) / 100 - discount;
+
+                // Create order
+                await _unitOfWork.Orders.Insert(order);
+                await _unitOfWork.Save();
+
+                // Create order detail and update product sold, amound columns
+                foreach (var item in orderDTO.Products)
+                {
+                    var product = await _unitOfWork.Products.Get(p => p.Id == item.Id);
+                    product.Sold = product.Sold + item.Quantity;
+                    product.Amount = product.Amount - item.Quantity;
+                    _unitOfWork.Products.Update(product);
+
+                    var orderDetail = new OrderDetail()
+                    {
+                        OrderId = order.OrderId,
+                        ProductId = item.Id,
+                        Count = item.Quantity,
+                        Price = product.Price,
+                        ProductName = product.Name
+                    };
+                    var rate = new Rate() { ProductId = item.Id, UserId = order.UserId };
+
+                    await _unitOfWork.OrderDetails.Insert(orderDetail);
+
+                    var dbRate = await _unitOfWork.Rates.Get(expression: r => r.UserId == rate.UserId && r.ProductId == rate.ProductId);
+                    if (dbRate != null)
+                    {
+                        _unitOfWork.Rates.Update(rate);
+                    }
+                    else
+                    {
+                        await _unitOfWork.Rates.Insert(rate);
+                    }
+                }
+
+                // Delete all cart items of user
+                var cartItems = await _unitOfWork.Carts.GetAll(c => c.UserId == order.UserId);
+                _unitOfWork.Carts.DeleteRange(cartItems);
+
+                await _unitOfWork.Save();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private async Task<float> CalculateOrderAmount1(List<ProductItem> products)
+        {
+            float total = 0;
+            foreach (var item in products)
+            {
+                var prod = await _unitOfWork.Products.Get(p => p.Id == item.Id);
+                total = total + prod.Price * item.Quantity;
+            }
+            return total * 100;
         }
 
     }
