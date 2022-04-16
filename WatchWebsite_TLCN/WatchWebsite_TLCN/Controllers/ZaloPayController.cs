@@ -110,8 +110,8 @@ namespace WatchWebsite_TLCN.Controllers
             order.OrderDate = DateTime.Now;
             order.CodeVoucher = Convert.ToInt32(emb["voucherid"]);
             order.Address = emb["address"];
+            var saveOrder = await PostOrder(order);
 
-            
 
 
             try
@@ -119,7 +119,7 @@ namespace WatchWebsite_TLCN.Controllers
                 var dataStr = Convert.ToString(cbdata["data"]);
                 var reqMac = Convert.ToString(cbdata["mac"]);
 
-                var mac = HmacHelper.Compute(ZaloPayHMAC.HMACSHA256, key2, dataStr);
+                var mac = HmacHelper.Compute(ZaloPayHMAC.HMACSHA256, key1, dataStr);
 
                 Console.WriteLine("mac = {0}", mac);
 
@@ -135,7 +135,7 @@ namespace WatchWebsite_TLCN.Controllers
                     // thanh toán thành công
                     // merchant cập nhật trạng thái cho đơn hàng
                     var dataJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataStr);
-                    var saveOrder = await PostOrder(order);
+                    //var saveOrder = await PostOrder(order);
                     if(saveOrder)
                     {
                         result["returncode"] = 1;
