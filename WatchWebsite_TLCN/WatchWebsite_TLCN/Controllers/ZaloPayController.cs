@@ -108,7 +108,10 @@ namespace WatchWebsite_TLCN.Controllers
             order.Name = dataJson1["appuser"];
             order.UserId = Convert.ToInt32(emb["userid"]);
             order.OrderDate = DateTime.Now;
-            order.CodeVoucher = Convert.ToInt32(emb["voucherid"]);
+            if (emb["voucherid"] != null)
+                order.CodeVoucher = Convert.ToInt32(emb["voucherid"]);
+            else
+                order.CodeVoucher = null;
             order.Address = emb["address"];
             var saveOrder = await PostOrder(order);
 
