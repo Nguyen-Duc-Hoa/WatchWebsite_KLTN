@@ -155,6 +155,125 @@ namespace WatchWebsite_TLCN.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("LoginWithFacebook")]
+        public async Task<IActionResult> LoginWithFacebook(LoginFacebook loginFacebook)
+        {
+            User user = await _unitOfWork.Users.Get(expression: u => u.Email == loginFacebook.Email &&
+             u.Password == loginFacebook.Id && u.State == true);
+            if (user != null)
+            {
+                List<String> roles = new List<string>();
+                var user_role = (from u in _context.User_Roles
+                                 join r in _context.Roles on u.RoleId equals r.RoleId
+                                 where u.UserId == user.Id
+                                 select new
+                                 {
+                                     r.RoleId,
+                                     r.RoleName
+                                 }).ToList();
+
+                foreach (var item in user_role)
+                {
+                    roles.Add(item.RoleName);
+                }
+                var token = _jwtAuthenticationManager.Authenticate(user.Id, user.Username, user.Password, roles);
+
+                if (token == null)
+                {
+                    return Unauthorized();
+                }
+
+                return Ok(new
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Address = user.Address,
+                    Phone = user.Phone,
+                    Birthday = user.Birthday,
+                    Avatar = user.Avatar,
+                    Role = roles,
+                    Token = token.JwtToken
+                });
+            }
+
+            var createdUser = new User
+            {
+                Username = loginFacebook.Name,
+                Name = loginFacebook.Name,
+                Password = loginFacebook.Id,
+                Phone = "",
+                Email = loginFacebook.Email,
+                State = true,
+                Avatar = loginFacebook.ImageUrl
+            };
+            try
+            {
+                _context.Users.Add(createdUser);
+                var result = await _context.SaveChangesAsync();
+
+
+                if (result.Equals(1))
+                {
+                    string customerRole = Constant.customerRole;
+                    Role dbRole = _context.Roles.FirstOrDefault(r => r.RoleName == customerRole);
+                    User_Role usrRole = new User_Role { RoleId = dbRole.RoleId, UserId = createdUser.Id };
+                    _context.User_Roles.Add(usrRole);
+                    await _context.SaveChangesAsync();
+
+                    User dbUser = await _unitOfWork.Users.Get(expression: u => u.Email == loginFacebook.Email &&
+                        u.Password == loginFacebook.Id && u.State == true);
+
+
+                    List<String> roles = new List<string>();
+                    var user_role = (from u in _context.User_Roles
+                                     join r in _context.Roles on u.RoleId equals r.RoleId
+                                     where u.UserId == createdUser.Id
+                                     select new
+                                     {
+                                         r.RoleId,
+                                         r.RoleName
+                                     }).ToList();
+
+                    foreach (var item in user_role)
+                    {
+                        roles.Add(item.RoleName);
+                    }
+                    var token = _jwtAuthenticationManager.Authenticate(createdUser.Id, createdUser.Username, createdUser.Password, roles);
+
+                    if (token == null)
+                    {
+                        return Unauthorized();
+                    }
+
+                    return Ok(new
+                    {
+                        Id = createdUser.Id,
+                        Username = createdUser.Username,
+                        Email = createdUser.Email,
+                        Name = createdUser.Name,
+                        Address = createdUser.Address,
+                        Phone = createdUser.Phone,
+                        Birthday = createdUser.Birthday,
+                        Avatar = createdUser.Avatar,
+                        Role = roles,
+                        Token = token.JwtToken
+                    });
+                }
+                else
+                {
+                    return BadRequest("Dang ki khong thanh cong");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
 
         [AllowAnonymous]
         [HttpPost]

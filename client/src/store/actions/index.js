@@ -5,7 +5,8 @@ export {
   reset,
   authCheckState,
   authUpdateInfo,
-  loginGoogle
+  loginGoogle,
+  loginFacebook
 } from "./auth";
 export {
   updateBrand,
