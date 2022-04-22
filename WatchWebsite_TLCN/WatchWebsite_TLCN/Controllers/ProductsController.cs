@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WatchWebsite_TLCN.DTO;
 using WatchWebsite_TLCN.Entities;
 using WatchWebsite_TLCN.Intefaces;
@@ -221,10 +225,10 @@ namespace WatchWebsite_TLCN.Controllers
                 }
                 var results = _context.Products.FromSqlRaw("SELECT a.* FROM[dbo].[Product] AS a FULL JOIN Brand b ON a.BrandId = b.BrandId FULL JOIN CONTAINSTABLE(Product, (Name, Description), '" + textsearch + "') AS TBL ON a.Id = TBL.[KEY] FULL JOIN CONTAINSTABLE(Brand, Name, '" + textsearch + "') akt ON b.BrandId = akt.[Key] WHERE TBL.RANK is not null OR  akt.RANK is not null ORDER BY(TBL.RANK + akt.RANK) / 2 DESC, TBL.RANK DESC, akt.RANK DESC").ToList();
                 var productDTO = _mapper.Map<List<ProductSearchResponse>>(results);
-                if(productDTO.Count > 0)
+                if (productDTO.Count > 0)
                 {
                     var lstIDProduct = new List<String> { };
-                    foreach(var item in productDTO)
+                    foreach (var item in productDTO)
                     {
                         lstIDProduct.Add(item.Id);
                     }
@@ -334,6 +338,76 @@ namespace WatchWebsite_TLCN.Controllers
                 }
             }
             return false;
+        }
+
+        [HttpGet("senddata")]
+        public async Task<IActionResult> SendProductsToRecom()
+        {
+            //string apikey = "0f3f519d372126a2fae86f0ff3723f61";
+            string apikey = "2e0894b7fa55d7060d50f6101f713de9";
+            var result = (from p in _context.Products
+                          select new
+                          {
+                              p.Id,
+                              p.Name,
+                              p.Amount,
+                              p.Price,
+                              p.Description,
+                              p.Sold,
+                              p.BrandId,
+                              p.Gender,
+                              p.MaterialId,
+                              p.WaterResistanceId,
+                              p.SizeId,
+                              p.EnergyId,
+                          }).ToList();
+
+            //var result = await _unitOfWork.Products.GetAll();
+            var json = JsonConvert.SerializeObject(result);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var url = "https://recom.fpt.vn/api/v0.1/recommendation/dataset/data/overwrite";
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", apikey);
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await client.PostAsync(url, data);
+            return Ok();
+        }
+
+        [HttpGet("getRecom")]
+        public async Task<IActionResult> GetProductRecom(string productId)
+        {
+            string restApi = "https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/309?input={itemId}&key=bg4fovOZrSf81rDZT5fnZB6bhqRJ1aOj97YCqd18UJT37FUwUdhP0nI3ZEY5ir0wq0vVCozy6d5Y5JHUHlFoQE8rUwd96s1XDT0r";
+            restApi = restApi.Replace("{itemId}", productId);
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(restApi);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var ObjResponse = response.Content.ReadAsStringAsync().Result;
+                        var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(ObjResponse);
+                        var lstID = JsonConvert.DeserializeObject<List<string>>(data["data"].ToString());
+                        lstID[0] = lstID[0].TrimStart('{');
+                        lstID[lstID.Count() - 1] = lstID[lstID.Count() - 1].TrimEnd('}');
+
+                        var resullt = await _unitOfWork.Products.GetAll(p => lstID.Contains(p.Id));
+                        return Ok(resullt);
+                    }
+                    else
+                    {
+                        Console.Write("Failure");
+                        return BadRequest("Dont have product");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+           
         }
     }
 }
