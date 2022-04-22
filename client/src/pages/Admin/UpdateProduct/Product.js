@@ -14,6 +14,8 @@ import { connect } from "react-redux";
 import { useLocation, useParams } from "react-router";
 import { notify } from "../../../helper/notify";
 import * as actions from "../../../store/actions/index";
+import { storage } from "../../../config/firebase";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 
 const { Option } = Select;
 
@@ -147,7 +149,6 @@ function Product({ brands, onFetchAllBrands }) {
   };
 
   const updateProduct = (productInfo) => {
-    setLoading(true);
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Products/`, {
       method: isAdd ? "POST" : "PUT",
       headers: {
@@ -162,7 +163,7 @@ function Product({ brands, onFetchAllBrands }) {
           notify(
             `${isAdd ? "ADD" : "EDIT"} SUCCESS`,
             `You have already ${isAdd ? "added" : "edited"} a ${
-              isAdd && "new"
+              isAdd ? "new" : ""
             } product!`,
             "success"
           );
@@ -212,7 +213,14 @@ function Product({ brands, onFetchAllBrands }) {
   };
 
   const onFinish = (values) => {
-    updateProduct({ ...values, image: imageBase64 });
+    const storageRef = ref(storage, new Date().getTime().toString());
+    setLoading(true);
+
+    uploadString(storageRef, imageBase64, "data_url")
+      .then((_) => getDownloadURL(storageRef))
+      .then((url) => {
+        updateProduct({ ...values, image: url });
+      });
   };
 
   return (

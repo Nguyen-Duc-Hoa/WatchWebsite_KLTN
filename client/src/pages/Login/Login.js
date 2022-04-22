@@ -7,6 +7,9 @@ import * as actions from "../../store/actions/index";
 import { Redirect, useHistory } from "react-router";
 import { notify } from "../../helper/notify";
 import { Link } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import GoogleLogin from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 const { Text } = Typography;
 const formItemLayout = {
@@ -29,7 +32,14 @@ const breadcrumbRoute = [
   },
 ];
 
-function Login({ onLogin, isAuth, loading, onReset }) {
+function Login({
+  onLogin,
+  isAuth,
+  loading,
+  onReset,
+  onLoginGoogle,
+  onLoginFacebook,
+}) {
   const [openResetForm, setOpenResetForm] = useState(false);
   const history = useHistory();
 
@@ -41,12 +51,30 @@ function Login({ onLogin, isAuth, loading, onReset }) {
 
   const loginHandler = (values) => {
     onLogin(notify, values, () => {
-      history.push('/')
+      history.push("/");
     });
   };
 
   const resetHandler = (values) => {
     onReset(notify, values.email);
+  };
+
+  const handleResponseGoogle = (response) => {
+    const { email, name, imageUrl, googleId } = response.profileObj;
+    onLoginGoogle(notify, { email, name, imageUrl, googleId }, () => {
+      history.push("/");
+    });
+  };
+
+  const handleResponseFacebook = (response) => {
+    const { email, id, name, picture } = response;
+    onLoginFacebook(
+      notify,
+      { id, name, email, imageUrl: picture.data.url },
+      () => {
+        history.push("/");
+      }
+    );
   };
 
   return (
@@ -94,14 +122,59 @@ function Login({ onLogin, isAuth, loading, onReset }) {
               <Form.Item>
                 <Button
                   size="large"
-                  htmlType="submit"
                   block
                   type="primary"
+                  htmlType="submit"
                   loading={loading}
                 >
                   Sign in
                 </Button>
               </Form.Item>
+              <GoogleLogin
+                clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
+                onSuccess={handleResponseGoogle}
+                onFailure={handleResponseGoogle}
+                cookiePolicy="single_host_origin"
+                render={(renderProps) => (
+                  <Form.Item>
+                    <Button
+                      onClick={renderProps.onClick}
+                      loading={loading}
+                      className="googleLoginBtn"
+                      size="large"
+                      block
+                      type="primary"
+                      icon={<FcGoogle className="googleIcon" />}
+                    >
+                      Sign in with Google
+                    </Button>
+                  </Form.Item>
+                )}
+              />
+              <div className="facebookLoginBtn">
+                <FacebookLogin
+                  cssClass="facebookLoginBtn"
+                  appId={process.env.REACT_APP_FACEBOOK_API_TOKEN}
+                  autoLoad
+                  fields="name,email,picture,id"
+                  callback={handleResponseFacebook}
+                  render={(renderProps) => (
+                    <Form.Item>
+                      <Button
+                        onClick={renderProps.onClick}
+                        loading={loading}
+                        className="googleLoginBtn"
+                        size="large"
+                        block
+                        type="primary"
+                        icon={<FcGoogle className="googleIcon" />}
+                      >
+                        Sign in with Facebook
+                      </Button>
+                    </Form.Item>
+                  )}
+                />
+              </div>
             </Form>
           </div>
         )}
@@ -127,7 +200,12 @@ function Login({ onLogin, isAuth, loading, onReset }) {
 
               <Form.Item>
                 <Space>
-                  <Button size="large" htmlType="submit" type="primary" loading={loading}>
+                  <Button
+                    size="large"
+                    htmlType="submit"
+                    type="primary"
+                    loading={loading}
+                  >
                     Submit
                   </Button>
                   <Button size="large" onClick={() => setOpenResetForm(false)}>
@@ -159,7 +237,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onLogin: (notify, loginInfo, redirect) =>
       dispatch(actions.login(notify, loginInfo, redirect)),
+    onLoginGoogle: (notify, loginInfo, redirect) =>
+      dispatch(actions.loginGoogle(notify, loginInfo, redirect)),
     onReset: (notify, email) => dispatch(actions.reset(notify, email)),
+    onLoginFacebook: (notify, loginInfo, redirect) =>
+      dispatch(actions.loginFacebook(notify, loginInfo, redirect)),
   };
 };
 

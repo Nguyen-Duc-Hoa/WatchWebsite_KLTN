@@ -5,6 +5,8 @@ import { useLocation, useParams } from "react-router";
 import UploadImage from "../../../components/UploadImage/UploadImage";
 import * as actions from "../../../store/actions/index";
 import { notify } from "../../../helper/notify";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { storage } from "../../../config/firebase";
 
 const layout = {
   labelCol: { span: 24 },
@@ -25,8 +27,8 @@ function UpdateBrand({ onUpdateBrand, loading, token }) {
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/brands?id=${id}`, {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${token}`,
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((response) => response.json())
       .then((result) => {
@@ -44,27 +46,30 @@ function UpdateBrand({ onUpdateBrand, loading, token }) {
 
   const updateBrand = (values) => {
     if (!imageBase64) return;
-    id
-      ? onUpdateBrand(
-          { brandId: id, name: values.name, image: imageBase64 },
-          isAdd,
-          notify,
-          token
-        )
-      : onUpdateBrand(
-          { name: values.name, image: imageBase64 },
-          isAdd,
-          notify,
-          token
-        );
+
+    const storageRef = ref(storage, new Date().getTime().toString());
+    uploadString(storageRef, imageBase64, "data_url")
+      .then((_) => getDownloadURL(storageRef))
+      .then((url) => {
+        id
+          ? onUpdateBrand(
+              { brandId: id, name: values.name, image: url },
+              isAdd,
+              notify,
+              token
+            )
+          : onUpdateBrand(
+              { name: values.name, image: url },
+              isAdd,
+              notify,
+              token
+            );
+      });
   };
   return (
     <section className="admin">
       <div className="heading">{isAdd ? "Add" : "Edit"} Brand</div>
-      <UploadImage
-        imageBase64={imageBase64}
-        setImageBase64={setImageBase64}
-      />
+      <UploadImage imageBase64={imageBase64} setImageBase64={setImageBase64} />
       <Form
         {...layout}
         style={{ maxWidth: 400 }}
@@ -102,7 +107,7 @@ function UpdateBrand({ onUpdateBrand, loading, token }) {
 const mapStateToProps = (state) => {
   return {
     loading: state.brand.lading,
-    token: state.auth.token
+    token: state.auth.token,
   };
 };
 

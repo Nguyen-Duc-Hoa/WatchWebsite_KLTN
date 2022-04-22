@@ -53,6 +53,112 @@ export const login = (notify, loginInfo, redirect) => {
   };
 };
 
+export const loginGoogle = (notify, loginInfo, redirect) => {
+  return (dispatch) => {
+    dispatch(waiting());
+    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Account/LoginWithGoogle`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginInfo),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        const expires = new Date(new Date().getTime() + 3600 * 1000);
+        const userInfo = {
+          id: result.Id,
+          username: result.Username,
+          email: result.Email,
+          name: result.Name,
+          address: result.Address,
+          phone: result.Phone,
+          birthday: result.Birthday,
+          avatar: result.Avatar,
+          roles: [...result.Role],
+          token: result.Token,
+        };
+        localStorage.setItem("expire", expires);
+        localStorage.setItem("name", result.Name);
+        localStorage.setItem("token", result.Token);
+        localStorage.setItem("idUser", result.Id);
+        localStorage.setItem("userName", result.Username);
+        localStorage.setItem("email", result.Email);
+        localStorage.setItem("address", result.Address);
+        localStorage.setItem("phone", result.Phone);
+        localStorage.setItem("birthday", result.Birthday);
+        localStorage.setItem("avatar", result.Avatar);
+        localStorage.setItem("roles", JSON.stringify([...result.Role]));
+        dispatch(loginSuccess(userInfo));
+        dispatch(stopLoading());
+        dispatch(
+          checkAuthTimeOut((expires.getTime() - new Date().getTime()) / 1000)
+        );
+        notify("LOGIN SUCCESS", "Welcome to our store!", "success");
+        setTimeout(() => {
+          redirect();
+        }, 3500);
+      })
+      .catch(() => {
+        dispatch(stopLoading());
+        notify("LOGIN FAILED", "Please try again!!!", "error");
+      });
+  };
+};
+
+export const loginFacebook = (notify, loginInfo, redirect) => {
+  return (dispatch) => {
+    dispatch(waiting());
+    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Account/LoginWithFacebook`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginInfo),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        const expires = new Date(new Date().getTime() + 3600 * 1000);
+        const userInfo = {
+          id: result.Id,
+          username: result.Username,
+          email: result.Email,
+          name: result.Name,
+          address: result.Address,
+          phone: result.Phone,
+          birthday: result.Birthday,
+          avatar: result.Avatar,
+          roles: [...result.Role],
+          token: result.Token,
+        };
+        localStorage.setItem("expire", expires);
+        localStorage.setItem("name", result.Name);
+        localStorage.setItem("token", result.Token);
+        localStorage.setItem("idUser", result.Id);
+        localStorage.setItem("userName", result.Username);
+        localStorage.setItem("email", result.Email);
+        localStorage.setItem("address", result.Address);
+        localStorage.setItem("phone", result.Phone);
+        localStorage.setItem("birthday", result.Birthday);
+        localStorage.setItem("avatar", result.Avatar);
+        localStorage.setItem("roles", JSON.stringify([...result.Role]));
+        dispatch(loginSuccess(userInfo));
+        dispatch(stopLoading());
+        dispatch(
+          checkAuthTimeOut((expires.getTime() - new Date().getTime()) / 1000)
+        );
+        notify("LOGIN SUCCESS", "Welcome to our store!", "success");
+        setTimeout(() => {
+          redirect();
+        }, 3500);
+      })
+      .catch(() => {
+        dispatch(stopLoading());
+        notify("LOGIN FAILED", "Please try again!!!", "error");
+      });
+  };
+};
+
 const loginSuccess = (userInfo) => {
   return {
     type: actionTypes.LOGIN_SUCCESS,
