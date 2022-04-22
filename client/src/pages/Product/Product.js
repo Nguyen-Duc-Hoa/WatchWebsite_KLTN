@@ -30,6 +30,8 @@ import "swiper/components/pagination/pagination.min.css";
 
 // import required modules
 import SwiperCore, { Pagination } from "swiper/core";
+import { useWindowDimensions } from "../../hook/useWindowDemension";
+import { Link } from "react-router-dom";
 
 // install Swiper modules
 SwiperCore.use([Pagination]);
@@ -38,6 +40,7 @@ const { TabPane } = Tabs;
 
 function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
   const [comments, setComments] = useState([]);
+  const [recomData, setRecomData] = useState([]);
   const [rate, setRate] = useState(0);
   const [numOfRate, setNumOfRate] = useState(0);
   const [ratable, setRatable] = useState(false);
@@ -54,6 +57,18 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
   ];
   const url = document.location.href;
 
+  const windowDimensions = useWindowDimensions();
+  const [resizeFlag, setResizeFlag] = useState(false);
+
+  useEffect(() => {
+    setResizeFlag(windowDimensions.width > 750);
+  }, [windowDimensions]);
+
+  useEffect(() => {
+    if (!id) return;
+    fetchRecom();
+  }, [id]);
+
   useEffect(() => {
     if (!id) return;
     fetchComments();
@@ -68,6 +83,14 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     if (!id) return;
     fetchRate();
   }, [id]);
+
+  const fetchRecom = () => {
+    fetch(
+      `${process.env.REACT_APP_HOST_DOMAIN}/api/products/getRecom?productId=${id}`
+    )
+      .then((res) => res.json())
+      .then((data) => setRecomData(data));
+  };
 
   const fetchRate = () => {
     fetch(
@@ -130,7 +153,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     comments.length;
 
   const handleRate = async (value) => {
-    console.log(value)
+    console.log(value);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_HOST_DOMAIN}/api/rates`,
@@ -152,10 +175,9 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
         if ("rateValue" in data && "numOfRate" in data) {
           setRate(data["rateValue"]);
           setNumOfRate(data["numOfRate"]);
-          setRatable(false)
+          setRatable(false);
         }
-      }
-      else {
+      } else {
         throw Error();
       }
     } catch {
@@ -329,6 +351,30 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
               )}
             </TabPane>
           </Tabs>
+        </section>
+        <section className="recomContainer">
+          <div className="heading">Recommend</div>
+          <Swiper
+            slidesPerView={resizeFlag ? 5 : 3}
+            spaceBetween={20}
+            pagination={{
+              clickable: true,
+            }}
+          >
+            {recomData.length !== 0 &&
+              recomData.map((ele) => (
+                <SwiperSlide key={ele.Id}>
+                  <Link to={`/products/${ele.Id}`}>
+                    <div className="card">
+                      <img src={`${ele.Image}`} alt="" />
+                      <div>{ele.Name}</div>
+                      <p>{ele.Brand}</p>
+                      <p>${ele.Price}</p>
+                    </div>
+                  </Link>
+                </SwiperSlide>
+              ))}
+          </Swiper>
         </section>
       </Spin>
     </section>

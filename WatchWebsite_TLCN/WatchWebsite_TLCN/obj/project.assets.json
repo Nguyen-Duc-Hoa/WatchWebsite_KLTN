@@ -9784,25 +9784,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Nguyen Duc Hoa\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Users\\APTS\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\project\\WatchWebsite_KLTN\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
+      "projectUniqueName": "E:\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
       "projectName": "WatchWebsite_TLCN",
-      "projectPath": "G:\\project\\WatchWebsite_KLTN\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
-      "packagesPath": "C:\\Users\\Nguyen Duc Hoa\\.nuget\\packages\\",
-      "outputPath": "G:\\project\\WatchWebsite_KLTN\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\obj\\",
+      "projectPath": "E:\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\WatchWebsite_TLCN.csproj",
+      "packagesPath": "C:\\Users\\APTS\\.nuget\\packages\\",
+      "outputPath": "E:\\WatchWebsite_KLTN\\WatchWebsite_TLCN\\WatchWebsite_TLCN\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Nguyen Duc Hoa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\APTS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -9813,6 +9808,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -9824,6 +9820,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": {
             "target": "Package",
@@ -9898,7 +9895,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
       }
     }
   }
