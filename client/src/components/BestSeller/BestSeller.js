@@ -11,6 +11,7 @@ import "swiper/components/pagination/pagination.min.css";
 // import Swiper core and required modules
 import SwiperCore, { Pagination } from "swiper/core";
 import { Link } from "react-router-dom";
+import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
 
 // install Swiper modules
 SwiperCore.use([Pagination]);
@@ -19,6 +20,7 @@ function BestSeller() {
   const windowDimensions = useWindowDimensions();
   const [resizeFlag, setResizeFlag] = useState(false);
   const [data, setData] = useState([]);
+  const gaEventTracker = useAnalyticsEventTracker("Best seller");
 
   useEffect(() => {
     setResizeFlag(windowDimensions.width > 750);
@@ -48,7 +50,12 @@ function BestSeller() {
         {data.length !== 0 &&
           data.map((ele) => (
             <SwiperSlide key={ele.Id}>
-              <Link to={`/products/${ele.Id}`}>
+              <Link
+                to={`/products/${ele.Id}`}
+                onClick={() => {
+                  gaEventTracker(`${ele.Id}-${ele.Name}`);
+                }}
+              >
                 <div className="card">
                   <img src={`${ele.Image}`} alt="" />
                   <div>{ele.Name}</div>

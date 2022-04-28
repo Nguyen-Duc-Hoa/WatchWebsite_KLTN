@@ -9,6 +9,9 @@ import { useEffect, useState, Suspense, lazy } from "react";
 import PrivateRoute from "./components/Routes/PrivateRoute";
 import PageLoading from "./components/PageLoading/PageLoading";
 
+import ReactGA from 'react-ga';
+
+
 const Home = lazy(() => import("./pages/Home/Home"));
 const Product = lazy(() => import("./pages/Product/Product"));
 const Products = lazy(() => import("./pages/Products/Products"));
@@ -28,8 +31,15 @@ const Profile = lazy(() => import("./pages/Profile/Profile"));
 const LoginAdmin = lazy(() => import("./pages/Admin/Login/Login"));
 const AdminMain = lazy(() => import("./pages/Admin/AdminMain/AdminMain"));
 
+
+ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_CODE);
+
 function App({ onCheckAuthState, onFetchAllBrands }) {
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   useEffect(() => {
     onCheckAuthState();

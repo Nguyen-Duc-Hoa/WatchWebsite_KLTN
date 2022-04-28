@@ -7,6 +7,7 @@ import SidebarAccount from "./SidebarAccount/SidebarAccount";
 import * as actionTypes from "../../../store/actions/actionTypes";
 import * as actions from "../../../store/actions/index";
 import { Link } from "react-router-dom";
+import useAnalyticsEventTracker from "../../../hook/useAnalyticsEventTracker";
 
 function Sidebar({
   showSidebar,
@@ -16,6 +17,9 @@ function Sidebar({
   onLogout,
   brands,
 }) {
+  const gaEventTracker = useAnalyticsEventTracker("Sidebar");
+
+
   const closeSidebarHandler = () => {
     onCloseSidebar();
     onCloseOverlay();
@@ -27,17 +31,17 @@ function Sidebar({
         <IoMdClose />
       </div>
       <ul className="sidebar__menu">
-        <Link to="/">
+        <Link to="/" onClick={() => gaEventTracker("Home")}>
           <SidebarItem key={0} content="Home" />
         </Link>
         <SidebarItem key={1} content="Brands" submenu={brands} />
-        <Link to="/products">
+        <Link to="/products" onClick={() => gaEventTracker("Products")}>
           <SidebarItem key={3} content="Products" />
         </Link>
-        <Link to="/products">
+        <Link to="/products" onClick={() => gaEventTracker("Mens")}>
           <SidebarItem key={2} content="Mens" />
         </Link>
-        <Link to="/products">
+        <Link to="/products" onClick={() => gaEventTracker("Ladies")}>
           <SidebarItem key={3} content="Ladies" />
         </Link>
       </ul>

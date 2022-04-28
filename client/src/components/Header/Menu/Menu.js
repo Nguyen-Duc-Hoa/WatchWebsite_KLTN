@@ -4,6 +4,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { connect } from "react-redux";
 import * as actionTypes from "../../../store/actions/actionTypes";
 import { useHistory, Link } from "react-router-dom";
+import useAnalyticsEventTracker from "../../../hook/useAnalyticsEventTracker";
 
 function Menu({
   onOpenSidebar,
@@ -12,19 +13,21 @@ function Menu({
   onSetBrands,
   onSetGender,
 }) {
+  const gaEventTrackerHeader = useAnalyticsEventTracker("Header");
   const history = useHistory();
   const openSidebarHandler = () => {
     onOpenSidebar();
     onOpenOverlay();
   };
   const clickHandler = (brandName) => {
+    gaEventTrackerHeader(brandName);
     onSetBrands(brandName);
     history.push("/products");
   };
   return (
     <div className="menu">
       <div className="menu__item">
-        <Link to="/">
+        <Link to="/" onClick={() => gaEventTrackerHeader("Home")}>
           <span>Home</span>
         </Link>
       </div>
@@ -53,17 +56,29 @@ function Menu({
         </div>
       </div>
       <div className="menu__item">
-        <Link to="/products">
+        <Link to="/products" onClick={() => gaEventTrackerHeader("Products")}>
           <span>Products</span>
         </Link>
       </div>
       <div className="menu__item">
-        <Link to="/products" onClick={() => onSetGender(0)}>
+        <Link
+          to="/products"
+          onClick={() => {
+            gaEventTrackerHeader("Ladies");
+            onSetGender(0);
+          }}
+        >
           <span>Ladies</span>
         </Link>
       </div>
       <div className="menu__item">
-        <Link to="/products" onClick={() => onSetGender(1)}>
+        <Link
+          to="/products"
+          onClick={() => {
+            gaEventTrackerHeader("Mens");
+            onSetGender(1);
+          }}
+        >
           <span>Mens</span>
         </Link>
       </div>

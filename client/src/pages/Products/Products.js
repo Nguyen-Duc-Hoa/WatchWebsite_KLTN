@@ -10,6 +10,7 @@ import Breadcrumbing from "../../components/Breadcrumb/Breadcrumb";
 import { notify } from "../../helper/notify";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
+import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
 
 const breadCrumbRoute = [
   { name: "Home", link: "/" },
@@ -21,6 +22,7 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [spinning, setSpinning] = useState(false);
+  const gaEventTracker = useAnalyticsEventTracker("Add to cart");
 
   useEffect(() => {
     filterReq(filterInfo, currentPage);
@@ -34,6 +36,7 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
     event.stopPropagation();
     if (isAuth) {
       onAddToCart(productId, 1, userId, token, notify);
+      gaEventTracker(productId);
     } else {
       notify(
         "YOU MUST LOGIN",

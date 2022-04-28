@@ -11,6 +11,7 @@ import * as actionTyes from "../../store/actions/actionTypes";
 import * as actions from "../../store/actions/index";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
 
 const DEBOUNCE_TIME = 500;
 
@@ -26,6 +27,7 @@ export function Header({
   const [showSearchArea, setShowSearchArea] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [products, setProducts] = useState([]);
+  const gaEventTrackerHeader = useAnalyticsEventTracker("Header");
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -43,6 +45,7 @@ export function Header({
   }, [searchValue]);
 
   const openCartHandler = () => {
+    gaEventTrackerHeader("Cart");
     onOpenOverlay();
     onOpenCart();
   };
@@ -58,7 +61,9 @@ export function Header({
     <section className="header">
       <Menu />
       <div className="header__logo">
-        <Link to="/">MiniMix</Link>
+        <Link to="/" onClick={() => gaEventTrackerHeader("Logo")}>
+          MiniMix
+        </Link>
       </div>
 
       <div className="header__icons">
@@ -83,10 +88,20 @@ export function Header({
             ) : (
               <>
                 <div>
-                  <Link to="/login">Login</Link>
+                  <Link
+                    to="/login"
+                    onClick={() => gaEventTrackerHeader("Login")}
+                  >
+                    Login
+                  </Link>
                 </div>
                 <div>
-                  <Link to="/register">Register</Link>
+                  <Link
+                    to="/register"
+                    onClick={() => gaEventTrackerHeader("Register")}
+                  >
+                    Register
+                  </Link>
                 </div>
               </>
             )}

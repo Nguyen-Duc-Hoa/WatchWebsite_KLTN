@@ -32,6 +32,7 @@ import "swiper/components/pagination/pagination.min.css";
 import SwiperCore, { Pagination } from "swiper/core";
 import { useWindowDimensions } from "../../hook/useWindowDemension";
 import { Link } from "react-router-dom";
+import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
 
 // install Swiper modules
 SwiperCore.use([Pagination]);
@@ -59,6 +60,8 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
 
   const windowDimensions = useWindowDimensions();
   const [resizeFlag, setResizeFlag] = useState(false);
+
+  const gaEventTracker = useAnalyticsEventTracker("Add to cart");
 
   useEffect(() => {
     setResizeFlag(windowDimensions.width > 750);
@@ -138,6 +141,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
 
   const onFinish = (values) => {
     if (isAuth) {
+      gaEventTracker(`${id}-${productDetail.Name}`);
       onAddToCart(id, values.quantity, userId, token, notify);
     } else {
       notify(

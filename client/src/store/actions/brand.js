@@ -86,8 +86,7 @@ export const deleteBrands = (deletiveArray, notify, token) => {
               },
             }
           );
-        }
-        else {
+        } else {
           return Promise.reject();
         }
       })
@@ -136,12 +135,7 @@ export const fetchAllBrands = () => {
     })
       .then((response) => response.json())
       .then((result) => {
-        if(result) {
-          dispatch(fetchBrandsSuccess(result));
-        }
-        else {
-          throw Error
-        }
-      })
+        dispatch(fetchBrandsSuccess(result));
+      });
   };
 };

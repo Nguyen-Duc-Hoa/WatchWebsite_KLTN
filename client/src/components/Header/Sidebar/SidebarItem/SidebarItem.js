@@ -5,9 +5,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import * as actionTypes from "../../../../store/actions/actionTypes";
 import { connect } from "react-redux";
+import useAnalyticsEventTracker from "../../../../hook/useAnalyticsEventTracker";
 
 function SidebarItem({ content, submenu, onSetBrands, onSetGender }) {
   const [showSubmenu, setShowSubmenu] = useState(false);
+  const gaEventTracker = useAnalyticsEventTracker("Sidebar");
+
   const clickHandler = () => {
     setShowSubmenu(!showSubmenu);
     if (content === "Mens") {
@@ -28,11 +31,15 @@ function SidebarItem({ content, submenu, onSetBrands, onSetGender }) {
         )}
       </div>
       <ul className={`item__submenu ${showSubmenu && "active"}`}>
-        {submenu && submenu.length !== 0 &&
+        {submenu &&
+          submenu.length !== 0 &&
           submenu.map((ele) => (
             <li>
               <Link
-                onClick={() => onSetBrands(ele.name)}
+                onClick={() => {
+                  onSetBrands(ele.name);
+                  gaEventTracker(ele.name);
+                }}
                 to={`/products`}
                 style={{ display: "inline-block" }}
                 key={ele.key}

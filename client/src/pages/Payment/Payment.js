@@ -8,6 +8,7 @@ import PaymentForm from "../../components/PaymentForm/PaymentForm";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { Button, Space } from "antd";
+import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
 
 const breadCrumbRoute = [
   { link: "/", name: "Home" },
@@ -22,8 +23,10 @@ const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PROMISE}`);
 
 function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
   const [payMethod, setPaymethod] = useState("");
+  const gaEventTracker = useAnalyticsEventTracker("Choose method payment");
 
   const makeZalopayReq = () => {
+    gaEventTracker("Zalo");
     const items = cart.map((element) => {
       return {
         id: element.Id,
@@ -43,23 +46,23 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
         phone: orderInfo.phone,
         products: items,
         voucherCode: voucherCode,
-        voucherId: voucherId
+        voucherId: voucherId,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        if(data.returncode === 1) {
-          window.location.href = data.orderurl
+        if (data.returncode === 1) {
+          window.location.href = data.orderurl;
         }
       });
-  }
-
+  };
 
   if (cart.length === 0) {
     return <Redirect to="/" />;
   }
 
   const choosePayMethod = (method) => {
+    gaEventTracker(method);
     setPaymethod(method);
   };
 
@@ -99,10 +102,7 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
                 />
               </div>
             </div>
-            <div
-              className="paymethod"
-              onClick={makeZalopayReq}
-            >
+            <div className="paymethod" onClick={makeZalopayReq}>
               <div className="left">
                 <img
                   src="https://upload.wikimedia.org/wikipedia/vi/7/77/ZaloPay_Logo.png"

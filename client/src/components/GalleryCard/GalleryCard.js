@@ -4,6 +4,7 @@ import "./GalleryCard.scss";
 import { connect } from "react-redux";
 import * as actionTypes from "../../store/actions/actionTypes";
 import { useHistory } from "react-router";
+import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
 
 function Gallery({
   heading,
@@ -15,6 +16,8 @@ function Gallery({
   gender,
 }) {
   const history = useHistory();
+  const gaEventTracker = useAnalyticsEventTracker("Gallery");
+
   const clickBtnHandler = () => {
     if (gender === 1) {
       onSetGender(1);
@@ -22,6 +25,7 @@ function Gallery({
       onSetGender(0);
     }
     history.push("/products");
+    gaEventTracker(btnText);
   };
   return (
     <div className={`gallery__card ${className}`}>

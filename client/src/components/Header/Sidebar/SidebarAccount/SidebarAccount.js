@@ -2,8 +2,11 @@ import React from "react";
 import "./SidebarAccount.scss";
 import { Button, Space, Row, Col } from "antd";
 import { Link } from "react-router-dom";
+import useAnalyticsEventTracker from "../../../../hook/useAnalyticsEventTracker";
 
 function SidebarAccount({ isAuth, onLogout }) {
+  const gaEventTracker = useAnalyticsEventTracker("Sidebar");
+
   return (
     <div className="sidebar__account">
       <div className="heading">My Account</div>
@@ -12,7 +15,7 @@ function SidebarAccount({ isAuth, onLogout }) {
           <>
             <Row gutter={12}>
               <Col span={12}>
-                <Link to="/profile">
+                <Link to="/profile" onClick={() => gaEventTracker("Profile")}>
                   <Button
                     style={{ height: "46px" }}
                     size="large"
@@ -24,7 +27,10 @@ function SidebarAccount({ isAuth, onLogout }) {
                 </Link>
               </Col>
               <Col span={12}>
-                <Link to="/orderhistory">
+                <Link
+                  to="/orderhistory"
+                  onClick={() => gaEventTracker("Orders history")}
+                >
                   <Button
                     style={{ height: "46px" }}
                     size="large"
@@ -40,7 +46,10 @@ function SidebarAccount({ isAuth, onLogout }) {
               style={{ height: "46px" }}
               size="large"
               block
-              onClick={onLogout}
+              onClick={() => {
+                onLogout();
+                gaEventTracker("Logout");
+              }}
             >
               Logout
             </Button>
@@ -52,10 +61,16 @@ function SidebarAccount({ isAuth, onLogout }) {
               size="large"
               type="primary"
               block
+              onClick={() => gaEventTracker("Login")}
             >
               <Link to="/login">Login</Link>
             </Button>
-            <Button style={{ height: "46px" }} size="large" block>
+            <Button
+              style={{ height: "46px" }}
+              size="large"
+              block
+              onClick={() => gaEventTracker("Register")}
+            >
               <Link to="/register">Register</Link>
             </Button>
           </>
