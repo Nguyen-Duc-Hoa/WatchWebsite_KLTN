@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WatchWebsite_TLCN.Entities;
 
 namespace WatchWebsite_TLCN.Models
 {
@@ -30,5 +31,11 @@ namespace WatchWebsite_TLCN.Models
         public string Energy { get; set; }
 
         public List<string> SubImage { get; set; }
+    }
+
+    public class PutProduct
+    {
+        public Product product { get; set; }
+        public List<string> subImages { get; set; }
     }
 }
