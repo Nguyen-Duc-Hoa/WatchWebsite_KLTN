@@ -98,17 +98,30 @@ namespace WatchWebsite_TLCN.Controllers
 
         //[Authorize(Roles = "Admin,Employee")]
         [HttpPut]
-        public async Task<IActionResult> PutProduct(Product product)
+        public async Task<IActionResult> PutProduct(PutProduct value)
         {
-            _unitOfWork.Products.Update(product);
+            _unitOfWork.Products.Update(value.product);
 
+            var lstSubImage = await _unitOfWork.SubImages.GetAll(p => p.ProductId == value.product.Id);
+            if (lstSubImage.Count() > 0)
+            {
+                foreach (var item in lstSubImage)
+                    await _unitOfWork.SubImages.Delete(item.Id);
+            }
             try
             {
+                foreach( var item in value.subImages)
+                {
+                    SubImage image = new SubImage();
+                    image.Image = item;
+                    image.ProductId = value.product.Id;
+                    await _unitOfWork.SubImages.Insert(image);
+                }
                 await _unitOfWork.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!(await ProductExists(product.Id)))
+                if (!(await ProductExists(value.product.Id)))
                 {
                     return NotFound();
                 }
@@ -121,16 +134,26 @@ namespace WatchWebsite_TLCN.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<Product>> PostProduct(PutProduct value)
         {
-            await _unitOfWork.Products.Insert(product);
+            await _unitOfWork.Products.Insert(value.product);
+
             try
             {
+                await _unitOfWork.Save();
+                foreach (string item in value.subImages)
+                {
+                    SubImage image = new SubImage();
+                    image.ProductId = value.product.Id;
+                    image.Image = item;
+                    await _unitOfWork.SubImages.Insert(image);
+                }
+
                 await _unitOfWork.Save();
             }
             catch (DbUpdateException)
             {
-                if (!(await ProductExists(product.Id)))
+                if (!(await ProductExists(value.product.Id)))
                 {
                     return Conflict();
                 }
@@ -153,7 +176,15 @@ namespace WatchWebsite_TLCN.Controllers
                 foreach (string item in id)
                 {
                     await _unitOfWork.Products.Delete<string>(item);
+                    var lstSubImage = await _unitOfWork.SubImages.GetAll(p => p.ProductId == item);
+                    if (lstSubImage.Count() > 0)
+                    {
+                        foreach (var subiamge in lstSubImage)
+                            await _unitOfWork.SubImages.Delete(subiamge.Id);
+                    }
                 }
+                
+
                 await _unitOfWork.Save();
                 return Ok();
             }
@@ -407,7 +438,99 @@ namespace WatchWebsite_TLCN.Controllers
             {
                 throw e;
             }
-           
+
         }
+
+        [HttpGet("sendProductUser")]
+        public async Task<IActionResult> SendProductsUserToRecom()
+        {
+            //string apikey = "0f3f519d372126a2fae86f0ff3723f61";
+            string apikey = "2e0894b7fa55d7060d50f6101f713de9";
+            //var result = (from r in _context.Rates
+            //              join u in _context.Users on r.UserId equals u.Id into ut
+            //              from u in ut.DefaultIfEmpty()
+
+            //              select new
+            //              {
+            //                 UserID = u.Id,
+            //                 ProductID = r.ProductId,
+            //                 Value = r.Value
+            //              }).ToList();
+
+            var result = (from users in _context.Users
+                          from mappings in _context.Rates
+                               .Where(mapping => mapping.UserId == users.Id)
+                               .DefaultIfEmpty() // <== makes join left join
+                          from groups in _context.Products
+                               .Where(gruppe => gruppe.Id == mappings.ProductId)
+                               .DefaultIfEmpty() // <== makes join left join
+
+                              // where users.USR_Name.Contains(keyword)
+                              // || mappings.USRGRP_USR.Equals(666)  
+                              // || mappings.USRGRP_USR == 666 
+                              // || groups.Name.Contains(keyword)
+
+                          select new
+                          {
+                              UserId = users.Id,
+                              Value = mappings.Value,
+                              ProductId = groups.Id == null ? "null" : groups.Id
+                          }).ToList();
+            //var result = await _unitOfWork.Products.GetAll();
+            var json = JsonConvert.SerializeObject(result);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var url = "https://recom.fpt.vn/api/v0.1/recommendation/dataset/data1/overwrite";
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", apikey);
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await client.PostAsync(url, data);
+            return Ok();
+        }
+
+        [HttpGet("getRecomUser")]
+        public async Task<IActionResult> GetProductUserRecom(int userId)
+        {
+            string restApi = "https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/317?input={itemId}&key=o34mMgEA115ZfNFwGlkMS4JUVsokmg6sEF6SyF852bgAJmjlm9CkoTOd2ox3E1eedzBD0mUNB86UEvTwSV5IG58U66sfEZlCs9h2";
+            restApi = restApi.Replace("{itemId}", userId.ToString());
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(restApi);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var ObjResponse = response.Content.ReadAsStringAsync().Result;
+                        var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(ObjResponse);
+                        if (data["message"].ToString() == "Success")
+                        {
+                            var lstID = JsonConvert.DeserializeObject<List<string>>(data["data"].ToString());
+                            lstID[0] = lstID[0].TrimStart('[');
+                            lstID[lstID.Count() - 1] = lstID[lstID.Count() - 1].TrimEnd(']');
+
+                            for (int i = 0; i < lstID.Count(); i++)
+                            {
+                                lstID[i] = lstID[i].Trim().TrimStart('\'');
+                                lstID[i] = lstID[i].Trim().TrimEnd('\'');
+                            }
+                            var resullt = await _unitOfWork.Products.GetAll(p => lstID.Contains(p.Id));
+                            return Ok(resullt);
+                        }
+                        return BadRequest("Not found data");
+                    }
+                    else
+                    {
+                        return BadRequest("Dont have product");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
+
     }
 }
