@@ -10,6 +10,7 @@ import Breadcrumbing from "../../components/Breadcrumb/Breadcrumb";
 import { notify } from "../../helper/notify";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
+import RecommendForUser from "../../components/RecommendForUser/RecommendForUser";
 import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
 
 const breadCrumbRoute = [
@@ -117,6 +118,7 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
           />
         </div>
       </div>
+      {isAuth && <RecommendForUser />}
     </section>
   );
 }

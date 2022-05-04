@@ -5,6 +5,8 @@ import Gallery from "../../components/GalleryCard/GalleryCard";
 import "./Home.scss";
 import BestSeller from "../../components/BestSeller/BestSeller";
 import Service from "../../components/Service/Service";
+import { connect } from "react-redux";
+import RecommendForUser from "../../components/RecommendForUser/RecommendForUser";
 
 const services = [
   {
@@ -33,10 +35,12 @@ const services = [
   },
 ];
 
-function Home() {
+function Home({ isAuth }) {
   return (
     <>
       <CustomCarousel />
+      <BestSeller />
+      {isAuth && <RecommendForUser />}
       <BrandCollection />
       <section className="gallery">
         <Gallery
@@ -54,7 +58,6 @@ function Home() {
           text="Classic looks and elegant styles"
         />
       </section>
-      <BestSeller />
       <section className="services">
         {services.map(({ image, heading, text }, index) => (
           <Service key={index} image={image} heading={heading} text={text} />
@@ -64,4 +67,10 @@ function Home() {
   );
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    isAuth: state.auth.token !== null,
+  };
+};
+
+export default connect(mapStateToProps)(Home);

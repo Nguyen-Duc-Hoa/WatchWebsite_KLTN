@@ -139,7 +139,6 @@ function Login({
                   <Form.Item>
                     <Button
                       onClick={renderProps.onClick}
-                      loading={loading}
                       className="googleLoginBtn"
                       size="large"
                       block

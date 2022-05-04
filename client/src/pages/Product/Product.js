@@ -357,7 +357,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
           </Tabs>
         </section>
         <section className="recomContainer">
-          <div className="heading">Recommend</div>
+          <div className="heading">Related products</div>
           <Swiper
             slidesPerView={resizeFlag ? 5 : 3}
             spaceBetween={20}

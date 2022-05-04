@@ -68,12 +68,6 @@ namespace WatchWebsite_TLCN.Controllers
                     return Unauthorized();
                 }
 
-                using(HttpClient httpClient = new HttpClient())
-                {
-                    string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-                    //httpClient.GetAsync("");
-                }
-
                 return Ok(new
                 {
                     Id = user.Id,
@@ -135,6 +129,12 @@ namespace WatchWebsite_TLCN.Controllers
                     if (token == null)
                     {
                         return Unauthorized();
+                    }
+
+                    using (HttpClient httpClient = new HttpClient())
+                    {
+                        string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+                        httpClient.GetAsync($"{domainName}/api/products/sendProductUser");
                     }
 
                     return Ok(new
@@ -256,6 +256,12 @@ namespace WatchWebsite_TLCN.Controllers
                         return Unauthorized();
                     }
 
+                    using (HttpClient httpClient = new HttpClient())
+                    {
+                        string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+                        httpClient.GetAsync($"{domainName}/api/products/sendProductUser");
+                    }
+
                     return Ok(new
                     {
                         Id = createdUser.Id,
@@ -301,6 +307,13 @@ namespace WatchWebsite_TLCN.Controllers
                     User_Role usrRole = new User_Role { RoleId = dbRole.RoleId, UserId = user.Id };
                     _context.User_Roles.Add(usrRole);
                     await _context.SaveChangesAsync();
+
+                    using (HttpClient httpClient = new HttpClient())
+                    {
+                        string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+                        httpClient.GetAsync($"{domainName}/api/products/sendProductUser");
+                    }
+
                     return Ok();
                 }
                 else
@@ -321,8 +334,6 @@ namespace WatchWebsite_TLCN.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
-            string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-
             string username = model.Username;
             string password = model.Password;
             int userid = 0;
@@ -456,6 +467,5 @@ namespace WatchWebsite_TLCN.Controllers
                 return StatusCode(500);
             }
         }
-
     }
 }
