@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -65,6 +66,12 @@ namespace WatchWebsite_TLCN.Controllers
                 if (token == null)
                 {
                     return Unauthorized();
+                }
+
+                using(HttpClient httpClient = new HttpClient())
+                {
+                    string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+                    //httpClient.GetAsync("");
                 }
 
                 return Ok(new
@@ -314,6 +321,8 @@ namespace WatchWebsite_TLCN.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
+            string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+
             string username = model.Username;
             string password = model.Password;
             int userid = 0;
