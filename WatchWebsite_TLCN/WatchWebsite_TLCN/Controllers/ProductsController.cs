@@ -141,6 +141,11 @@ namespace WatchWebsite_TLCN.Controllers
             try
             {
                 await _unitOfWork.Save();
+
+                var subImages = await _unitOfWork.SubImages.GetAll(expression: si => si.ProductId == value.product.Id);
+
+                _unitOfWork.SubImages.DeleteRange(subImages);
+
                 foreach (string item in value.subImages)
                 {
                     SubImage image = new SubImage();

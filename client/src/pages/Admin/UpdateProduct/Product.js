@@ -15,7 +15,16 @@ import { useLocation, useParams } from "react-router";
 import { notify } from "../../../helper/notify";
 import * as actions from "../../../store/actions/index";
 import { storage } from "../../../config/firebase";
-import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  uploadString,
+} from "firebase/storage";
+import "./Product.scss";
+import ImagePreview from "../../../components/ImagePreview/ImagePreview";
+import FileInput from "../../../components/FileInput/FileInput";
+import { async } from "@firebase/util";
 
 const { Option } = Select;
 
@@ -30,6 +39,8 @@ const validateMessage = {
 
 function Product({ brands, onFetchAllBrands }) {
   const [form] = Form.useForm();
+  const [subimages, setSubimages] = useState([]);
+  const [subimageFiles, setSubimageFiles] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [energies, setEnergies] = useState([]);
@@ -55,6 +66,20 @@ function Product({ brands, onFetchAllBrands }) {
     if (!id) return;
     fetchProduct();
   }, [id]);
+
+  const isFilesPreview = subimageFiles.length !== 0;
+
+  const handleRemoveSubimages = (removeIndex) => {
+    if (isFilesPreview) {
+      setSubimageFiles(
+        subimageFiles.filter((_, index) => index !== removeIndex)
+      );
+    } else {
+      setSubimages(subimages.filter((_, index) => index !== removeIndex));
+    }
+  };
+
+  const previewData = isFilesPreview ? subimageFiles : subimages;
 
   const fetchAllMaterials = () => {
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Materials/GetAll`, {
@@ -182,11 +207,15 @@ function Product({ brands, onFetchAllBrands }) {
   };
 
   const fetchProduct = () => {
-    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/Products?id=${id}`, {
-      method: "GET",
-    })
+    fetch(
+      `${process.env.REACT_APP_HOST_DOMAIN}/api/Products/ProductDetail?id=${id}`,
+      {
+        method: "GET",
+      }
+    )
       .then((response) => response.json())
       .then((result) => {
+        setSubimages(result.SubImages.map((ele) => ele.Image));
         setImageBase64(result.Image);
         setHidden(true);
         form.setFieldsValue({
@@ -212,15 +241,43 @@ function Product({ brands, onFetchAllBrands }) {
       });
   };
 
-  const onFinish = (values) => {
+  const storeImages = (files) => {
+    const promises = files.map((file) => {
+      const storageRef = ref(storage, file.name);
+      return uploadBytes(storageRef, file).then((_) =>
+        getDownloadURL(storageRef)
+      );
+    });
+    return Promise.all(promises);
+  };
+
+  const storeAvatar = () => {
     const storageRef = ref(storage, new Date().getTime().toString());
+
+    return uploadString(storageRef, imageBase64, "data_url").then((_) =>
+      getDownloadURL(storageRef)
+    );
+  };
+
+  const onFinish = async (values) => {
     setLoading(true);
 
-    uploadString(storageRef, imageBase64, "data_url")
-      .then((_) => getDownloadURL(storageRef))
-      .then((url) => {
-        updateProduct({ ...values, image: url });
-      });
+    let subimageUrls = subimages,
+      avatarUrl = imageBase64;
+
+    if (subimageFiles.length !== 0) {
+      subimageUrls = await storeImages(subimageFiles);
+    }
+
+    if (!avatarUrl.includes("https://firebasestorage.googleapis.com")) {
+      avatarUrl = await storeAvatar();
+    }
+
+
+    updateProduct({
+      product: { ...values, image: avatarUrl },
+      subImages: subimageUrls,
+    });
   };
 
   return (
@@ -411,6 +468,26 @@ function Product({ brands, onFetchAllBrands }) {
 
             <Form.Item name="description" label="Description">
               <Input.TextArea rows={8} />
+            </Form.Item>
+
+            <Form.Item label="Subimages">
+              <FileInput
+                multiple
+                onChange={(images) => setSubimageFiles(images)}
+              >
+                <Button type="button">Upload</Button>
+              </FileInput>
+              {previewData.length !== 0 && (
+                <div className="imagesPreview">
+                  {previewData.map((element, index) => (
+                    <ImagePreview
+                      key={index}
+                      file={element}
+                      onRemove={() => handleRemoveSubimages(index)}
+                    />
+                  ))}
+                </div>
+              )}
             </Form.Item>
 
             <Form.Item>
