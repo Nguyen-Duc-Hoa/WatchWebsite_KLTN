@@ -24,6 +24,8 @@ namespace WatchWebsite_TLCN.Entities
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Rate> Rates { get; set; }
         public DbSet<SubImage> SubImages { get; set; }
+        public DbSet<SubImage> UserTracking { get; set; }
+
 
         public MyDBContext(DbContextOptions options) : base(options)
         {
@@ -119,6 +121,13 @@ namespace WatchWebsite_TLCN.Entities
                 .HasForeignKey(x => x.ProductId);
 
             modelBuilder.Entity<SubImage>().HasKey(u => new { u.Id});
+
+            //Cart set 2 Primary Key
+            modelBuilder.Entity<UserTracking>().HasKey(u => new
+            {
+                u.Cookie,
+                u.ProductId
+            });
         }
        
 

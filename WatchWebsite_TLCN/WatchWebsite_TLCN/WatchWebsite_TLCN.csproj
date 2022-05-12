@@ -25,6 +25,8 @@
     <Compile Remove="Migrations\20211003121448_DbInit.Designer.cs" />
     <Compile Remove="Migrations\20211003122549_DbInit.cs" />
     <Compile Remove="Migrations\20211003122549_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20220512000243_updateTypeCookie.cs" />
+    <Compile Remove="Migrations\20220512000243_updateTypeCookie.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -487,6 +487,8 @@ E:\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1
 E:\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.dll
 E:\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.pdb
 E:\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.genruntimeconfig.cache
+G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.AssemblyInfoInputs.cache
+G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.AssemblyInfo.cs
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\bin\Debug\netcoreapp3.1\appsettings.Development.json
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\bin\Debug\netcoreapp3.1\appsettings.json
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
@@ -640,8 +642,6 @@ G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TL
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.csprojAssemblyReference.cache
-G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.AssemblyInfoInputs.cache
-G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.AssemblyInfo.cs
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.csproj.CoreCompileInputs.cache
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.MvcApplicationPartsAssemblyInfo.cache
 G:\project\WatchWebsite_KLTN\WatchWebsite_KLTN\WatchWebsite_TLCN\WatchWebsite_TLCN\obj\Debug\netcoreapp3.1\WatchWebsite_TLCN.RazorTargetAssemblyInfo.cache

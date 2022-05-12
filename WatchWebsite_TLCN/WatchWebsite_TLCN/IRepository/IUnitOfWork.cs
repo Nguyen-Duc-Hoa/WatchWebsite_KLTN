@@ -24,6 +24,7 @@ namespace WatchWebsite_TLCN.IRepository
         IGenericRepository<SubImage> SubImages { get; }
         IGenericRepository<Voucher> Vouchers { get; }
         IGenericRepository<Rate> Rates { get; }
+        IGenericRepository<UserTracking> UserTrackings { get; }
         Task Save();
     }
 }

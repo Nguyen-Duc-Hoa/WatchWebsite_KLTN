@@ -28,6 +28,7 @@ namespace WatchWebsite_TLCN.Repository
 
         private IGenericRepository<Voucher> _voucher;
         private IGenericRepository<Rate> _rate;
+        private IGenericRepository<UserTracking> _userTracking;
 
         public UnitOfWork(MyDBContext context)
         {
@@ -220,6 +221,18 @@ namespace WatchWebsite_TLCN.Repository
                     _rate = new GenericRepository<Rate>(_context);
                 }
                 return _rate;
+            }
+        }
+
+        public IGenericRepository<UserTracking> UserTrackings
+        {
+            get
+            {
+                if (_userTracking == null)
+                {
+                    _userTracking = new GenericRepository<UserTracking>(_context);
+                }
+                return _userTracking;
             }
         }
 

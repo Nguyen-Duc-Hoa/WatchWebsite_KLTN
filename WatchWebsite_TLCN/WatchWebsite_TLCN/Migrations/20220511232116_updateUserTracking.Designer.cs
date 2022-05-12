@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WatchWebsite_TLCN.Entities;
 
 namespace WatchWebsite_TLCN.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class MyDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220511232116_updateUserTracking")]
+    partial class updateUserTracking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -393,8 +395,8 @@ namespace WatchWebsite_TLCN.Migrations
 
             modelBuilder.Entity("WatchWebsite_TLCN.Entities.UserTracking", b =>
                 {
-                    b.Property<string>("Cookie")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Cookie")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
