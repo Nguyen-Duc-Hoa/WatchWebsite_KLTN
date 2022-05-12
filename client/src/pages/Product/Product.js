@@ -87,6 +87,24 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     fetchRate();
   }, [id]);
 
+  useEffect(() => {
+    let intervalId = setInterval(() => {
+      fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/UserTracking`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cookie: localStorage.getItem("trackingCookie"),
+          productId: id,
+          behavior: "ViewDetail",
+        }),
+      });
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [id]);
+
   const fetchRecom = () => {
     fetch(
       `${process.env.REACT_APP_HOST_DOMAIN}/api/products/getRecom?productId=${id}`
@@ -143,6 +161,17 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     if (isAuth) {
       gaEventTracker(`${id}-${productDetail.Name}`);
       onAddToCart(id, values.quantity, userId, token, notify);
+      fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/UserTracking`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cookie: localStorage.getItem("trackingCookie"),
+          productId: id,
+          behavior: "ClickCart",
+        }),
+      });
     } else {
       notify(
         "YOU MUST LOGIN",
@@ -157,7 +186,6 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     comments.length;
 
   const handleRate = async (value) => {
-    console.log(value);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_HOST_DOMAIN}/api/rates`,
@@ -187,6 +215,20 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     } catch {
       notify("RATE FAIL", "Something went wrong :( Please try again.", "error");
     }
+  };
+
+  const handleClickProduct = (id) => {
+    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/UserTracking`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cookie: localStorage.getItem("trackingCookie"),
+        productId: id,
+        behavior: "ClickDetail",
+      }),
+    });
   };
 
   return (
@@ -368,7 +410,10 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
             {recomData.length !== 0 &&
               recomData.map((ele) => (
                 <SwiperSlide key={ele.Id}>
-                  <Link to={`/products/${ele.Id}`}>
+                  <Link
+                    to={`/products/${ele.Id}`}
+                    onClick={() => handleClickProduct(ele.Id)}
+                  >
                     <div className="card">
                       <img src={`${ele.Image}`} alt="" />
                       <div>{ele.Name}</div>

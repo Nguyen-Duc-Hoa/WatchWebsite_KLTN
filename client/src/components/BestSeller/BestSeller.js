@@ -34,6 +34,21 @@ function BestSeller() {
       .then((result) => setData([...result]));
   }, []);
 
+  const handleClickProduct = (ele) => {
+    gaEventTracker(`${ele.Id}-${ele.Name}`);
+    fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/UserTracking`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cookie: localStorage.getItem("trackingCookie"),
+        productId: ele.Id,
+        behavior: "ClickDetail",
+      }),
+    });
+  };
+
   return (
     <section className="best-seller">
       <div className="heading">Best Seller</div>
@@ -50,12 +65,7 @@ function BestSeller() {
         {data.length !== 0 &&
           data.map((ele) => (
             <SwiperSlide key={ele.Id}>
-              <Link
-                to={`/products/${ele.Id}`}
-                onClick={() => {
-                  gaEventTracker(`${ele.Id}-${ele.Name}`);
-                }}
-              >
+              <Link to={`/products/${ele.Id}`} onClick={() => handleClickProduct(ele)}>
                 <div className="card">
                   <img src={`${ele.Image}`} alt="" />
                   <div>{ele.Name}</div>

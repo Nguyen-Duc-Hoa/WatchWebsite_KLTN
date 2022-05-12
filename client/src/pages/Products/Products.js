@@ -38,6 +38,17 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
     if (isAuth) {
       onAddToCart(productId, 1, userId, token, notify);
       gaEventTracker(productId);
+      fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/UserTracking`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cookie: localStorage.getItem("trackingCookie"),
+          productId: productId,
+          behavior: "ClickCart",
+        }),
+      });
     } else {
       notify(
         "YOU MUST LOGIN",

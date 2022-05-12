@@ -25,8 +25,25 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
   const [payMethod, setPaymethod] = useState("");
   const gaEventTracker = useAnalyticsEventTracker("Choose method payment");
 
+  const handleTrackingOrder = () => {
+    cart.forEach((element) =>
+      fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/UserTracking`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cookie: localStorage.getItem("trackingCookie"),
+          productId: element.ProductId,
+          behavior: "Order",
+        }),
+      })
+    );
+  };
+
   const makeZalopayReq = () => {
     gaEventTracker("Zalo");
+    handleTrackingOrder();
     const items = cart.map((element) => {
       return {
         id: element.Id,
@@ -62,6 +79,7 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
   }
 
   const choosePayMethod = (method) => {
+    handleTrackingOrder();
     gaEventTracker(method);
     setPaymethod(method);
   };

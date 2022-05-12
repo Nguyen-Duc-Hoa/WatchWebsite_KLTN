@@ -47,17 +47,7 @@ namespace WatchWebsite_TLCN.Controllers
                 if (userTrac != null)
                 {
                     newTrac = userTrac;
-                    //await _unitOfWork.UserTrackings.Insert(model);
                 }
-                //else
-                //{
-                //    userTrac.Order += model.Order;
-                //    userTrac.Time += model.Time;
-                //    userTrac.ClickCart += model.ClickCart;
-                //    userTrac.ClickDetail += model.ClickDetail;
-
-                //    _unitOfWork.UserTrackings.Update(userTrac);
-                //}
 
                 switch (model.Behavior)
                 {
@@ -69,6 +59,9 @@ namespace WatchWebsite_TLCN.Controllers
                         break;
                     case "ClickCart":
                         newTrac.ClickCart += 1;
+                        break;
+                    case "ViewDetail":
+                        newTrac.Time += 1;
                         break;
                     default:
                         break;
@@ -84,7 +77,7 @@ namespace WatchWebsite_TLCN.Controllers
                 }
                 await _unitOfWork.Save();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
                 return BadRequest();
             }
