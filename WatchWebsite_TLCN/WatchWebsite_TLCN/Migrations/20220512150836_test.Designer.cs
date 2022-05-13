@@ -10,8 +10,8 @@ using WatchWebsite_TLCN.Entities;
 namespace WatchWebsite_TLCN.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    [Migration("20220512000701_insertdb")]
-    partial class insertdb
+    [Migration("20220512150836_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -398,9 +398,6 @@ namespace WatchWebsite_TLCN.Migrations
                     b.Property<string>("Cookie")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("ClickCart")
                         .HasColumnType("int");
 
@@ -410,10 +407,13 @@ namespace WatchWebsite_TLCN.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Time")
                         .HasColumnType("float");
 
-                    b.HasKey("Cookie", "ProductId");
+                    b.HasKey("Cookie");
 
                     b.ToTable("UserTracking");
                 });

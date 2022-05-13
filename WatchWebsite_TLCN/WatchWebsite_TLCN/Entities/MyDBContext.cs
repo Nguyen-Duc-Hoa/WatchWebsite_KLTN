@@ -24,7 +24,7 @@ namespace WatchWebsite_TLCN.Entities
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Rate> Rates { get; set; }
         public DbSet<SubImage> SubImages { get; set; }
-        public DbSet<SubImage> UserTracking { get; set; }
+        public DbSet<UserTracking> UserTracking { get; set; }
 
 
         public MyDBContext(DbContextOptions options) : base(options)

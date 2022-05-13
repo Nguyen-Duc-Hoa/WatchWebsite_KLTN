@@ -413,7 +413,7 @@ namespace WatchWebsite_TLCN.Controllers
         [HttpGet("getRecom")]
         public async Task<IActionResult> GetProductRecom(string productId)
         {
-            string restApi = "https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/309?input={itemId}&key=bg4fovOZrSf81rDZT5fnZB6bhqRJ1aOj97YCqd18UJT37FUwUdhP0nI3ZEY5ir0wq0vVCozy6d5Y5JHUHlFoQE8rUwd96s1XDT0r";
+            string restApi = "https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/330?input={itemId}&key=ECr16CLWjgNRmSbrI1wrMQJB53tYanAuV2mLhYyVv7aD4eNVWdCA1iNyZUlfz6f9OLj5SgxfC9UDmxatl7GQrjQy5j1RJGSEdlr2";
             restApi = restApi.Replace("{itemId}", productId);
             try
             {
@@ -425,9 +425,12 @@ namespace WatchWebsite_TLCN.Controllers
                     {
                         var ObjResponse = response.Content.ReadAsStringAsync().Result;
                         var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(ObjResponse);
-                        var lstID = JsonConvert.DeserializeObject<List<string>>(data["data"].ToString());
-                        lstID[0] = lstID[0].TrimStart('{');
-                        lstID[lstID.Count() - 1] = lstID[lstID.Count() - 1].TrimEnd('}');
+                        var lstProduct = JsonConvert.DeserializeObject<List<Product>>(data["data"].ToString());
+                        List<String> lstID = new List<string>();
+                        foreach(var item in lstProduct)
+                        { 
+                            lstID.Add(item.Id);
+                        }
 
                         var resullt = await _unitOfWork.Products.GetAll(p => lstID.Contains(p.Id));
                         return Ok(resullt);
@@ -449,38 +452,29 @@ namespace WatchWebsite_TLCN.Controllers
         [HttpGet("sendProductUser")]
         public async Task<IActionResult> SendProductsUserToRecom()
         {
-            //string apikey = "0f3f519d372126a2fae86f0ff3723f61";
             string apikey = "2e0894b7fa55d7060d50f6101f713de9";
-            //var result = (from r in _context.Rates
-            //              join u in _context.Users on r.UserId equals u.Id into ut
-            //              from u in ut.DefaultIfEmpty()
-
+            //var result = (from users in _context.Users
+            //              from mappings in _context.Rates
+            //                   .Where(mapping => mapping.UserId == users.Id)
+            //                   .DefaultIfEmpty() // <== makes join left join
+            //              from groups in _context.Products
+            //                   .Where(gruppe => gruppe.Id == mappings.ProductId)
+            //                   .DefaultIfEmpty() // <== makes join left join
             //              select new
             //              {
-            //                 UserID = u.Id,
-            //                 ProductID = r.ProductId,
-            //                 Value = r.Value
+            //                  UserId = users.Id,
+            //                  Value = mappings.Value,
+            //                  ProductId = groups.Id == null ? "null" : groups.Id
             //              }).ToList();
 
-            var result = (from users in _context.Users
-                          from mappings in _context.Rates
-                               .Where(mapping => mapping.UserId == users.Id)
-                               .DefaultIfEmpty() // <== makes join left join
-                          from groups in _context.Products
-                               .Where(gruppe => gruppe.Id == mappings.ProductId)
-                               .DefaultIfEmpty() // <== makes join left join
-
-                              // where users.USR_Name.Contains(keyword)
-                              // || mappings.USRGRP_USR.Equals(666)  
-                              // || mappings.USRGRP_USR == 666 
-                              // || groups.Name.Contains(keyword)
-
+            var result = (from u in _context.UserTracking
                           select new
                           {
-                              UserId = users.Id,
-                              Value = mappings.Value,
-                              ProductId = groups.Id == null ? "null" : groups.Id
+                              UserId = u.Cookie,
+                              ProductId = u.ProductId,
+                              Value = Convert.ToInt32(u.ClickDetail * 1 + u.ClickCart * 5 + u.Order * 8 + u.Time * 1)
                           }).ToList();
+
             //var result = await _unitOfWork.Products.GetAll();
             var json = JsonConvert.SerializeObject(result);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
@@ -496,7 +490,7 @@ namespace WatchWebsite_TLCN.Controllers
         [HttpGet("getRecomUser")]
         public async Task<IActionResult> GetProductUserRecom(int userId)
         {
-            string restApi = "https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/317?input={itemId}&key=o34mMgEA115ZfNFwGlkMS4JUVsokmg6sEF6SyF852bgAJmjlm9CkoTOd2ox3E1eedzBD0mUNB86UEvTwSV5IG58U66sfEZlCs9h2";
+            string restApi = "https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/332?input={itemId}&key=bgpld6T6NDkYwsQuLJIgAGyuX2g2RaNJnBmo0QdH2KfcYWUk41mQKUyNJ2CrBKXF3l3iDNAwi7MYv6vntJqXZQwhB7NYZVvbdl1V";
             restApi = restApi.Replace("{itemId}", userId.ToString());
             try
             {
@@ -510,14 +504,11 @@ namespace WatchWebsite_TLCN.Controllers
                         var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(ObjResponse);
                         if (data["message"].ToString() == "Success")
                         {
-                            var lstID = JsonConvert.DeserializeObject<List<string>>(data["data"].ToString());
-                            lstID[0] = lstID[0].TrimStart('[');
-                            lstID[lstID.Count() - 1] = lstID[lstID.Count() - 1].TrimEnd(']');
-
-                            for (int i = 0; i < lstID.Count(); i++)
+                            var lstId = JsonConvert.DeserializeObject<List<tmpRecUser>>(data["data"].ToString());
+                            List<string> lstID = new List<string>();
+                            foreach (var item in lstId)
                             {
-                                lstID[i] = lstID[i].Trim().TrimStart('\'');
-                                lstID[i] = lstID[i].Trim().TrimEnd('\'');
+                                lstID.Add(item.Id);
                             }
                             var resullt = await _unitOfWork.Products.GetAll(p => lstID.Contains(p.Id));
                             return Ok(resullt);
@@ -537,5 +528,10 @@ namespace WatchWebsite_TLCN.Controllers
 
         }
 
+    }
+
+    public class tmpRecUser
+    {
+        public string Id { get; set; }
     }
 }
