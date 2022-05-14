@@ -131,11 +131,6 @@ namespace WatchWebsite_TLCN.Controllers
                         return Unauthorized();
                     }
 
-                    using (HttpClient httpClient = new HttpClient())
-                    {
-                        string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-                        httpClient.GetAsync($"{domainName}/api/products/sendProductUser");
-                    }
 
                     return Ok(new
                     {
@@ -256,11 +251,6 @@ namespace WatchWebsite_TLCN.Controllers
                         return Unauthorized();
                     }
 
-                    using (HttpClient httpClient = new HttpClient())
-                    {
-                        string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-                        httpClient.GetAsync($"{domainName}/api/products/sendProductUser");
-                    }
 
                     return Ok(new
                     {
@@ -308,11 +298,6 @@ namespace WatchWebsite_TLCN.Controllers
                     _context.User_Roles.Add(usrRole);
                     await _context.SaveChangesAsync();
 
-                    using (HttpClient httpClient = new HttpClient())
-                    {
-                        string domainName = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-                        httpClient.GetAsync($"{domainName}/api/products/sendProductUser");
-                    }
 
                     return Ok();
                 }
