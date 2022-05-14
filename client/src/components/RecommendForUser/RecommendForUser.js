@@ -31,7 +31,7 @@ const RecommendForUser = ({ idUser }) => {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `${process.env.REACT_APP_HOST_DOMAIN}/api/products/getRecomUser?userId=${idUser}`,
+      `${process.env.REACT_APP_HOST_DOMAIN}/api/products/getRecomUser?cookie=${trackingCookie}`,
       {
         method: "GET",
       }

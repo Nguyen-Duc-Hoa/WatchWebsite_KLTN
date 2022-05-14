@@ -24,6 +24,7 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
   const [totalPage, setTotalPage] = useState(1);
   const [spinning, setSpinning] = useState(false);
   const gaEventTracker = useAnalyticsEventTracker("Add to cart");
+  const isHaveTrackingCookie = !!localStorage.getItem("trackingCookie");
 
   useEffect(() => {
     filterReq(filterInfo, currentPage);
@@ -129,7 +130,7 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
           />
         </div>
       </div>
-      {isAuth && <RecommendForUser />}
+      {isHaveTrackingCookie && <RecommendForUser />}
     </section>
   );
 }
