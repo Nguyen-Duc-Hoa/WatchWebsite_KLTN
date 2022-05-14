@@ -467,7 +467,7 @@ namespace WatchWebsite_TLCN.Controllers
             //                  ProductId = groups.Id == null ? "null" : groups.Id
             //              }).ToList();
 
-            var result = (from u in _context.UserTracking
+            var result = (from u in _context.UserTrackings
                           select new
                           {
                               UserId = u.Cookie,
