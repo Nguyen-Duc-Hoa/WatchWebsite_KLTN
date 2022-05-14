@@ -5,7 +5,6 @@ import Gallery from "../../components/GalleryCard/GalleryCard";
 import "./Home.scss";
 import BestSeller from "../../components/BestSeller/BestSeller";
 import Service from "../../components/Service/Service";
-import { connect } from "react-redux";
 import RecommendForUser from "../../components/RecommendForUser/RecommendForUser";
 
 const services = [
@@ -35,12 +34,14 @@ const services = [
   },
 ];
 
-function Home({ isAuth }) {
+function Home() {
+  const isHaveTrackingCookie = !!localStorage.getItem("trackingCookie");
+
   return (
     <>
       <CustomCarousel />
       <BestSeller />
-      {isAuth && <RecommendForUser />}
+      {isHaveTrackingCookie && <RecommendForUser />}
       <BrandCollection />
       <section className="gallery">
         <Gallery
@@ -67,10 +68,5 @@ function Home({ isAuth }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    isAuth: state.auth.token !== null,
-  };
-};
 
-export default connect(mapStateToProps)(Home);
+export default Home;

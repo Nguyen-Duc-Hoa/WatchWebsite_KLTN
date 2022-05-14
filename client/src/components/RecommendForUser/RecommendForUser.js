@@ -22,6 +22,7 @@ const RecommendForUser = ({ idUser }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const gaEventTracker = useAnalyticsEventTracker("Recommend for user");
+  const trackingCookie = localStorage.getItem("trackingCookie");
 
   useEffect(() => {
     setResizeFlag(windowDimensions.width > 750);
