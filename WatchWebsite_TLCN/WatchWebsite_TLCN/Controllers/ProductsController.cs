@@ -487,11 +487,12 @@ namespace WatchWebsite_TLCN.Controllers
             return Ok();
         }
 
+
         [HttpGet("getRecomUser")]
-        public async Task<IActionResult> GetProductUserRecom(int userId)
+        public async Task<IActionResult> GetProductUserRecom(string cookie)
         {
-            string restApi = "https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/332?input={itemId}&key=bgpld6T6NDkYwsQuLJIgAGyuX2g2RaNJnBmo0QdH2KfcYWUk41mQKUyNJ2CrBKXF3l3iDNAwi7MYv6vntJqXZQwhB7NYZVvbdl1V";
-            restApi = restApi.Replace("{itemId}", userId.ToString());
+            string restApi = "https://recom.fpt.vn/api/v0.1/recommendation/api/result/getResult/359?input={itemId}&key=ZbB2O5szTfWnLV7qVihCsb20gSrsWlQS3Vf1QB89Rzrx6D0GfAzMtYMDAzu3m6ATBBo7RH369ll73qEBsPMr3MeLxM19H4Hl1iTO";
+            restApi = restApi.Replace("{itemId}", cookie);
             try
             {
                 using (HttpClient client = new HttpClient())
