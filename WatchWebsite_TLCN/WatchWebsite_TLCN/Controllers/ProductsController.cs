@@ -180,11 +180,13 @@ namespace WatchWebsite_TLCN.Controllers
             {
                 foreach (string item in id)
                 {
-                    await _unitOfWork.Products.Delete<string>(item);
                     var lstSubImage = await _unitOfWork.SubImages.GetAll(p => p.ProductId == item);
                     var lstOrder = await _unitOfWork.OrderDetails.GetAll(p => p.ProductId == item);
-                    if (lstOrder.Count() == 0)
+                    var lstCart = await _unitOfWork.Carts.GetAll(p => p.ProductId == item);
+                    if (lstOrder.Count() == 0 && lstCart.Count()==0)
                     {
+                        await _unitOfWork.Products.Delete<string>(item);
+
                         if (lstSubImage.Count() > 0)
                         {
                             foreach (var subiamge in lstSubImage)
