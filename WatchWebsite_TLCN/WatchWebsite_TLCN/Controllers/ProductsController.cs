@@ -110,7 +110,7 @@ namespace WatchWebsite_TLCN.Controllers
             }
             try
             {
-                foreach( var item in value.subImages)
+                foreach (var item in value.subImages)
                 {
                     SubImage image = new SubImage();
                     image.Image = item;
@@ -183,7 +183,7 @@ namespace WatchWebsite_TLCN.Controllers
                     await _unitOfWork.Products.Delete<string>(item);
                     var lstSubImage = await _unitOfWork.SubImages.GetAll(p => p.ProductId == item);
                     var lstOrder = await _unitOfWork.OrderDetails.GetAll(p => p.ProductId == item);
-                    if(lstOrder.Count() == 0)
+                    if (lstOrder.Count() == 0)
                     {
                         if (lstSubImage.Count() > 0)
                         {
@@ -191,9 +191,10 @@ namespace WatchWebsite_TLCN.Controllers
                                 await _unitOfWork.SubImages.Delete(subiamge.Id);
                         }
                     }
-                    return BadRequest();
+                    else
+                        return BadRequest();
                 }
-                
+
 
                 await _unitOfWork.Save();
                 return Ok();
@@ -432,8 +433,8 @@ namespace WatchWebsite_TLCN.Controllers
                         var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(ObjResponse);
                         var lstProduct = JsonConvert.DeserializeObject<List<Product>>(data["data"].ToString());
                         List<String> lstID = new List<string>();
-                        foreach(var item in lstProduct)
-                        { 
+                        foreach (var item in lstProduct)
+                        {
                             lstID.Add(item.Id);
                         }
 
@@ -457,7 +458,7 @@ namespace WatchWebsite_TLCN.Controllers
         [HttpGet("sendProductUser")]
         public async Task<IActionResult> SendProductsUserToRecom()
         {
-                string apikey = "2e0894b7fa55d7060d50f6101f713de9";
+            string apikey = "2e0894b7fa55d7060d50f6101f713de9";
             //var result = (from users in _context.Users
             //              from mappings in _context.Rates
             //                   .Where(mapping => mapping.UserId == users.Id)
