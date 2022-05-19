@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form, Input, Button, DatePicker } from "antd";
+import "./FormProfile.scss";
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const layout = {
   labelCol: { span: 24 },
@@ -7,12 +10,86 @@ const layout = {
 };
 
 const regexPhoneNumber = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+const dateFormat = "YYYY/MM/DD";
+
+mapboxgl.accessToken =
+  "pk.eyJ1Ijoic2VubmluZSIsImEiOiJjbDB0aHljY2UwNnE5M2lwZXA3dG02amRoIn0.OReYhfaCWigJ7ae-eGqogg";
 
 function FormProfile({ form, onSubmit, loading }) {
-  const dateFormat = "YYYY/MM/DD";
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+  const marker = useRef(null);
+  const [lng, setLng] = useState(106.758144);
+  const [lat, setLat] = useState(10.862592);
+  const [zoom, setZoom] = useState(15);
+  const [addresses, setAddresses] = useState([]);
+
+  const getLocationInfo = async (lngInput, latInput) => {
+    try {
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lngInput},${latInput}.json?types=poi&access_token=${mapboxgl.accessToken}`
+      );
+      const data = await res.json();
+      form.setFieldsValue({ address: data.features[0].place_name });
+    } catch {
+      return "No information";
+    }
+  };
+
+  useEffect(() => {
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom: zoom,
+    });
+    marker.current = new mapboxgl.Marker({ color: "red" })
+      .setLngLat([lng, lat])
+      .addTo(map.current);
+
+    map.current.on("click", (event) => {
+      const { lng: lngEvt, lat: latEvt } = event.lngLat;
+      marker.current.setLngLat([lngEvt, latEvt]);
+      getLocationInfo(lngEvt, latEvt);
+    });
+  });
+
+  const handleSearch = async (inputValue) => {
+    try {
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${inputValue}.json?autocomplete=true&access_token=${mapboxgl.accessToken}`
+      );
+      const data = await res.json();
+      setAddresses(data.features);
+    } catch {
+      console.log("something went wrong");
+    }
+  };
+
+  const handleClickAddress = (address) => {
+    const { place_name, center } = address;
+    form.setFieldsValue({ address: place_name });
+    setAddresses([]);
+    setLng(center[0]);
+    setLat(center[1]);
+    map.current.flyTo({
+      center,
+      essential: true,
+    });
+    marker.current.setLngLat(center);
+  };
 
   return (
-    <Form {...layout} style={{ maxWidth: 600 }} onFinish={onSubmit} form={form}>
+    <Form
+      {...layout}
+      style={{ maxWidth: 600 }}
+      onFinish={onSubmit}
+      form={form}
+      onValuesChange={(_, values) => {
+        handleSearch(values.address);
+      }}
+    >
       <Form.Item
         label="Name"
         rules={[
@@ -43,17 +120,25 @@ function FormProfile({ form, onSubmit, loading }) {
             message: "Address is required!",
           },
           {
-            min: 8,
-            message: "Address length must be at least 8 characters!",
-          },
-          {
             max: 40,
             message: "Address length must be less than 40 characters!",
           },
         ]}
       >
-        <Input />
+        <Input autoComplete="off" />
       </Form.Item>
+
+      <div className="addressDropdown">
+        {addresses.map((address) => (
+          <div
+            onClick={() => handleClickAddress(address)}
+            className="addressItem"
+          >
+            {address.place_name}
+          </div>
+        ))}
+      </div>
+      <div className="map-container" ref={mapContainer}></div>
 
       <Form.Item
         label="E-mail"

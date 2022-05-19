@@ -1,0 +1,22 @@
+.map-container {
+  height: 500px;
+}
+
+.mapboxgl-control-container {
+  display: none;
+}
+
+.addressDropdown {
+  position: relative;
+  top: -80%;
+  width: 100%;
+  margin-top: -20px;
+  padding: 8px 10px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  .addressItem {
+    line-height: 28px;
+  }
+}
