@@ -182,11 +182,16 @@ namespace WatchWebsite_TLCN.Controllers
                 {
                     await _unitOfWork.Products.Delete<string>(item);
                     var lstSubImage = await _unitOfWork.SubImages.GetAll(p => p.ProductId == item);
-                    if (lstSubImage.Count() > 0)
+                    var lstOrder = await _unitOfWork.OrderDetails.GetAll(p => p.ProductId == item);
+                    if(lstOrder.Count() == 0)
                     {
-                        foreach (var subiamge in lstSubImage)
-                            await _unitOfWork.SubImages.Delete(subiamge.Id);
+                        if (lstSubImage.Count() > 0)
+                        {
+                            foreach (var subiamge in lstSubImage)
+                                await _unitOfWork.SubImages.Delete(subiamge.Id);
+                        }
                     }
+                    return BadRequest();
                 }
                 
 
@@ -452,7 +457,7 @@ namespace WatchWebsite_TLCN.Controllers
         [HttpGet("sendProductUser")]
         public async Task<IActionResult> SendProductsUserToRecom()
         {
-            string apikey = "2e0894b7fa55d7060d50f6101f713de9";
+                string apikey = "2e0894b7fa55d7060d50f6101f713de9";
             //var result = (from users in _context.Users
             //              from mappings in _context.Rates
             //                   .Where(mapping => mapping.UserId == users.Id)
