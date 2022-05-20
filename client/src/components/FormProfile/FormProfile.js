@@ -15,7 +15,7 @@ const dateFormat = "YYYY/MM/DD";
 mapboxgl.accessToken =
   "pk.eyJ1Ijoic2VubmluZSIsImEiOiJjbDB0aHljY2UwNnE5M2lwZXA3dG02amRoIn0.OReYhfaCWigJ7ae-eGqogg";
 
-function FormProfile({ form, onSubmit, loading }) {
+function FormProfile({ form, onSubmit, loading, address }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const marker = useRef(null);
@@ -35,6 +35,20 @@ function FormProfile({ form, onSubmit, loading }) {
       return "No information";
     }
   };
+
+  useEffect(() => {
+    fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?autocomplete=true&access_token=${mapboxgl.accessToken}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        map.current.flyTo({
+          center: data.features[0].center,
+          essential: true,
+        });
+        marker.current.setLngLat(data.features[0].center);
+      });
+  }, []);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
@@ -118,10 +132,6 @@ function FormProfile({ form, onSubmit, loading }) {
           {
             required: true,
             message: "Address is required!",
-          },
-          {
-            max: 40,
-            message: "Address length must be less than 40 characters!",
           },
         ]}
       >

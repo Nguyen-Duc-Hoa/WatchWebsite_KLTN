@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form, Input, Button, Space } from "antd";
 import "./CheckoutForm.scss";
 import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import * as actionTypes from "../../store/actions/actionTypes";
 import { BiCopy } from "react-icons/bi";
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const formItemLayout = {
   labelCol: {
@@ -15,10 +17,20 @@ const formItemLayout = {
   },
 };
 
+mapboxgl.accessToken =
+  "pk.eyJ1Ijoic2VubmluZSIsImEiOiJjbDB0aHljY2UwNnE5M2lwZXA3dG02amRoIn0.OReYhfaCWigJ7ae-eGqogg";
+
 function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   const [form] = Form.useForm();
   const history = useHistory();
   const [vouchers, setVouchers] = useState([]);
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+  const marker = useRef(null);
+  const [lng, setLng] = useState(106.758144);
+  const [lat, setLat] = useState(10.862592);
+  const [zoom, setZoom] = useState(15);
+  const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/vouchers`)
@@ -27,6 +39,52 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
         setVouchers(data);
       });
   }, []);
+
+  useEffect(() => {
+    if (address !== "null" && "") return;
+    fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?autocomplete=true&access_token=${mapboxgl.accessToken}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        map.current.flyTo({
+          center: data.features[0].center,
+          essential: true,
+        });
+        marker.current.setLngLat(data.features[0].center);
+      });
+  }, []);
+
+  const getLocationInfo = async (lngInput, latInput) => {
+    try {
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lngInput},${latInput}.json?types=poi&access_token=${mapboxgl.accessToken}`
+      );
+      const data = await res.json();
+      form.setFieldsValue({ address: data.features[0].place_name });
+    } catch {
+      return "No information";
+    }
+  };
+
+  useEffect(() => {
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom: zoom,
+    });
+    marker.current = new mapboxgl.Marker({ color: "red" })
+      .setLngLat([lng, lat])
+      .addTo(map.current);
+
+    map.current.on("click", (event) => {
+      const { lng: lngEvt, lat: latEvt } = event.lngLat;
+      marker.current.setLngLat([lngEvt, latEvt]);
+      getLocationInfo(lngEvt, latEvt);
+    });
+  });
 
   useEffect(() => {
     if (orderInfo.name || orderInfo.address || orderInfo.phone) {
@@ -44,19 +102,56 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
     }
   }, []);
 
+  const handleSearch = async (inputValue) => {
+    try {
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${inputValue}.json?autocomplete=true&access_token=${mapboxgl.accessToken}&country=VN`
+      );
+      const data = await res.json();
+      setAddresses(data.features);
+    } catch {
+      console.log("something went wrong");
+    }
+  };
+
+  const handleClickAddress = (address) => {
+    const { place_name, center } = address;
+    form.setFieldsValue({ address: place_name });
+    setAddresses([]);
+    setLng(center[0]);
+    setLat(center[1]);
+    map.current.flyTo({
+      center,
+      essential: true,
+    });
+    marker.current.setLngLat(center);
+  };
+
   const onFinish = (values) => {
     if (values.voucherCode && values.voucherCode.trim() !== "") {
-      values["voucherDiscount"] = vouchers.find(voucher => voucher.Code === values.voucherCode).Discount;
-      values["voucherId"] = vouchers.find(voucher => voucher.Code === values.voucherCode).VoucherId;
+      values["voucherDiscount"] = vouchers.find(
+        (voucher) => voucher.Code === values.voucherCode
+      ).Discount;
+      values["voucherId"] = vouchers.find(
+        (voucher) => voucher.Code === values.voucherCode
+      ).VoucherId;
     }
-    console.log(values)
+    console.log(values);
     onSetInfoOrder(values);
     history.push("/checkout/payment");
   };
 
   return (
     <div className="form-order">
-      <Form {...formItemLayout} size="large" form={form} onFinish={onFinish}>
+      <Form
+        {...formItemLayout}
+        size="large"
+        form={form}
+        onFinish={onFinish}
+        onValuesChange={(_, values) => {
+          handleSearch(values.address);
+        }}
+      >
         <div className="heading">Shipping address</div>
 
         <Form.Item
@@ -70,8 +165,20 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
           name="address"
           rules={[{ required: true, message: "Address is required!" }]}
         >
-          <Input placeholder="Address" />
+          <Input placeholder="Address" autoComplete="off" />
         </Form.Item>
+
+        <div className="addressDropdown">
+          {addresses.map((address) => (
+            <div
+              onClick={() => handleClickAddress(address)}
+              className="addressItem"
+            >
+              {address.place_name}
+            </div>
+          ))}
+        </div>
+        <div className="map-container" ref={mapContainer}></div>
 
         <Form.Item
           name="phone"
