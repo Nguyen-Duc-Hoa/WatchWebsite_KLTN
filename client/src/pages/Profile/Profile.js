@@ -51,6 +51,7 @@ function Profile({
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         <Col lg={{ span: 16, order: 2 }} sm={{ span: 24, order: 2 }}>
           <FormProfile
+            address={address}
             form={form}
             style={{ maxWidth: 600 }}
             onSubmit={updateAccount}
