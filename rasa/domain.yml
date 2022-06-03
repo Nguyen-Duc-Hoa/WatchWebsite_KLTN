@@ -1,0 +1,50 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - traHang
+  - answer_returnPro
+  - answer_shopInfo
+  - bot_challenge
+  - thanks
+  - search_restaurant
+  - corona_state
+  - ask_spGender
+  - ask_spName
+  - ask_shopInfo
+  
+actions:
+  - action_search_restaurant
+  - action_corona_tracker
+  - action_filter_product
+
+entities:
+  - hotel
+  - state
+  - prodFilter
+
+responses:
+  utter_greet:
+  - text: "Xin chào"
+  - text: "Chào bạn"
+  - text: "Chào quý khách"
+  - text: "Chào quý khách. Shop có thể giúp gì cho bạn"
+
+  utter_answer_traHang:
+  - text: "bạn liên lạc với email vic.nguyenduchoa@gmail.com nhé!"
+  - text: "Bạn liên lạc với số điện thoại 035112779 nhé"
+  - text: "Bạn liên lạc với thông tin của shop để được hỗ trợ thêm. Email: vic.nguyenduchoa@gmail.com"
+
+  utter_thanks:
+  - text: "Cảm ơn quí khách đã quan tâm."
+  - text: "Rất vui được phục vụ quí khách"
+  - text: "Cảm ơn quí khách"
+
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

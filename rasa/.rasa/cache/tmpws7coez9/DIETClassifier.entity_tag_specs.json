@@ -1,0 +1,36 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-hotel",
+      "2": "I-hotel",
+      "3": "L-hotel",
+      "4": "U-hotel",
+      "5": "B-prodFilter",
+      "6": "I-prodFilter",
+      "7": "L-prodFilter",
+      "8": "U-prodFilter",
+      "9": "B-state",
+      "10": "I-state",
+      "11": "L-state",
+      "12": "U-state",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-hotel": 1,
+      "I-hotel": 2,
+      "L-hotel": 3,
+      "U-hotel": 4,
+      "B-prodFilter": 5,
+      "I-prodFilter": 6,
+      "L-prodFilter": 7,
+      "U-prodFilter": 8,
+      "B-state": 9,
+      "I-state": 10,
+      "L-state": 11,
+      "U-state": 12,
+      "O": 0
+    },
+    "num_tags": 13
+  }
+]

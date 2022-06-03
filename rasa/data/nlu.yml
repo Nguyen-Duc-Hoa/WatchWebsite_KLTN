@@ -1,0 +1,278 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - xin chào
+    - chào bạn
+    - hello
+    - hi
+    - hey
+    - mình có vài câu hỏi
+    - có ai giúp mình không
+    - bạn ơi
+    - anh ơi
+    - chị ơi
+    - cháu ơi
+    - hello 
+    - chào 
+    - hi 
+    - có ai ở đây không?
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - không
+    - không phải
+    - tôi không nghĩ vậy
+    - không thích điều đó
+    - xin lỗi tôi không thể
+    - không hẳn
+
+- intent: mood_great
+  examples: |
+    - hoàn hảo
+    - Tuyệt
+    - kinh ngạc
+    - Tuyệt vời
+    - Tôi đang cảm thấy rất tốt
+    - tôi rất tuyệt
+    - quá hoàn hảo
+    - tốt quá
+
+
+- intent: traHang
+  examples: |
+    - Mình muốn xin thông tin để hoàn trả hàng.
+    - Mình muốn đổi trả đồng hồ
+    - Mình muốn trả hàng.
+    - Cho xin thông tin để đổi trả đồng hồ
+    - đồng hồ bị lỗi, mình cần hoàn trả lại
+    - đồng hồ bị lỗi
+    - Shop giao không đúng sản phẩm.
+    - Giao sai đồng hồ
+
+- intent: answer_returnPro
+  examples: |
+    - bạn liên lạc với email vic.nguyenduchoa@gmail.com nhé!
+    - Bạn liên lạc với số điện thoại 035112779 nhé 
+    - Bạn liên lạc với thông tin của shop để được hỗ trợ thêm. Email: vic.nguyenduchoa@gmail.com
+
+- intent: answer_shopInfo
+  examples: |
+    - Email liên lạc của shop là vic.nguyenduchoa@gmail.com
+    - Địa chỉ của cửa hàng 1 Phạm Văn Đồng - Thủ Đức
+    - Thông tin liên hệ với shop là 035112779
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+
+- intent: thanks
+  examples: |
+    - cám ơn
+    - thanks
+    - thank you
+    - ok
+
+- intent: search_restaurant
+  examples: |
+    # - show me [india](hotel) restaurant
+    # - show me [thai](hotel) restaurant
+    # - show me [vietnam](hotel) restaurant
+    # - show me [italian](hotel) restaurant
+    # - show me [nữ](hotel) restaurant
+    - mua đồng hồ [nữ](hotel)
+    - mua đồng hồ [nam](hotel)
+    - mua sản phẩm [nam](hotel)
+    - mua sản phẩm [nữ](hotel)
+
+- intent: corona_state
+  examples: |
+    - [india](state)
+    - [corona](state)
+    - [karnatak](state) 
+    - [bihar](state) 
+    - [delhi](state) 
+    - [punjab](state) 
+    - [west bengal](state) 
+    - [odisha](state) 
+    - [assam](state) 
+    - [goa](state) 
+
+- intent: ask_spGender
+  examples: |
+    - tìm sản phẩm của [nam](prodFilter) không?
+    - tìm sản phẩm của [nữ](prodFilter) không?
+    - cần sản phẩm cho [nam](prodFilter)
+    - cần sản phẩm cho [nữ](prodFilter)
+    - mua đồng hồ [nữ](prodFilter)
+    - mua đồng hồ [nam](prodFilter)
+    - mua sản phẩm [nam](prodFilter)
+    - mua sản phẩm [nữ](prodFilter)
+
+
+- intent: ask_spName
+  examples: |
+    - Có sản phẩm [Casio G-Shock G-Squad Bluetooth](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Casio G-Shock G-Squad Bluetooth](prodFilter)
+    - Đồng hồ [Casio G-Shock G-Squad Bluetooth](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Casio G-Shock G-Squad Bluetooth](prodFilter)
+    - cho mình xin thông tin đồng hồ [Casio G-Shock G-Squad Bluetooth](prodFilter)
+    - Có sản phẩm [Ladies Hugo Boss Felina Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Ladies Hugo Boss Felina Watch](prodFilter)
+    - Đồng hồ [Ladies Hugo Boss Felina Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Ladies Hugo Boss Felina Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Ladies Hugo Boss Felina Watch](prodFilter)
+    - Có sản phẩm [Ladies Hugo Boss Novia Ceramic Watch White](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Ladies Hugo Boss Novia Ceramic Watch White](prodFilter)
+    - Đồng hồ [Ladies Hugo Boss Novia Ceramic Watch White](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Ladies Hugo Boss Novia Ceramic Watch White](prodFilter)
+    - cho mình xin thông tin đồng hồ [Ladies Hugo Boss Novia Ceramic Watch White](prodFilter)
+    - Có sản phẩm [Ladies Hugo Boss Novia Ceramic Watch Gold](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Gold](prodFilter)
+    - Đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Gold](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Gold](prodFilter)
+    - cho mình xin thông tin đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Gold](prodFilter)
+    - Có sản phẩm [Ladies Hugo Boss Novia Ceramic Watch Silver](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Silver](prodFilter)
+    - Đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Silver](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Silver](prodFilter)
+    - cho mình xin thông tin đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Silver](prodFilter)
+    - Có sản phẩm [Ladies Hugo Boss Novia Ceramic Watch Black](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Black](prodFilter)
+    - Đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Black](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Black](prodFilter)
+    - cho mình xin thông tin đồng hồ [Ladies Hugo Boss Novia Ceramic Watch Black](prodFilter)
+    - Có sản phẩm [Ladies Hugo Boss Saya Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Ladies Hugo Boss Saya Watch](prodFilter)
+    - Đồng hồ [Ladies Hugo Boss Saya Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Ladies Hugo Boss Saya Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Ladies Hugo Boss Saya Watch](prodFilter)
+    - Có sản phẩm [Mens Hugo Boss Ace Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Hugo Boss Ace Watch](prodFilter)
+    - Đồng hồ [Mens Hugo Boss Ace Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Hugo Boss Ace Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Hugo Boss Ace Watch](prodFilter)
+    - Có sản phẩm [Hugo Boss Watch Black](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Hugo Boss Watch Black](prodFilter)
+    - Đồng hồ [Hugo Boss Watch Black](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Hugo Boss Watch Black](prodFilter)
+    - cho mình xin thông tin đồng hồ [Hugo Boss Watch Black](prodFilter)
+    - Có sản phẩm [Casio G-Shock 5600](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Casio G-Shock 5600](prodFilter)
+    - Đồng hồ [Casio G-Shock 5600](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Casio G-Shock 5600](prodFilter)
+    - cho mình xin thông tin đồng hồ [Casio G-Shock 5600](prodFilter)
+    - Có sản phẩm [G-Shock Snow Camo verson 2](prodFilter) không?
+    - Mình muốn tìm đồng hồ [G-Shock Snow Camo verson 2](prodFilter)
+    - Đồng hồ [G-Shock Snow Camo verson 2](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [G-Shock Snow Camo verson 2](prodFilter)
+    - cho mình xin thông tin đồng hồ [G-Shock Snow Camo verson 2](prodFilter)
+    - Có sản phẩm [Mens Citizen Navihawk Calibre 6600](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Citizen Navihawk Calibre 6600](prodFilter)
+    - Đồng hồ [Mens Citizen Navihawk Calibre 6600](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Citizen Navihawk Calibre 6600](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Citizen Navihawk Calibre 6600](prodFilter)
+    - Có sản phẩm [Mens Citizen Endeavour Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Citizen Endeavour Watch](prodFilter)
+    - Đồng hồ [Mens Citizen Endeavour Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Citizen Endeavour Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Citizen Endeavour Watch](prodFilter)
+    - Có sản phẩm [Mens Citizen Calibre 8700 Chronograph](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Citizen Calibre 8700 Chronograph](prodFilter)
+    - Đồng hồ [Mens Citizen Calibre 8700 Chronograph](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Citizen Calibre 8700 Chronograph](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Citizen Calibre 8700 Chronograph](prodFilter)
+    - Có sản phẩm [Mens Citizen Eco-drive Promaster Aqualand](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Citizen Eco-drive Promaster Aqualand](prodFilter)
+    - Đồng hồ [Mens Citizen Eco-drive Promaster Aqualand](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Citizen Eco-drive Promaster Aqualand](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Citizen Eco-drive Promaster Aqualand](prodFilter)
+    - Có sản phẩm [Mens Citizen Perpetual Chrono A.T. Alarm](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Citizen Perpetual Chrono A.T. Alarm](prodFilter)
+    - Đồng hồ [Mens Citizen Perpetual Chrono A.T. Alarm](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Citizen Perpetual Chrono A.T. Alarm](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Citizen Perpetual Chrono A.T. Alarm](prodFilter)
+    - Có sản phẩm [Mens Rotary GB_PILOT A Chronograph Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Rotary GB_PILOT A Chronograph Watch](prodFilter)
+    - Đồng hồ [Mens Rotary GB_PILOT A Chronograph Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Rotary GB_PILOT A Chronograph Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Rotary GB_PILOT A Chronograph Watch](prodFilter)
+    - Có sản phẩm [Mens Rotary GB_PILOT B Chronograph Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Rotary GB_PILOT B Chronograph Watch](prodFilter)
+    - Đồng hồ [Mens Rotary GB_PILOT B Chronograph Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Rotary GB_PILOT B Chronograph Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Rotary GB_PILOT B Chronograph Watch](prodFilter)
+    - Có sản phẩm [Mens Rotary GS_Multi 1 Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Rotary GS_Multi 1 Watch](prodFilter)
+    - Đồng hồ [Mens Rotary GS_Multi 1 Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Rotary GS_Multi 1 Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Rotary GS_Multi 1 Watch](prodFilter)
+    - Có sản phẩm [Mens Rotary Exclusive Hero Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Rotary Exclusive Hero Watch](prodFilter)
+    - Đồng hồ [Mens Rotary Exclusive Hero Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Rotary Exclusive Hero Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Rotary Exclusive Hero Watch](prodFilter)
+    - Có sản phẩm [Mens Rotary Skeleton Automatic Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Rotary Skeleton Automatic Watch](prodFilter)
+    - Đồng hồ [Mens Rotary Skeleton Automatic Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Rotary Skeleton Automatic Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Rotary Skeleton Automatic Watch](prodFilter)
+    - Có sản phẩm [Mens Citizen Navihawk A-T Alarm Chronograph](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Citizen Navihawk A-T Alarm Chronograph](prodFilter)
+    - Đồng hồ [Mens Citizen Navihawk A-T Alarm Chronograph](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Citizen Navihawk A-T Alarm Chronograph](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Citizen Navihawk A-T Alarm Chronograph](prodFilter)
+    - Có sản phẩm [Mens Citizen Navihawk AT Alarm](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Mens Citizen Navihawk AT Alarm](prodFilter)
+    - Đồng hồ [Mens Citizen Navihawk AT Alarm](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Mens Citizen Navihawk AT Alarm](prodFilter)
+    - cho mình xin thông tin đồng hồ [Mens Citizen Navihawk AT Alarm](prodFilter)
+    - Có sản phẩm [Citizen Red Arrows Skyhawk A-T](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Citizen Red Arrows Skyhawk A-T](prodFilter)
+    - Đồng hồ [Citizen Red Arrows Skyhawk A-T](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Citizen Red Arrows Skyhawk A-T](prodFilter)
+    - cho mình xin thông tin đồng hồ [Citizen Red Arrows Skyhawk A-T](prodFilter)
+    - Có sản phẩm [Ladies Casio Classic Watch](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Ladies Casio Classic Watch](prodFilter)
+    - Đồng hồ [Ladies Casio Classic Watch](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Ladies Casio Classic Watch](prodFilter)
+    - cho mình xin thông tin đồng hồ [Ladies Casio Classic Watch](prodFilter)
+    - Có sản phẩm [Alarm Chronograph Solar](prodFilter) không?
+    - Mình muốn tìm đồng hồ [Alarm Chronograph Solar](prodFilter)
+    - Đồng hồ [Alarm Chronograph Solar](prodFilter) còn hàng không?
+    - Mình cần tìm thông tin đồng hồ [Alarm Chronograph Solar](prodFilter)
+    - cho mình xin thông tin đồng hồ [Alarm Chronograph Solar](prodFilter)
+
+- intent: ask_shopInfo
+  examples: |
+    - Cho mình xin thêm thông tin của cửa hàng đi.
+    - Địa chỉ cửa hàng ở đâu vậy
+    - thông tin liên lạc của shop
+    - liên lạc với shop như thế nào
+    - cho mình xin địa chỉ
