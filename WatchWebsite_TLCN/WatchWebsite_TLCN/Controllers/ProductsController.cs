@@ -558,7 +558,12 @@ namespace WatchWebsite_TLCN.Controllers
             List<string> result = new List<string>();
             for (int i = 0; i < 3; i++)
             {
-                result.Add("http://minimix-watch-shop.surge.sh/products/" + products[i].Id);
+                try
+                {
+                    result.Add("http://minimix-watch-shop.surge.sh/products/" + products[i].Id);
+                }
+                catch
+                { }
             }
             return Ok(result);
         }
