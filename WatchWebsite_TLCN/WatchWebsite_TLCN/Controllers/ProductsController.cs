@@ -183,7 +183,7 @@ namespace WatchWebsite_TLCN.Controllers
                     var lstSubImage = await _unitOfWork.SubImages.GetAll(p => p.ProductId == item);
                     var lstOrder = await _unitOfWork.OrderDetails.GetAll(p => p.ProductId == item);
                     var lstCart = await _unitOfWork.Carts.GetAll(p => p.ProductId == item);
-                    if (lstOrder.Count() == 0 && lstCart.Count()==0)
+                    if (lstOrder.Count() == 0 && lstCart.Count() == 0)
                     {
                         await _unitOfWork.Products.Delete<string>(item);
 
@@ -537,6 +537,32 @@ namespace WatchWebsite_TLCN.Controllers
 
         }
 
+        [HttpGet("getByChat")]
+        public async Task<IActionResult> GetProductByChatbot(string value)
+        {
+            List<Product> products = new List<Product>();
+
+            if (value == "nam" || value == "Nam")
+            {
+                products = await _unitOfWork.Products.GetAll(p => p.Gender == 1);
+            }
+            else if (value == "nữ" || value == "Nữ")
+            {
+                products = await _unitOfWork.Products.GetAll(p => p.Gender == 0);
+            }
+            else
+            {
+                products = await _unitOfWork.Products.GetAll(p => p.Name.Contains(value));
+            }
+
+            List<string> result = new List<string>();
+            for (int i = 0; i < 3; i++)
+            {
+                result.Add("http://minimix-watch-shop.surge.sh/products/" + products[i].Id);
+            }
+            return Ok(result);
+        }
+
     }
 
     public class tmpRecUser
@@ -544,3 +570,5 @@ namespace WatchWebsite_TLCN.Controllers
         public string Id { get; set; }
     }
 }
+
+    
