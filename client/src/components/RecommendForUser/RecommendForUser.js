@@ -43,37 +43,40 @@ const RecommendForUser = ({ idUser }) => {
 
   return (
     <div className="recommendForUser">
-      <div className="heading">Recommend</div>
-      <Spin spinning={loading}>
-        <Swiper
-          slidesPerView={resizeFlag ? 5 : 3}
-          loop={true}
-          loopFillGroupWithBlank={true}
-          spaceBetween={20}
-          pagination={{
-            clickable: true,
-          }}
-        >
-          {data.length !== 0 &&
-            data.map((ele) => (
-              <SwiperSlide key={ele.Id}>
-                <Link
-                  to={`/products/${ele.Id}`}
-                  onClick={() => {
-                    gaEventTracker(`${ele.Id}-${ele.Name}`);
-                  }}
-                >
-                  <div className="card">
-                    <img src={`${ele.Image}`} alt="" />
-                    <div>{ele.Name}</div>
-                    <p>{ele.Brand}</p>
-                    <p>${ele.Price}</p>
-                  </div>
-                </Link>
-              </SwiperSlide>
-            ))}
-        </Swiper>
-      </Spin>
+      {data.length !== 0 && (
+        <>
+          <div className="heading">Recommend</div>
+          <Spin spinning={loading}>
+            <Swiper
+              slidesPerView={resizeFlag ? 5 : 3}
+              loop={true}
+              loopFillGroupWithBlank={true}
+              spaceBetween={20}
+              pagination={{
+                clickable: true,
+              }}
+            >
+              {data.map((ele) => (
+                <SwiperSlide key={ele.Id}>
+                  <Link
+                    to={`/products/${ele.Id}`}
+                    onClick={() => {
+                      gaEventTracker(`${ele.Id}-${ele.Name}`);
+                    }}
+                  >
+                    <div className="card">
+                      <img src={`${ele.Image}`} alt="" />
+                      <div>{ele.Name}</div>
+                      <p>{ele.Brand}</p>
+                      <p>${ele.Price}</p>
+                    </div>
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </Spin>
+        </>
+      )}
     </div>
   );
 };
