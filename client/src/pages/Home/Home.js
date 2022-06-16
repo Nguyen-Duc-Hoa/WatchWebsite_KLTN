@@ -6,6 +6,7 @@ import "./Home.scss";
 import BestSeller from "../../components/BestSeller/BestSeller";
 import Service from "../../components/Service/Service";
 import RecommendForUser from "../../components/RecommendForUser/RecommendForUser";
+import Page from "../../components/Page/Page";
 
 const services = [
   {
@@ -36,9 +37,22 @@ const services = [
 
 function Home() {
   const isHaveTrackingCookie = !!localStorage.getItem("trackingCookie");
+  const description =
+    "Visit minimix-watch-shop.surge.sh today - the world's No.1 for designer watches online. We stock hundreds of designer brands including Olivia Burton, Hugo Boss and Timex, with FREE next day delivery.";
+  const title = "Minimix home page";
 
   return (
-    <>
+    <Page
+      title={title}
+      description={description}
+      canonicalPath="/"
+      schema={{
+        "@context": "http://schema.org",
+        "@type": "HomePage",
+        description: description,
+        name: title,
+      }}
+    >
       <CustomCarousel />
       <BestSeller />
       {isHaveTrackingCookie && <RecommendForUser />}
@@ -64,9 +78,8 @@ function Home() {
           <Service key={index} image={image} heading={heading} text={text} />
         ))}
       </section>
-    </>
+    </Page>
   );
 }
-
 
 export default Home;

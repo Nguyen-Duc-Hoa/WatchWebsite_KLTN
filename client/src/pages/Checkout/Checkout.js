@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import Breadcrumbing from "../../components/Breadcrumb/Breadcrumb";
 import CheckoutForm from "../../components/CheckoutForm/CheckoutForm";
 import CheckoutProducts from "../../components/CheckoutProducts/CheckoutProducts";
 import "./Checkout.scss";
+import Page from "../../components/Page/Page";
 
 const breadCrumbRoute = [
   { link: "/", name: "Home" },
@@ -16,13 +17,15 @@ function Checkout({ cart }) {
     return <Redirect to="/" />;
   }
   return (
-    <section className="checkout">
-      <Breadcrumbing route={breadCrumbRoute} />
-      <div className="checkout__content">
-        <CheckoutForm />
-        <CheckoutProducts />
-      </div>
-    </section>
+    <Page title="Minimix checkout page" description="Minimix checkout page">
+      <section className="checkout">
+        <Breadcrumbing route={breadCrumbRoute} />
+        <div className="checkout__content">
+          <CheckoutForm />
+          <CheckoutProducts />
+        </div>
+      </section>
+    </Page>
   );
 }
 

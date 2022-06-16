@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { Button, Space } from "antd";
 import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
+import Page from "../../components/Page/Page";
 
 const breadCrumbRoute = [
   { link: "/", name: "Home" },
@@ -84,60 +85,63 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
     setPaymethod(method);
   };
 
+  const title = "Minimix shop - payment";
   return (
-    <section className="shipping">
-      <Breadcrumbing route={breadCrumbRoute} />
-      <div className="shipping__info">
-        <div className="info__content">
-          <div className="content__top">
-            <div className="content__item content__item--first">
-              <div className="title">Contact</div>
-              <div className="text">{orderInfo.phone}</div>
-              <Link to="/checkout">Change</Link>
-            </div>
-            <div className="content__item">
-              <div className="title">Ship to</div>
-              <div className="text">{orderInfo.address}</div>
-              <Link to="/checkout">Change</Link>
-            </div>
-          </div>
-          <div className="heading">Shipping method</div>
-          <div className="content__bottom">
-            <div className="circle"></div>
-            <div className="method">Standard</div>
-            <div className="price">Free</div>
-          </div>
-          <div className="heading">Payment</div>
-          <Space style={{ marginBottom: 20 }} direction="horizontal">
-            <div
-              className="paymethod"
-              onClick={() => choosePayMethod("Stripe")}
-            >
-              <div className="left">
-                <img
-                  src="https://woocommerce.com/wp-content/uploads/2011/12/stripe-logo-blue.png"
-                  alt=""
-                />
+    <Page title={title}>
+      <section className="shipping">
+        <Breadcrumbing route={breadCrumbRoute} />
+        <div className="shipping__info">
+          <div className="info__content">
+            <div className="content__top">
+              <div className="content__item content__item--first">
+                <div className="title">Contact</div>
+                <div className="text">{orderInfo.phone}</div>
+                <Link to="/checkout">Change</Link>
+              </div>
+              <div className="content__item">
+                <div className="title">Ship to</div>
+                <div className="text">{orderInfo.address}</div>
+                <Link to="/checkout">Change</Link>
               </div>
             </div>
-            <div className="paymethod" onClick={makeZalopayReq}>
-              <div className="left">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/vi/7/77/ZaloPay_Logo.png"
-                  alt=""
-                />
-              </div>
+            <div className="heading">Shipping method</div>
+            <div className="content__bottom">
+              <div className="circle"></div>
+              <div className="method">Standard</div>
+              <div className="price">Free</div>
             </div>
-          </Space>
-          {payMethod === "Stripe" && (
-            <Elements stripe={stripePromise}>
-              <PaymentForm />
-            </Elements>
-          )}
+            <div className="heading">Payment</div>
+            <Space style={{ marginBottom: 20 }} direction="horizontal">
+              <div
+                className="paymethod"
+                onClick={() => choosePayMethod("Stripe")}
+              >
+                <div className="left">
+                  <img
+                    src="https://woocommerce.com/wp-content/uploads/2011/12/stripe-logo-blue.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div className="paymethod" onClick={makeZalopayReq}>
+                <div className="left">
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/vi/7/77/ZaloPay_Logo.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </Space>
+            {payMethod === "Stripe" && (
+              <Elements stripe={stripePromise}>
+                <PaymentForm />
+              </Elements>
+            )}
+          </div>
+          <CheckoutProducts />
         </div>
-        <CheckoutProducts />
-      </div>
-    </section>
+      </section>
+    </Page>
   );
 }
 
