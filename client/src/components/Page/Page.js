@@ -8,8 +8,7 @@ const addressRegion = "Ho Chi Minh";
 const postalCode = "71310";
 const streetAddress = "1 Võ Văn Ngân";
 
-const defaultImageUrl =
-  "https://icons-for-free.com/download-icon-han+handwatch+time+watch+icon-1320086001462629177_512.png";
+const defaultImageUrl = `${canonicalRootURL}/thumb.png`;
 
 const Page = ({
   children,
@@ -71,11 +70,27 @@ const Page = ({
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
 
+        <meta property="og:image:width" content="150" />
+        <meta property="og:image:height" content="150" />
+
+        <meta
+          property="og:image:secure_url"
+          key="og:image"
+          content={imageUrl || defaultImageUrl}
+        />
+
         <meta
           property="og:image"
           key="og:image"
           content={imageUrl || defaultImageUrl}
         />
+
+        {/* <meta property="og:image" content="http://example.com/ogp.jpg" />
+        <meta
+          property="og:image:secure_url"
+          content="https://secure.example.com/ogp.jpg"
+        /> */}
+        <meta property="og:image:type" content="image/jpeg" />
 
         <script type="application/ld+json">{schemaArrayJSONString}</script>
       </Helmet>
