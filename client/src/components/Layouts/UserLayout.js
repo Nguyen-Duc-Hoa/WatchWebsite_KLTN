@@ -6,8 +6,8 @@ import Footer from "../Footer/Footer";
 import BackTopBtn from "../BackTopBtn/BackTopBtn";
 import Overlay from "../Overlay/Overlay";
 import { Launcher } from "react-chat-window";
+import { MessengerChat } from "react-messenger-chat-plugin";
 import "./UserLayout.scss";
-import MessengerCustomerChat from "react-messenger-customer-chat";
 
 const BOT_TURN = "BOT";
 const CUSTOMER_TURN = "CUSTOMER";
@@ -49,7 +49,7 @@ function UserLayout({ children }) {
       <Overlay />
       <Launcher
         agentProfile={{
-          teamName: "react-chat-window",
+          teamName: "Minimix Watch Shop",
           imageUrl:
             "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png",
         }}
@@ -57,7 +57,14 @@ function UserLayout({ children }) {
         messageList={messageList}
         showEmoji
       />
-      <MessengerCustomerChat pageId="107224811929347" appId="593385925129811" />
+      <MessengerChat
+        pageId="105623528855771"
+        language="vi_VN"
+        themeColor={"#000000"}
+        greetingDialogDisplay={"show"}
+        debugMode={true}
+      />
+      ,
     </>
   );
 }
