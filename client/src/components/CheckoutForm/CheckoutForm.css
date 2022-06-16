@@ -40,6 +40,31 @@
   padding: 10px;
 }
 
+.form-order .map-container {
+  height: 300px;
+  margin-bottom: 20px;
+}
+
+.form-order .mapboxgl-control-container {
+  display: none;
+}
+
+.form-order .addressDropdown {
+  position: relative;
+  top: -80%;
+  width: 100%;
+  margin-top: -20px;
+  padding: 8px 10px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-order .addressDropdown .addressItem {
+  line-height: 28px;
+}
+
 @media (max-width: 1080px) {
   .form-order {
     width: 100%;

@@ -1,0 +1,14 @@
+#sc-launcher .sc-open-icon,
+#sc-launcher .sc-closed-icon,
+#sc-launcher .sc-launcher {
+  bottom: 90px;
+}
+
+#sc-launcher .sc-chat-window {
+  bottom: 156px;
+  max-height: 568px;
+
+  @media (max-width: 450px) {
+    height: 70%;
+  }
+}
