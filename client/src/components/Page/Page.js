@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-const canonicalRootURL = process.env.REACT_APP_HOST_DOMAIN;
+const canonicalRootURL = process.env.REACT_APP_CLIENT_DOMAIN;
 const siteTitle = "Discover Better Watch";
 const addressCountry = "VN";
 const addressRegion = "Ho Chi Minh";
