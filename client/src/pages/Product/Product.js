@@ -232,8 +232,8 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
     });
   };
 
-  const title = productDetail.Name;
-  const description = `${productDetail.Name} - ${productDetail.Price}`;
+  const title = productDetail?.Name || "Minimix product";
+  const description = `${productDetail?.Name} - ${productDetail?.Price}` || "";
   return (
     <Page
       title={title}
@@ -245,7 +245,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
         description: description,
         name: title,
       }}
-      urlImage={productDetail.Image}
+      urlImage={productDetail?.Image}
     >
       <section className="product">
         <Breadcrumbing route={breadCrumbRoute} />
