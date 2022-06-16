@@ -64,7 +64,6 @@ function UserLayout({ children }) {
         greetingDialogDisplay={"show"}
         debugMode={true}
       />
-      ,
     </>
   );
 }
