@@ -8,7 +8,7 @@ const addressRegion = "Ho Chi Minh";
 const postalCode = "71310";
 const streetAddress = "1 Võ Văn Ngân";
 
-const defaultImageUrl = `${canonicalRootURL}/thumb.png`;
+const defaultImageUrl = `https://htluxury.vn/wp-content/uploads/2020/02/blancpain.jpg`;
 
 const Page = ({
   children,
@@ -84,13 +84,6 @@ const Page = ({
           key="og:image"
           content={imageUrl || defaultImageUrl}
         />
-
-        {/* <meta property="og:image" content="http://example.com/ogp.jpg" />
-        <meta
-          property="og:image:secure_url"
-          content="https://secure.example.com/ogp.jpg"
-        /> */}
-        <meta property="og:image:type" content="image/jpeg" />
 
         <script type="application/ld+json">{schemaArrayJSONString}</script>
       </Helmet>
