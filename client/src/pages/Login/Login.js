@@ -31,23 +31,28 @@ const breadcrumbRoute = [
     link: "/login",
   },
 ];
-
+/*global FB*/
 const loadScript = () => {
-  const appId = "568775388147691";
-
-  // Fb
   window.fbAsyncInit = function () {
-    window.FB.init({
-      appId,
+    console.log("------------------------------");
+    FB.init({
+      appId: "568775388147691",
       cookie: true,
       xfbml: true,
       version: "v13.0",
     });
 
-    window.FB.AppEvents.logPageView();
+    FB.AppEvents.logPageView();
   };
+  FB.init({
+    appId: "426675909317530",
+    cookie: true,
+    xfbml: true,
+    version: "v13.0",
+  });
 
   (function (d, s, id) {
+    console.log("load script");
     var js,
       fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) {
@@ -62,16 +67,20 @@ const loadScript = () => {
 
 export async function loginFb(callback) {
   const authResponse = await new Promise((resolve, reject) =>
-    window.FB.login(function (response) {
-      if (response.status === "connected") {
-        window.FB.api("/me?fields=name,email,picture,id", function (data) {
-          resolve({ data, accessToken: response.authResponse.accessToken });
-        });
-      }
-    })
+    window.FB.login(
+      function (response) {
+        if (response.status === "connected") {
+          window.FB.api("/me?fields=email,id,name,picture.width(720).height(720)", function (data) {
+            resolve({ data, accessToken: response.authResponse.accessToken });
+          });
+        }
+      },
+      { scope: "email" }
+    )
   );
-  console.log(authResponse);
   // callback(authResponse);
+  console.log(authResponse);
+  callback(authResponse);
   if (!authResponse) return;
 }
 
@@ -88,9 +97,6 @@ function Login({
 
   useEffect(() => {
     loadScript();
-    if (isAuth) {
-      return <Redirect to="/" />;
-    }
   }, []);
 
   const loginHandler = (values) => {
@@ -111,15 +117,21 @@ function Login({
   };
 
   const handleResponseFacebook = (response) => {
-    const { email, id, name, picture } = response;
-    onLoginFacebook(
-      notify,
-      { id, name, email, imageUrl: picture.data.url },
-      () => {
-        history.push("/");
-      }
-    );
+    const { email, id, name, picture } = response.data;
+    const imageUrl = picture.data.url;
+    console.log(email, id, name, imageUrl);
+    // onLoginFacebook(
+    //   notify,
+    //   { id, name, email, imageUrl: picture.data.url },
+    //   () => {
+    //     history.push("/");
+    //   }
+    // );
   };
+
+  if (isAuth) {
+    return <Redirect to="/" />;
+  }
 
   const description = "Login into Minimix watch shop";
   const title = "Login Minimix now";
@@ -210,7 +222,7 @@ function Login({
                 />
                 <Button
                   className="googleLoginBtn"
-                  style={{ backgroundColor: "#4e8cff", color: 'white' }}
+                  style={{ backgroundColor: "#4e8cff", color: "white" }}
                   size="large"
                   block
                   onClick={() => loginFb(handleResponseFacebook)}
