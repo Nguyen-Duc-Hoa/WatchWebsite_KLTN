@@ -14,6 +14,7 @@ using WatchWebsite_TLCN.DTO;
 using AutoMapper;
 using WatchWebsite_TLCN.Intefaces;
 using Microsoft.AspNetCore.Authorization;
+using WatchWebsite_TLCN.Utilities;
 
 namespace WatchWebsite_TLCN.Controllers
 {
@@ -93,8 +94,11 @@ namespace WatchWebsite_TLCN.Controllers
                     if(voucher != null)
                     {
                         discount = voucher.Discount;
+                        order.VoucherName = voucher.Name;
+                        order.Discount = voucher.Discount;
                     }
                 }
+                order.PaymentMethod = Constant.stripeMethod;
                 order.Total = await CalculateOrderAmount(orderDTO.Products) / 100 - discount;
 
                 // Create order

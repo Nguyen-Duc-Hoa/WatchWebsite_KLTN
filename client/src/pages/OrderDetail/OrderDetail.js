@@ -73,6 +73,9 @@ function OrderDetail({ token }) {
           Name: result.Name,
           Phone: result.Phone,
           DeliveryStatus: result.DeliveryStatus,
+          PaymentMethod: result.PaymentMethod,
+          VoucherName: result.VoucherName,
+          Discount: result.Discount,
         };
         setData(newData);
         setTableDataSrc(result.OrderDetails);
@@ -106,7 +109,7 @@ function OrderDetail({ token }) {
           </div>
           <div className="orderItem">
             <div className="name">{data && data.Name}</div>
-            <div className="name">MIXIN SHOP</div>
+            <div className="name">MINIMIX SHOP</div>
           </div>
           <div className="orderItem">
             <div>{data && data.Address}</div>
@@ -114,11 +117,15 @@ function OrderDetail({ token }) {
           </div>
           <div className="orderItem">
             <div>{data && data.Phone}</div>
-            <div>090881234</div>
+            <div>0908849577</div>
           </div>
+          <Divider />
           <div className="orderItem vertical">
-            <div>{data && data.DeliveryStatus}</div>
-            <div>{data && data.OrderDate}</div>
+            <div>Order status: {data && data.DeliveryStatus}</div>
+            <div>Create at: {data && data.OrderDate}</div>
+            <div>Payment method: {data && data.PaymentMethod}</div>
+            {data && data.VoucherName && <div>Voucher: {data.VoucherName}</div>}
+            {data && data.Discount && <div>Discount: {data.Discount}$</div>}
           </div>
           <Divider />
           <Table

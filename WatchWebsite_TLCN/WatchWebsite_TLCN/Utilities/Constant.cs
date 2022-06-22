@@ -21,5 +21,8 @@ namespace WatchWebsite_TLCN.Utilities
         public const string customerRole = "Customer";
 
         public static readonly string[] typeComment = { "Main", "Rep" };
+
+        public const string stripeMethod = "Stripe";
+        public const string zaloPayMethod = "Zalo";
     }
 }

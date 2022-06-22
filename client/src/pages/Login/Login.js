@@ -70,16 +70,17 @@ export async function loginFb(callback) {
     window.FB.login(
       function (response) {
         if (response.status === "connected") {
-          window.FB.api("/me?fields=email,id,name,picture.width(720).height(720)", function (data) {
-            resolve({ data, accessToken: response.authResponse.accessToken });
-          });
+          window.FB.api(
+            "/me?fields=email,id,name,picture.width(720).height(720)",
+            function (data) {
+              resolve({ data, accessToken: response.authResponse.accessToken });
+            }
+          );
         }
       },
       { scope: "email" }
     )
   );
-  // callback(authResponse);
-  console.log(authResponse);
   callback(authResponse);
   if (!authResponse) return;
 }
@@ -119,14 +120,9 @@ function Login({
   const handleResponseFacebook = (response) => {
     const { email, id, name, picture } = response.data;
     const imageUrl = picture.data.url;
-    console.log(email, id, name, imageUrl);
-    // onLoginFacebook(
-    //   notify,
-    //   { id, name, email, imageUrl: picture.data.url },
-    //   () => {
-    //     history.push("/");
-    //   }
-    // );
+    onLoginFacebook(notify, { id, name, email, imageUrl }, () => {
+      history.push("/");
+    });
   };
 
   if (isAuth) {
