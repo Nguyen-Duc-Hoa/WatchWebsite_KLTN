@@ -83,6 +83,12 @@ namespace WatchWebsite_TLCN.Controllers
                 });
             }
 
+            User userDb = await _unitOfWork.Users.Get(expression: u => u.Email == loginGoogle.Email);
+            if (userDb != null)
+            {
+                return BadRequest("Dang ki khong thanh cong");
+            }
+
             var createdUser = new User { 
                 Username = loginGoogle.Name, 
                 Name = loginGoogle.Name,
@@ -200,6 +206,12 @@ namespace WatchWebsite_TLCN.Controllers
                     Role = roles,
                     Token = token.JwtToken
                 });
+            }
+
+            User userDb = await _unitOfWork.Users.Get(expression: u => u.Email == loginFacebook.Email);
+            if (userDb != null)
+            {
+                return BadRequest("Dang ki khong thanh cong");
             }
 
             var createdUser = new User
