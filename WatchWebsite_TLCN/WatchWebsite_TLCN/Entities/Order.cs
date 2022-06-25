@@ -39,8 +39,11 @@ namespace WatchWebsite_TLCN.Entities
 
         //[Required]
         public string DeliveryStatus { get; set; } = Constant.status[0];
+        public string PaymentMethod { get; set; }
 
         public int? CodeVoucher { get; set; }
+        public string VoucherName { get; set; }
+        public float? Discount { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }

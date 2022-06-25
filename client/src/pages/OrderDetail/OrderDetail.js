@@ -6,6 +6,7 @@ import { Table, Spin, Divider } from "antd";
 import moment from "moment";
 import { useParams } from "react-router";
 import { connect } from "react-redux";
+import Page from "../../components/Page/Page";
 
 const breadcrumbRoute = [
   { name: "Home", link: "/" },
@@ -45,7 +46,7 @@ const columns = [
   },
 ];
 
-function OrderDetail({token}) {
+function OrderDetail({ token }) {
   const { id } = useParams();
   const [tableDataSrc, setTableDataSrc] = useState([]);
   const [data, setData] = useState(null);
@@ -72,6 +73,9 @@ function OrderDetail({token}) {
           Name: result.Name,
           Phone: result.Phone,
           DeliveryStatus: result.DeliveryStatus,
+          PaymentMethod: result.PaymentMethod,
+          VoucherName: result.VoucherName,
+          Discount: result.Discount,
         };
         setData(newData);
         setTableDataSrc(result.OrderDetails);
@@ -84,50 +88,65 @@ function OrderDetail({token}) {
         );
       });
   }, [id]);
+
+  const title = "Order detail";
   return (
-    <section className="orderDetail">
-      <Breadcrumbing route={breadcrumbRoute} />
-      <Spin spinning={spinning}>
-        <div className="heading">Invoice</div>
-        <div className="orderItem">
-          <div className="title left">BILL FROM</div>
-          <div className="title right">BILL TO</div>
+    <Page
+      title={title}
+      schema={{
+        "@context": "http://schema.org",
+        "@type": "OrderDetailPage",
+        name: title,
+      }}
+    >
+      <section className="orderDetail">
+        <Breadcrumbing route={breadcrumbRoute} />
+        <Spin spinning={spinning}>
+          <div className="heading">Invoice</div>
+          <div className="orderItem">
+            <div className="title left">BILL FROM</div>
+            <div className="title right">BILL TO</div>
+          </div>
+          <div className="orderItem">
+            <div className="name">{data && data.Name}</div>
+            <div className="name">MINIMIX SHOP</div>
+          </div>
+          <div className="orderItem">
+            <div>{data && data.Address}</div>
+            <div>SU PHAM KY THUAT</div>
+          </div>
+          <div className="orderItem">
+            <div>{data && data.Phone}</div>
+            <div>0908849577</div>
+          </div>
+          <Divider />
+          <div className="orderItem vertical">
+            <div>Order status: {data && data.DeliveryStatus}</div>
+            <div>Create at: {data && data.OrderDate}</div>
+            <div>Payment method: {data && data.PaymentMethod}</div>
+            {data && data.VoucherName && <div>Voucher: {data.VoucherName}</div>}
+            {data && data.Discount && <div>Discount: {data.Discount}$</div>}
+          </div>
+          <Divider />
+          <Table
+            columns={columns}
+            dataSource={tableDataSrc}
+            pagination={{ position: ["none", "none"] }}
+            bordered={true}
+          />
+        </Spin>
+        <div className="total">
+          <span>Total:</span> ${data && data.Total}
         </div>
-        <div className="orderItem">
-          <div className="name">{data && data.Name}</div>
-          <div className="name">MIXIN SHOP</div>
-        </div>
-        <div className="orderItem">
-          <div>{data && data.Address}</div>
-          <div>SU PHAM KY THUAT</div>
-        </div>
-        <div className="orderItem">
-          <div>{data && data.Phone}</div>
-          <div>090881234</div>
-        </div>
-        <div className="orderItem vertical">
-          <div>{data && data.DeliveryStatus}</div>
-          <div>{data && data.OrderDate}</div>
-        </div>
-        <Divider />
-        <Table
-          columns={columns}
-          dataSource={tableDataSrc}
-          pagination={{ position: ["none", "none"] }}
-          bordered={true}
-        />
-      </Spin>
-      <div className="total">
-        <span>Total:</span> ${data && data.Total}
-      </div>
-    </section>
+      </section>
+    </Page>
   );
 }
 
-const mapStateToProps = state => {
-    return {
-        token: state.auth.token
-    }
-}
+const mapStateToProps = (state) => {
+  return {
+    token: state.auth.token,
+  };
+};
 
 export default connect(mapStateToProps)(OrderDetail);

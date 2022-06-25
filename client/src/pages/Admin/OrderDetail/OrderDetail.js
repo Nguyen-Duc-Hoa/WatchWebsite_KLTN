@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Divider, Table, Space, Spin } from "antd";
+import moment from "moment";
+import { Button, Divider, Table, Spin } from "antd";
 import "./OrderDetail.scss";
 import OrderState from "../../../components/OrderState/OrderState";
 import { useParams } from "react-router-dom";
@@ -63,22 +64,21 @@ function OrderDetail({ token }) {
         orderId: data.orderId,
         deliveryStatus: currentStep,
       }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          notify(
-            "UPDATE SUCCESS",
-            "You have already update an order.",
-            "success"
-          );
-        } else {
-          notify(
-            "LOAD FAILED",
-            "Something went wrong :( Please try again.",
-            "error"
-          );
-        }
-      });
+    }).then((response) => {
+      if (response.ok) {
+        notify(
+          "UPDATE SUCCESS",
+          "You have already update an order.",
+          "success"
+        );
+      } else {
+        notify(
+          "LOAD FAILED",
+          "Something went wrong :( Please try again.",
+          "error"
+        );
+      }
+    });
   };
 
   const fetchOrderDetail = () => {
@@ -100,9 +100,14 @@ function OrderDetail({ token }) {
           paymentStatus: result["PaymentStatus"],
           address: result["Address"],
           deliveryStatus: result["DeliveryStatus"],
-          orderDate: result["OrderDate"],
+          orderDate: moment(result["OrderDate"]).format(
+            "dddd, MMMM Do YYYY, h:mm:ss a"
+          ),
           total: result["Total"],
           phone: result["Phone"],
+          PaymentMethod: result["PaymentMethod"],
+          VoucherName: result["VoucherName"],
+          Discount: result["Discount"],
           products: result["OrderDetails"].map((ele) => {
             return {
               productName: ele.ProductName,
@@ -139,19 +144,28 @@ function OrderDetail({ token }) {
           </div>
           <div className="shippedBy">
             <div className="title">Shipped By:</div>
-            <div>Kayle</div>
+            <div>Minimix</div>
           </div>
         </div>
         <div className="payment">
           <div className="paymentInfo">
             <div className="title">Payment Method:</div>
-            <div>Visa</div>
+            <div>{data && data.PaymentMethod}</div>
           </div>
           <div className="paymentDate">
             <div className="title">Order Date:</div>
             <div>{data && data.orderDate}</div>
           </div>
         </div>
+        {data && data.VoucherName && (
+          <div className="payment">
+            <div className="paymentInfo">
+              <div className="title">Voucher:</div>
+              <div>{data.VoucherName}</div>
+              <div>Discount: {data.Discount}</div>
+            </div>
+          </div>
+        )}
         {currentStep && (
           <OrderState
             currentStep={currentStep}

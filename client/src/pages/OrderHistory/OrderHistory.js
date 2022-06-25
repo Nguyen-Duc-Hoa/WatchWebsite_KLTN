@@ -6,10 +6,9 @@ import { connect } from "react-redux";
 import Pagination from "../../components/Pagination/Pagination";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import Page from "../../components/Page/Page";
 
 const { Column } = Table;
-
-
 
 const breadcrumbRoute = [
   { name: "Home", link: "/" },
@@ -45,7 +44,7 @@ function OrderHistory({ token, userId }) {
         );
         setCurrentPage(result.CurrentPage);
         setTotalPage(result.TotalPage);
-      })
+      });
     setSpinning(false);
   }, [currentPage]);
 
@@ -64,8 +63,8 @@ function OrderHistory({ token, userId }) {
       sorter: (a, b) => a.OrderDate > b.OrderDate,
       sortDirections: ["descend"],
       render: (date) => (
-          <p>{moment(date).format("dddd, MMMM Do YYYY, h:mm:ss a").toString()}</p>
-      )
+        <p>{moment(date).format("dddd, MMMM Do YYYY, h:mm:ss a").toString()}</p>
+      ),
     },
     {
       title: "Total",
@@ -83,32 +82,43 @@ function OrderHistory({ token, userId }) {
       title: "Action",
       dataIndex: "Action",
       key: "Action",
-      render: (_, record) => (
-        <Link to={`/Orders/${record.key}`}>Detail</Link>
-      ),
+      render: (_, record) => <Link to={`/Orders/${record.key}`}>Detail</Link>,
     },
   ];
 
+  const title = "Order history";
+  const description = "Your order history";
   return (
-    <section className="orderHistory">
-      <Breadcrumbing route={breadcrumbRoute} />
-      <Spin spinning={spinning}>
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={{ position: ["none", "none"] }}
-          footer={() => (
-            <Pagination
-              currentPage={currentPage}
-              noPadding={true}
-              totalPage={totalPage}
-              setCurrentPage={setCurrentPage}
-            />
-          )}
-          bordered={true}
-        />
-      </Spin>
-    </section>
+    <Page
+      title={title}
+      description={description}
+      schema={{
+        "@context": "http://schema.org",
+        "@type": "OrderHistoryPage",
+        description: description,
+        name: title,
+      }}
+    >
+      <section className="orderHistory">
+        <Breadcrumbing route={breadcrumbRoute} />
+        <Spin spinning={spinning}>
+          <Table
+            columns={columns}
+            dataSource={data}
+            pagination={{ position: ["none", "none"] }}
+            footer={() => (
+              <Pagination
+                currentPage={currentPage}
+                noPadding={true}
+                totalPage={totalPage}
+                setCurrentPage={setCurrentPage}
+              />
+            )}
+            bordered={true}
+          />
+        </Spin>
+      </section>
+    </Page>
   );
 }
 

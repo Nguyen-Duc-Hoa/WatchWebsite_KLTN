@@ -34,7 +34,7 @@ function SidebarItem({ content, submenu, onSetBrands, onSetGender }) {
         {submenu &&
           submenu.length !== 0 &&
           submenu.map((ele) => (
-            <li>
+            <li key={ele.key}>
               <Link
                 onClick={() => {
                   onSetBrands(ele.name);
@@ -42,7 +42,6 @@ function SidebarItem({ content, submenu, onSetBrands, onSetGender }) {
                 }}
                 to={`/products`}
                 style={{ display: "inline-block" }}
-                key={ele.key}
               >
                 {ele.name}
               </Link>

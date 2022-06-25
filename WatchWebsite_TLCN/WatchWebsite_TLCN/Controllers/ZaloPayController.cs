@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using ZaloPay.Helper; // HmacHelper, RSAHelper, HttpHelper, Utils (tải về ở mục DOWNLOADS)
 using ZaloPay.Helper.Crypto;
 using System.Net.Http;
+using WatchWebsite_TLCN.Utilities;
 
 namespace WatchWebsite_TLCN.Controllers
 {
@@ -114,8 +115,6 @@ namespace WatchWebsite_TLCN.Controllers
                 order.CodeVoucher = null;
             order.Address = emb["address"];
             var saveOrder = await PostOrder(order);
-
-
 
             try
             {
@@ -229,8 +228,11 @@ namespace WatchWebsite_TLCN.Controllers
                     if (voucher != null)
                     {
                         discount = voucher.Discount;
+                        order.VoucherName = voucher.Name;
+                        order.Discount = voucher.Discount;
                     }
                 }
+                order.PaymentMethod = Constant.zaloPayMethod;
                 order.Total = await CalculateOrderAmount1(orderDTO.Products) / 100 - discount;
 
                 // Create order

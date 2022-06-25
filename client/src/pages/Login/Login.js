@@ -9,7 +9,7 @@ import { notify } from "../../helper/notify";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import GoogleLogin from "react-google-login";
-import FacebookLogin from "react-facebook-login";
+import Page from "../../components/Page/Page";
 
 const { Text } = Typography;
 const formItemLayout = {
@@ -31,6 +31,59 @@ const breadcrumbRoute = [
     link: "/login",
   },
 ];
+/*global FB*/
+const loadScript = () => {
+  window.fbAsyncInit = function () {
+    console.log("------------------------------");
+    FB.init({
+      appId: "568775388147691",
+      cookie: true,
+      xfbml: true,
+      version: "v13.0",
+    });
+
+    FB.AppEvents.logPageView();
+  };
+  FB.init({
+    appId: "426675909317530",
+    cookie: true,
+    xfbml: true,
+    version: "v13.0",
+  });
+
+  (function (d, s, id) {
+    console.log("load script");
+    var js,
+      fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {
+      return;
+    }
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  })(document, "script", "facebook-jssdk");
+};
+
+export async function loginFb(callback) {
+  const authResponse = await new Promise((resolve, reject) =>
+    window.FB.login(
+      function (response) {
+        if (response.status === "connected") {
+          window.FB.api(
+            "/me?fields=email,id,name,picture.width(720).height(720)",
+            function (data) {
+              resolve({ data, accessToken: response.authResponse.accessToken });
+            }
+          );
+        }
+      },
+      { scope: "email" }
+    )
+  );
+  callback(authResponse);
+  if (!authResponse) return;
+}
 
 function Login({
   onLogin,
@@ -44,9 +97,7 @@ function Login({
   const history = useHistory();
 
   useEffect(() => {
-    if (isAuth) {
-      return <Redirect to="/" />;
-    }
+    loadScript();
   }, []);
 
   const loginHandler = (values) => {
@@ -67,168 +118,172 @@ function Login({
   };
 
   const handleResponseFacebook = (response) => {
-    const { email, id, name, picture } = response;
-    onLoginFacebook(
-      notify,
-      { id, name, email, imageUrl: picture.data.url },
-      () => {
-        history.push("/");
-      }
-    );
+    const { email, id, name, picture } = response.data;
+    const imageUrl = picture.data.url;
+    onLoginFacebook(notify, { id, name, email, imageUrl }, () => {
+      history.push("/");
+    });
   };
 
+  if (isAuth) {
+    return <Redirect to="/" />;
+  }
+
+  const description = "Login into Minimix watch shop";
+  const title = "Login Minimix now";
+
   return (
-    <section className="login">
-      <Breadcrumbing route={breadcrumbRoute} />
-      <div className="login__body">
-        {!openResetForm && (
-          <div className="login__form">
-            <div className="heading">Log In</div>
-            <Form name="login" {...formItemLayout} onFinish={loginHandler}>
-              <Form.Item
-                name="username"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your username!",
-                  },
-                ]}
-              >
-                <Input size="large" placeholder="Username" />
-              </Form.Item>
-
-              <Form.Item
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password!",
-                  },
-                ]}
-              >
-                <Input.Password size="large" placeholder="Password" />
-              </Form.Item>
-
-              <Form.Item>
-                <Text
-                  underline
-                  style={{ cursor: "pointer" }}
-                  onClick={() => setOpenResetForm(true)}
+    <Page
+      title={title}
+      description={description}
+      canonicalPath="/login"
+      schema={{
+        "@context": "http://schema.org",
+        "@type": "LoginPage",
+        description: description,
+        name: title,
+      }}
+    >
+      <section className="login">
+        <Breadcrumbing route={breadcrumbRoute} />
+        <div className="login__body">
+          {!openResetForm && (
+            <div className="login__form">
+              <div className="heading">Log In</div>
+              <Form name="login" {...formItemLayout} onFinish={loginHandler}>
+                <Form.Item
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your username!",
+                    },
+                  ]}
                 >
-                  Forgot your password ?
-                </Text>
-              </Form.Item>
+                  <Input size="large" placeholder="Username" />
+                </Form.Item>
 
-              <Form.Item>
-                <Button
-                  size="large"
-                  block
-                  type="primary"
-                  htmlType="submit"
-                  loading={loading}
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your password!",
+                    },
+                  ]}
                 >
-                  Sign in
-                </Button>
-              </Form.Item>
-              <GoogleLogin
-                clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
-                onSuccess={handleResponseGoogle}
-                onFailure={handleResponseGoogle}
-                cookiePolicy="single_host_origin"
-                render={(renderProps) => (
-                  <Form.Item>
-                    <Button
-                      onClick={renderProps.onClick}
-                      className="googleLoginBtn"
-                      size="large"
-                      block
-                      type="primary"
-                      icon={<FcGoogle className="googleIcon" />}
-                    >
-                      Sign in with Google
-                    </Button>
-                  </Form.Item>
-                )}
-              />
-              <div className="facebookLoginBtn">
-                <FacebookLogin
-                  cssClass="facebookLoginBtn"
-                  appId={process.env.REACT_APP_FACEBOOK_API_TOKEN}
-                  autoLoad
-                  fields="name,email,picture,id"
-                  callback={handleResponseFacebook}
+                  <Input.Password size="large" placeholder="Password" />
+                </Form.Item>
+
+                <Form.Item>
+                  <Text
+                    underline
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setOpenResetForm(true)}
+                  >
+                    Forgot your password ?
+                  </Text>
+                </Form.Item>
+
+                <Form.Item>
+                  <Button
+                    size="large"
+                    block
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                  >
+                    Sign in
+                  </Button>
+                </Form.Item>
+                <GoogleLogin
+                  clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
+                  onSuccess={handleResponseGoogle}
+                  onFailure={handleResponseGoogle}
+                  cookiePolicy="single_host_origin"
                   render={(renderProps) => (
                     <Form.Item>
                       <Button
                         onClick={renderProps.onClick}
-                        loading={loading}
                         className="googleLoginBtn"
                         size="large"
                         block
                         type="primary"
                         icon={<FcGoogle className="googleIcon" />}
                       >
-                        Sign in with Facebook
+                        Sign in with Google
                       </Button>
                     </Form.Item>
                   )}
                 />
-              </div>
-            </Form>
-          </div>
-        )}
-        {openResetForm && (
-          <div className="login__form">
-            <div className="heading">Reset your password</div>
-            <Text style={{ display: "block", marginBottom: 12 }}>
-              We will send you an email to reset your password.
-            </Text>
-            <Form name="reset" {...formItemLayout} onFinish={resetHandler}>
-              <Form.Item
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    type: "email",
-                    message: "Please input your mail!",
-                  },
-                ]}
-              >
-                <Input size="large" />
-              </Form.Item>
+                <Button
+                  className="googleLoginBtn"
+                  style={{ backgroundColor: "#4e8cff", color: "white" }}
+                  size="large"
+                  block
+                  onClick={() => loginFb(handleResponseFacebook)}
+                >
+                  Sign in with Facebook
+                </Button>
+              </Form>
+            </div>
+          )}
+          {openResetForm && (
+            <div className="login__form">
+              <div className="heading">Reset your password</div>
+              <Text style={{ display: "block", marginBottom: 12 }}>
+                We will send you an email to reset your password.
+              </Text>
+              <Form name="reset" {...formItemLayout} onFinish={resetHandler}>
+                <Form.Item
+                  name="email"
+                  rules={[
+                    {
+                      required: true,
+                      type: "email",
+                      message: "Please input your mail!",
+                    },
+                  ]}
+                >
+                  <Input size="large" />
+                </Form.Item>
 
-              <Form.Item>
-                <Space>
-                  <Button
-                    size="large"
-                    htmlType="submit"
-                    type="primary"
-                    loading={loading}
-                  >
-                    Submit
-                  </Button>
-                  <Button size="large" onClick={() => setOpenResetForm(false)}>
-                    Cancel
-                  </Button>
-                </Space>
-              </Form.Item>
-            </Form>
+                <Form.Item>
+                  <Space>
+                    <Button
+                      size="large"
+                      htmlType="submit"
+                      type="primary"
+                      loading={loading}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      size="large"
+                      onClick={() => setOpenResetForm(false)}
+                    >
+                      Cancel
+                    </Button>
+                  </Space>
+                </Form.Item>
+              </Form>
+            </div>
+          )}
+          <div className="login__newUser">
+            <div className="heading">New Customer</div>
+            <Space direction="vertical">
+              <Text>
+                Sign up for early Sale access plus tailored new arrivals, trends
+                and promotions. To opt out, click unsubscribe in our emails.
+              </Text>
+              <Button size="large">
+                <Link to="/register">Register</Link>
+              </Button>
+            </Space>
           </div>
-        )}
-        <div className="login__newUser">
-          <div className="heading">New Customer</div>
-          <Space direction="vertical">
-            <Text>
-              Sign up for early Sale access plus tailored new arrivals, trends
-              and promotions. To opt out, click unsubscribe in our emails.
-            </Text>
-            <Button size="large">
-              <Link to="/register">Register</Link>
-            </Button>
-          </Space>
         </div>
-      </div>
-    </section>
+      </section>
+    </Page>
   );
 }
 
