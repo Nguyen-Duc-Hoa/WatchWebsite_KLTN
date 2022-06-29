@@ -15,15 +15,27 @@ namespace WatchWebsite_TLCN
             int refreshTimeMs = 86400000; //24 hour
             while (!stoppingToken.IsCancellationRequested)
             {
-                //call your function here
-                using (HttpClient httpClient = new HttpClient())
+                try
                 {
-                    string domainName = "https://kltn-watchwebsite.herokuapp.com/";
-                    await httpClient.GetAsync($"{domainName}/api/products/sendProductUser");
-                }
+                    //call your function here
+                    using (HttpClient httpclient = new HttpClient())
+                    {
+                        string domainname = "https://kltn-watchwebsite.herokuapp.com/";
+                        await httpclient.GetAsync($"{domainname}/api/products/sendproductuser");
+                    }
 
-                await Task.Delay(refreshTimeMs, stoppingToken);
+
+                    await Task.Delay(refreshTimeMs, stoppingToken);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                
             }
         }
+
+        
+
     }
 }
