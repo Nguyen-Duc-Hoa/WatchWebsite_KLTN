@@ -35,8 +35,8 @@ namespace WatchWebsite_TLCN.Controllers
             _mapper = mapper;
         }
 
-        static string appid = "553";
-        static string key1 = "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q";
+        static string appid = "2554";
+        static string key1 = "sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn";
         static string createOrderUrl = "https://sandbox.zalopay.com.vn/v001/tpe/createorder";
 
         [HttpPost]
@@ -81,7 +81,7 @@ namespace WatchWebsite_TLCN.Controllers
             return Ok(result);
         }
 
-        private string key2 = "eG4r0GcoNtRGbO8";
+        private string key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf";
 
         [HttpPost]
         public async Task<IActionResult> Callback([FromBody] dynamic cbdata)

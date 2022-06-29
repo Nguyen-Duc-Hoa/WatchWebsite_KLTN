@@ -72,7 +72,7 @@ function FormProfile({ form, onSubmit, loading, address }) {
   const handleSearch = async (inputValue) => {
     try {
       const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${inputValue}.json?autocomplete=true&access_token=${mapboxgl.accessToken}`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${inputValue}.json?autocomplete=true&country=VN&language=vi&limit=5&access_token=${mapboxgl.accessToken}`
       );
       const data = await res.json();
       setAddresses(data.features);
@@ -135,7 +135,7 @@ function FormProfile({ form, onSubmit, loading, address }) {
           },
         ]}
       >
-        <Input autoComplete="off" />
+        <Input autoComplete="off" onBlur={() => setAddresses([])} />
       </Form.Item>
 
       <div className="addressDropdown">

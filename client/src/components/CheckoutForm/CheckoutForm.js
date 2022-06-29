@@ -105,7 +105,7 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   const handleSearch = async (inputValue) => {
     try {
       const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${inputValue}.json?autocomplete=true&access_token=${mapboxgl.accessToken}&country=VN`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${inputValue}.json?autocomplete=true&country=VN&language=vi&limit=5&access_token=${mapboxgl.accessToken}`
       );
       const data = await res.json();
       setAddresses(data.features);
@@ -165,7 +165,7 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
           name="address"
           rules={[{ required: true, message: "Address is required!" }]}
         >
-          <Input placeholder="Address" autoComplete="off" />
+          <Input placeholder="Address" autoComplete="off" onBlur={() => setAddresses([])} />
         </Form.Item>
 
         <div className="addressDropdown">
