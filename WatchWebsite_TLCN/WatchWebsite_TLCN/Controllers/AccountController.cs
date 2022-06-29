@@ -298,6 +298,12 @@ namespace WatchWebsite_TLCN.Controllers
             var user = new User { Username = model.Username, Password = model.Password, Phone = model.Phone, Email = model.Email, State = true };
             try
             {
+                var dbUser = await _unitOfWork.Users.Get(expression: u => u.Email == model.Email);
+                if(dbUser != null)
+                {
+                    return BadRequest("Dang ki khong thanh cong");
+                }
+
                 _context.Users.Add(user);
                 var result = await _context.SaveChangesAsync();
 
