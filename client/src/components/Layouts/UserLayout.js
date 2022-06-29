@@ -16,9 +16,29 @@ function UserLayout({ children }) {
   const [messageList, setMessageList] = useState([]);
   const turnRef = useRef(CUSTOMER_TURN);
 
+  const getResponseFromBot = (message) => {
+    fetch("https://minimix.pagekite.me/webhooks/rest/webhook", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        sendMessage(data[0].text);
+      })
+      .catch(() => {
+        sendMessage("Bot đang được bảo trì. Vui lòng thử lại sau.");
+      });
+  };
+
   useEffect(() => {
     if (turnRef.current === BOT_TURN) {
-      sendMessage("bot answer");
+      // sendMessage("bot answer");
+      getResponseFromBot(messageList[messageList.length - 1].data.text);
       turnRef.current = CUSTOMER_TURN;
     }
   }, [messageList]);
