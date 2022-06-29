@@ -331,7 +331,7 @@ function Product({ isAuth, token, userId, username, avatarUser, onAddToCart }) {
                 Water resistence:{" "}
                 {productDetail && productDetail.GetWaterResistance.WaterValue}
               </div>
-              <div>Size: {productDetail && productDetail.Size.SizeId}</div>
+              <div>Size: {productDetail && productDetail.Size.SizeValue}</div>
               <div>
                 Energy: {productDetail && productDetail.Energy.EnergyValue}
               </div>
