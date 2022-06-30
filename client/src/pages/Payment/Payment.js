@@ -27,7 +27,8 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
   const gaEventTracker = useAnalyticsEventTracker("Choose method payment");
 
   const handleTrackingOrder = () => {
-    cart.forEach((element) =>
+    cart.forEach((element) => {
+      console.log(element);
       fetch(`${process.env.REACT_APP_HOST_DOMAIN}/api/UserTracking`, {
         method: "POST",
         headers: {
@@ -35,11 +36,11 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
         },
         body: JSON.stringify({
           cookie: localStorage.getItem("trackingCookie"),
-          productId: element.ProductId,
+          productId: element.Id,
           behavior: "Order",
         }),
-      })
-    );
+      });
+    });
   };
 
   const makeZalopayReq = () => {
@@ -69,8 +70,8 @@ function Shipping({ cart, orderInfo, token, idUser, voucherCode, voucherId }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.returncode === 1) {
-          window.location.href = data.orderurl;
+        if (data.return_code === 1) {
+          window.location.href = data.order_url;
         }
       });
   };
@@ -155,11 +156,5 @@ const mapStateToProps = (state) => {
     voucherId: state.order.voucherId,
   };
 };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     onFetchCart: (idUser, token) => dispatch(actions.fetchCart(idUser, token)),
-//   };
-// };
 
 export default connect(mapStateToProps)(Shipping);

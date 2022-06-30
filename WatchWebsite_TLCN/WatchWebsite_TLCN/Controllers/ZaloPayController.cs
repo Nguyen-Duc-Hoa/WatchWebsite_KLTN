@@ -35,16 +35,59 @@ namespace WatchWebsite_TLCN.Controllers
             _mapper = mapper;
         }
 
-        static string appid = "2554";
-        static string key1 = "sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn";
-        static string createOrderUrl = "https://sandbox.zalopay.com.vn/v001/tpe/createorder";
+        static string appid = "2553";
+        static string key1 = "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL";
+        static string createOrderUrl = "https://sb-openapi.zalopay.vn/v2/create";
 
         [HttpPost]
         [Route("createOrder")]
         public async Task<IActionResult> ZaloPayAsync([FromBody] PaymentZalo info)
         {
-            var transid = Guid.NewGuid().ToString();
-            object[] product = await CalculateOrderAmount(info.Products, 
+            //var transid = Guid.NewGuid().ToString();
+            //object[] product = await CalculateOrderAmount(info.Products, 
+            //    info.VoucherCode, info.VoucherId);
+            //var items = new List<ZaloItem>();
+            //string amount = "0";
+            //if (product != null && product[0] != null)
+            //{
+            //    amount = product[1].ToString();
+            //    items = (List<ZaloItem>)product[0];
+            //}
+            //var param = new Dictionary<string, string>();
+
+            //param.Add("app_id", appid);
+            //param.Add("app_user", info.Name);
+            //param.Add("app_time", Utils.GetTimeStamp().ToString());
+            //param.Add("amount", amount);
+            //param.Add("app_trans_id", DateTime.Now.ToString("yyMMdd") + "_" + transid); // mã giao dich có định dạng yyMMdd_xxxx
+            //param.Add("embed_data", JsonConvert.SerializeObject(new { 
+            //    userid = info.UserId,
+            //    voucherid = info.VoucherId,
+            //    phone = info.Phone,
+            //    address = info.Address
+            //}));
+            //param.Add("item", JsonConvert.SerializeObject(items));
+            //param.Add("description", "MiniMix Payment");
+            //param.Add("bank_code", "zalopayapp");
+            //param.Add("phone", info.Phone);
+            //param.Add("address", info.Address);
+
+            //var data = appid + "|" + param["app_trans_id"] + "|" + param["app_user"] + "|" + param["amount"] + "|"
+            //    + param["app_time"] + "|" + param["embed_data"] + "|" + param["item"];
+            //param.Add("mac", HmacHelper.Compute(ZaloPayHMAC.HMACSHA256, key1, data));
+
+            //var result = await HttpHelper.PostFormAsync(createOrderUrl, param);
+
+            string app_id = "2553";
+            string key1 = "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL";
+            string create_order_url = "https://sb-openapi.zalopay.vn/v2/create";
+
+            Random rnd = new Random();
+            var embed_data = new { };
+            var param = new Dictionary<string, string>();
+            var app_trans_id = rnd.Next(1000000); // Generate a random order's ID.
+
+            object[] product = await CalculateOrderAmount(info.Products,
                 info.VoucherCode, info.VoucherId);
             var items = new List<ZaloItem>();
             string amount = "0";
@@ -53,30 +96,28 @@ namespace WatchWebsite_TLCN.Controllers
                 amount = product[1].ToString();
                 items = (List<ZaloItem>)product[0];
             }
-            var param = new Dictionary<string, string>();
 
-            param.Add("appid", appid);
-            param.Add("appuser", info.Name);
-            param.Add("apptime", Utils.GetTimeStamp().ToString());
+            param.Add("app_id", app_id);
+            param.Add("app_user", info.Name);
+            param.Add("app_time", Utils.GetTimeStamp().ToString());
             param.Add("amount", amount);
-            param.Add("apptransid", DateTime.Now.ToString("yyMMdd") + "_" + transid); // mã giao dich có định dạng yyMMdd_xxxx
-            param.Add("embeddata", JsonConvert.SerializeObject(new { 
+            param.Add("app_trans_id", DateTime.Now.ToString("yyMMdd") + "_" + app_trans_id); // mã giao dich có định dạng yyMMdd_xxxx
+            param.Add("embed_data", JsonConvert.SerializeObject(new
+            {
                 userid = info.UserId,
                 voucherid = info.VoucherId,
                 phone = info.Phone,
                 address = info.Address
             }));
             param.Add("item", JsonConvert.SerializeObject(items));
-            param.Add("description", "MiniMix Payment");
-            param.Add("bankcode", "zalopayapp");
-            param.Add("phone", info.Phone);
-            param.Add("address", info.Address);
+            param.Add("description", "Lazada - Thanh toán đơn hàng #" + app_trans_id);
+            param.Add("bank_code", "zalopayapp");
 
-            var data = appid + "|" + param["apptransid"] + "|" + param["appuser"] + "|" + param["amount"] + "|"
-                + param["apptime"] + "|" + param["embeddata"] + "|" + param["item"];
+            var data = app_id + "|" + param["app_trans_id"] + "|" + param["app_user"] + "|" + param["amount"] + "|"
+                + param["app_time"] + "|" + param["embed_data"] + "|" + param["item"];
             param.Add("mac", HmacHelper.Compute(ZaloPayHMAC.HMACSHA256, key1, data));
 
-            var result = await HttpHelper.PostFormAsync(createOrderUrl, param);
+            var result = await HttpHelper.PostFormAsync(create_order_url, param);
 
             return Ok(result);
         }
@@ -90,7 +131,7 @@ namespace WatchWebsite_TLCN.Controllers
             var dataStr1 = Convert.ToString(cbdata["data"]);
 
             var dataJson1 = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataStr1);
-            var emb = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataJson1["embeddata"]);
+            var emb = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataJson1["embed_data"]);
             
             var item = JsonConvert.DeserializeObject<IList<ZaloItem>>(dataJson1["item"]);
 
