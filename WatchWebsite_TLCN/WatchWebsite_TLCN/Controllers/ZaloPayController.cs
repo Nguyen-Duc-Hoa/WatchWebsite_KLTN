@@ -43,47 +43,11 @@ namespace WatchWebsite_TLCN.Controllers
         [Route("createOrder")]
         public async Task<IActionResult> ZaloPayAsync([FromBody] PaymentZalo info)
         {
-            //var transid = Guid.NewGuid().ToString();
-            //object[] product = await CalculateOrderAmount(info.Products, 
-            //    info.VoucherCode, info.VoucherId);
-            //var items = new List<ZaloItem>();
-            //string amount = "0";
-            //if (product != null && product[0] != null)
-            //{
-            //    amount = product[1].ToString();
-            //    items = (List<ZaloItem>)product[0];
-            //}
-            //var param = new Dictionary<string, string>();
-
-            //param.Add("app_id", appid);
-            //param.Add("app_user", info.Name);
-            //param.Add("app_time", Utils.GetTimeStamp().ToString());
-            //param.Add("amount", amount);
-            //param.Add("app_trans_id", DateTime.Now.ToString("yyMMdd") + "_" + transid); // mã giao dich có định dạng yyMMdd_xxxx
-            //param.Add("embed_data", JsonConvert.SerializeObject(new { 
-            //    userid = info.UserId,
-            //    voucherid = info.VoucherId,
-            //    phone = info.Phone,
-            //    address = info.Address
-            //}));
-            //param.Add("item", JsonConvert.SerializeObject(items));
-            //param.Add("description", "MiniMix Payment");
-            //param.Add("bank_code", "zalopayapp");
-            //param.Add("phone", info.Phone);
-            //param.Add("address", info.Address);
-
-            //var data = appid + "|" + param["app_trans_id"] + "|" + param["app_user"] + "|" + param["amount"] + "|"
-            //    + param["app_time"] + "|" + param["embed_data"] + "|" + param["item"];
-            //param.Add("mac", HmacHelper.Compute(ZaloPayHMAC.HMACSHA256, key1, data));
-
-            //var result = await HttpHelper.PostFormAsync(createOrderUrl, param);
-
             string app_id = "2553";
             string key1 = "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL";
             string create_order_url = "https://sb-openapi.zalopay.vn/v2/create";
 
             Random rnd = new Random();
-            var embed_data = new { };
             var param = new Dictionary<string, string>();
             var app_trans_id = rnd.Next(1000000); // Generate a random order's ID.
 
@@ -110,7 +74,7 @@ namespace WatchWebsite_TLCN.Controllers
                 address = info.Address
             }));
             param.Add("item", JsonConvert.SerializeObject(items));
-            param.Add("description", "Lazada - Thanh toán đơn hàng #" + app_trans_id);
+            param.Add("description", "Minimix payment");
             param.Add("bank_code", "zalopayapp");
 
             var data = app_id + "|" + param["app_trans_id"] + "|" + param["app_user"] + "|" + param["amount"] + "|"
@@ -125,6 +89,7 @@ namespace WatchWebsite_TLCN.Controllers
         private string key2 = "trMrHtvjo6myautxDUiAcYsVtaeQ8nhf";
 
         [HttpPost]
+        [Route("callback")]
         public async Task<IActionResult> Callback([FromBody] dynamic cbdata)
         {
             var result = new Dictionary<string, object>();
@@ -145,9 +110,10 @@ namespace WatchWebsite_TLCN.Controllers
 
                 products.Add(prod);
             }
+            order.Transaction = dataJson1["app_trans_id"];
             order.Products = products;
             order.Phone = emb["phone"];
-            order.Name = dataJson1["appuser"];
+            order.Name = dataJson1["app_user"];
             order.UserId = Convert.ToInt32(emb["userid"]);
             order.OrderDate = DateTime.Now;
             if (emb["voucherid"] != null)
@@ -214,22 +180,8 @@ namespace WatchWebsite_TLCN.Controllers
                     discount = voucher.Discount;
                 }
             }
-            try
-            {
-                //using (var httpClient = new HttpClient())
-                //{
-                //    using (var response = await httpClient.GetAsync("https://free.currconv.com/api/v7/convert?q=USD_VND&compact=ultra&apiKey=0850bbd4eefdb86b5aed"))
-                //    {
-                //        string apiResponse = await response.Content.ReadAsStringAsync();
-                //        dataJson = JsonConvert.DeserializeObject<Dictionary<string, float>>(apiResponse);
-                //    }
-                //}
-                dataJson.Add("USD_VND", 23000);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            dataJson.Add("USD_VND", 23000);
             foreach (var item in products)
             {
                 var prod = await _unitOfWork.Products.Get(p => p.Id == item.Id);
@@ -246,7 +198,7 @@ namespace WatchWebsite_TLCN.Controllers
                 total = total + prod.Price * item.Quantity;
             }
             total = (float)Math.Truncate((total - discount) * dataJson["USD_VND"]);
-            if (total <= 0)
+            if (total < dataJson["USD_VND"])
             {
                 total = dataJson["USD_VND"];
             }
@@ -259,8 +211,6 @@ namespace WatchWebsite_TLCN.Controllers
             {
                 float discount = 0;
                 DateTime now = DateTime.Now;
-                //DateTime timeVN = now.AddHours(15);
-                //orderDTO.OrderDate = timeVN;
                 orderDTO.OrderDate = DateTime.Now;
                 var order = _mapper.Map<Entities.Order>(orderDTO);
                 if (orderDTO.CodeVoucher != -1)

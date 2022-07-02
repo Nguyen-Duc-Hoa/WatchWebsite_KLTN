@@ -179,6 +179,10 @@ namespace WatchWebsite_TLCN.Controllers
                 {
                     amount = amount - discount;
                 }
+                if(amount < 1)
+                {
+                    amount = 1;
+                }
                 var paymentIntent = paymentIntents.Create(new PaymentIntentCreateOptions
                 {
                     Amount = (long?)amount,
