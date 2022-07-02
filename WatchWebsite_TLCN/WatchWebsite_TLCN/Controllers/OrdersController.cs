@@ -48,7 +48,7 @@ namespace WatchWebsite_TLCN.Controllers
         {
             var result = await _unitOfWork.Orders.GetAllWithPagination(
                 expression: null,
-                orderBy: x => x.OrderByDescending(a => a.OrderId),
+                orderBy: x => x.OrderByDescending(a => a.OrderDate),
                 pagination: new Pagination { CurrentPage = currentPage }
                 );
             return Ok(new
@@ -225,7 +225,7 @@ namespace WatchWebsite_TLCN.Controllers
 
             var result = await _unitOfWork.Orders.GetAllWithPagination(
                 expression: p => p.UserId == userid,
-                orderBy: x => x.OrderBy(a => a.OrderDate),
+                orderBy: x => x.OrderByDescending(a => a.OrderDate),
                 pagination: new Pagination { CurrentPage = currentPage }
                 );
 
