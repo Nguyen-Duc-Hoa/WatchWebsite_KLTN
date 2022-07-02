@@ -84,10 +84,7 @@ namespace WatchWebsite_TLCN.Controllers
             try
             {
                 float discount = 0;
-                DateTime now = DateTime.Now;
-                DateTime timeVN = now.AddHours(7);
-                orderDTO.OrderDate = timeVN;
-                //orderDTO.OrderDate = DateTime.Now;
+                orderDTO.OrderDate = DateTime.Now;
                 var order = _mapper.Map<Entities.Order>(orderDTO);
                 if(orderDTO.CodeVoucher != -1)
                 {

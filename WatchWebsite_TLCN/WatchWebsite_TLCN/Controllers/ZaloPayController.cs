@@ -229,6 +229,7 @@ namespace WatchWebsite_TLCN.Controllers
 
                 // Create order
                 await _unitOfWork.Orders.Insert(order);
+                await _unitOfWork.Save();
 
                 // Create order detail and update product sold, amound columns
                 foreach (var item in orderDTO.Products)
