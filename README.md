@@ -1,5 +1,5 @@
 # Đề tài Khóa luận tốt nghiệp (HK2-2022/2023):
-# Tìm hiểu công nghệ ReactJs, ASP .NET core api và xây dựng website bán đồng hồ
+## Tìm hiểu công nghệ ReactJs, ASP .NET core api và xây dựng website bán đồng hồ
 
 Nhóm sinh viên thực hiện (Hệ đại trà)
 - Nguyễn Đức Hòa - 18110290
