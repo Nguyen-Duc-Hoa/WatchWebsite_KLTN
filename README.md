@@ -13,6 +13,8 @@ Yêu cầu:
 - Npm 8.1.2
 - Nodejs 16.13.1
 - Python
+- Pip
+- Rasa
 
 Sử dụng thẻ:
 - Số tài khoản: 4242 4242 4242 4242
@@ -29,7 +31,7 @@ Sử dụng app Zalopay:
 
 Hướng dẫn cài đặt
 
-B1: git clone -b deploy https://github.com/Nguyen-Duc-Hoa/WatchWebsite_TLCN.git
+B1: git clone https://github.com/Nguyen-Duc-Hoa/WatchWebsite_KLTN.git
 
 B2: Mở file WatchWebsite_TLCN.sln trong folder WatchWebsite_TLCN. Cấu hình sslPort là 44336 trong file launchSetting.json (nếu port khác 44336).
 
@@ -43,5 +45,11 @@ B5: Mở Terminal -> npm install -> npm start
 
 --> Hoàn thành run frontend
 
-B6: Hoàn thành cài đặt và run. Có thể sử dụng.
+B6: Mở folder rasa-chatbot bằng Visual studio code
+
+B7: Mở Terminal -> rasa run --enable-api --cors "*"
+
+B8: Mở Terminal khác -> rasa run actions
+
+B9: Hoàn thành cài đặt và run. Có thể sử dụng.
 
