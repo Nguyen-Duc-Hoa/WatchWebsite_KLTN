@@ -413,11 +413,12 @@ namespace WatchWebsite_TLCN.Controllers
             {
                 
                 string web_email = "nhomltweb@gmail.com";
-                // Cau hinh thong tin gmail
-                var mail = new SmtpClient("smtp.gmail.com", 25)
+                SmtpClient mail = new SmtpClient()
                 {
-                    Credentials = new NetworkCredential(web_email, "123456789a@"),
-                    EnableSsl = true
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(web_email, "wmuoitapyrpaxhde")
                 };
                 // tao gmail
                 var message = new MailMessage();
@@ -435,6 +436,9 @@ namespace WatchWebsite_TLCN.Controllers
 
                 try
                 {
+                    // gui gmail    
+                    mail.Send(message);
+
                     //Update Password
                     (from p in _context.Users
                      where (p.Email == email)
@@ -443,24 +447,21 @@ namespace WatchWebsite_TLCN.Controllers
 
                     _context.SaveChanges();
 
-                    // gui gmail    
-                    mail.Send(message);
-
                     return Ok("Check your email");
                 }
                 catch(Exception e)
                 {
-                    try
-                    {
-                        //tra lai Password cu
-                        (from p in _context.Users
-                         where (p.Email == email)
-                         select p).ToList()
-                                            .ForEach(x => x.Password = oldPass);
+                    //try
+                    //{
+                    //    //tra lai Password cu
+                    //    (from p in _context.Users
+                    //     where (p.Email == email)
+                    //     select p).ToList()
+                    //                        .ForEach(x => x.Password = oldPass);
 
-                        _context.SaveChanges();
-                    }
-                    catch { }
+                    //    _context.SaveChanges();
+                    //}
+                    //catch { }
                     return BadRequest(e.ToString());
                 }
                 
