@@ -17,7 +17,7 @@ function UserLayout({ children }) {
   const turnRef = useRef(CUSTOMER_TURN);
 
   const getResponseFromBot = (message) => {
-    fetch("https://minimix.pagekite.me/webhooks/rest/webhook", {
+    fetch("https://rasakltn.pagekite.me/webhooks/rest/webhook", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
