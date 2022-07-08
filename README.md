@@ -31,7 +31,7 @@ Sử dụng app Zalopay:
 
 Hướng dẫn cài đặt
 
-B1: git clone https://github.com/Nguyen-Duc-Hoa/WatchWebsite_KLTN.git
+B1: git clone https://github.com/Nguyen-Duc-Hoa/WatchWebsite_KLTN.git và git clone https://github.com/Nguyen-Duc-Hoa/rasa-chatbot.git
 
 B2: Mở file WatchWebsite_TLCN.sln trong folder WatchWebsite_TLCN. Cấu hình sslPort là 44336 trong file launchSetting.json (nếu port khác 44336).
 
