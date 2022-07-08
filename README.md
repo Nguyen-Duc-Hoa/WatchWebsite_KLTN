@@ -26,6 +26,10 @@ Sử dụng app Zalopay:
 - ![QR code](https://docs.zalopay.vn/images/download-sbapp-qr.png "QR code")
 - Android link: https://docs.zalopay.vn/downloads/zalopay-sandbox/android/ZaloPay-sandbox-react-release-v6.10.0.apk
 - Ios link: https://stcstg.zalopay.com.vn/ps_res/ios/enterprise/sandboxmer/6.8.2/install.html
+- Vào đường dẫn: https://sbmc.zalopay.vn/apps: Tài khoản	0925226173, Mật khẩu	Z@lopay123
+- Chính sửa thông tin app có id là 2553
+-  App Callback Url điền https://kltn-watchwebsite.herokuapp.com/api/zalopay/callback
+-  App Redirect Url điền https://minimix-watch-shop.surge.sh/orderHistory
 
 Đường dẫn vào trang đăng nhập admin: /secretRoute/login 
 
