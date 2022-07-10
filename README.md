@@ -20,7 +20,7 @@ Sử dụng thẻ:
 - Số tài khoản: 4242 4242 4242 4242
 - CVC: 123
 - Date: 12/30
-- Zip: 99501
+- Zip code: 99501
 
 Sử dụng app Zalopay: 
 - ![QR code](https://docs.zalopay.vn/images/download-sbapp-qr.png "QR code")
