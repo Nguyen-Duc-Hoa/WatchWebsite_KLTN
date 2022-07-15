@@ -55,10 +55,12 @@ namespace WatchWebsite_TLCN.Controllers
                 info.VoucherCode, info.VoucherId);
             var items = new List<ZaloItem>();
             string amount = "0";
+            string amountUSD = "0";
             if (product != null && product[0] != null)
             {
                 amount = product[1].ToString();
                 items = (List<ZaloItem>)product[0];
+                amountUSD = product[2].ToString();
             }
 
             param.Add("app_id", app_id);
@@ -71,7 +73,8 @@ namespace WatchWebsite_TLCN.Controllers
                 userid = info.UserId,
                 voucherid = info.VoucherId,
                 phone = info.Phone,
-                address = info.Address
+                address = info.Address,
+                total = amountUSD
             }));
             param.Add("item", JsonConvert.SerializeObject(items));
             param.Add("description", "Minimix payment");
@@ -100,7 +103,7 @@ namespace WatchWebsite_TLCN.Controllers
             
             var item = JsonConvert.DeserializeObject<IList<ZaloItem>>(dataJson1["item"]);
 
-            OrderDTO order = new OrderDTO();
+            Entities.Order order = new Entities.Order();
             List<ProductItem> products = new List<ProductItem>();
             foreach(var i in item)
             {
@@ -111,56 +114,69 @@ namespace WatchWebsite_TLCN.Controllers
                 products.Add(prod);
             }
             order.Transaction = dataJson1["app_trans_id"];
-            order.Products = products;
             order.Phone = emb["phone"];
             order.Name = dataJson1["app_user"];
             order.UserId = Convert.ToInt32(emb["userid"]);
-            order.OrderDate = DateTime.Now;
-            if (emb["voucherid"] != null)
-                order.CodeVoucher = Convert.ToInt32(emb["voucherid"]);
-            else
-                order.CodeVoucher = null;
+            order.Total = (float)Convert.ToDouble(emb["total"]);
             order.Address = emb["address"];
-            var saveOrder = await PostOrder(order);
 
-            try
+            float discount = 0;
+            order.OrderDate = DateTime.Now.AddHours(7);
+            if (emb["voucherid"] != null)
             {
-                var dataStr = Convert.ToString(cbdata["data"]);
-                var reqMac = Convert.ToString(cbdata["mac"]);
-
-                var mac = HmacHelper.Compute(ZaloPayHMAC.HMACSHA256, key1, dataStr);
-
-                Console.WriteLine("mac = {0}", mac);
-
-                // kiểm tra callback hợp lệ (đến từ ZaloPay server)
-                if (!reqMac.Equals(mac))
+                int voucherId = Convert.ToInt32(emb["voucherid"]);
+                var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.VoucherId == voucherId);
+                if (voucher != null)
                 {
-                    // callback không hợp lệ
-                    result["returncode"] = -1;
-                    result["returnmessage"] = "mac not equal";
+                    discount = voucher.Discount;
+                    order.VoucherName = voucher.Name;
+                    order.Discount = voucher.Discount;
+                }
+            }
+            order.PaymentMethod = Constant.zaloPayMethod;
+            order.PaymentStatus = "succeeded";
+
+            // Create order
+            await _unitOfWork.Orders.Insert(order);
+            await _unitOfWork.Save();
+
+            foreach (var prod in products)
+            {
+                var product = await _unitOfWork.Products.Get(p => p.Id == prod.Id);
+                product.Sold = product.Sold + prod.Quantity;
+                product.Amount = product.Amount - prod.Quantity;
+                _unitOfWork.Products.Update(product);
+
+                var orderDetail = new OrderDetail()
+                {
+                    OrderId = order.OrderId,
+                    ProductId = prod.Id,
+                    Count = prod.Quantity,
+                    Price = product.Price,
+                    ProductName = product.Name
+                };
+                var rate = new Rate() { ProductId = prod.Id, UserId = order.UserId };
+
+                await _unitOfWork.OrderDetails.Insert(orderDetail);
+
+                var dbRate = await _unitOfWork.Rates.Get(expression: r => r.UserId == rate.UserId && r.ProductId == rate.ProductId);
+                if (dbRate != null)
+                {
+                    _unitOfWork.Rates.Update(rate);
                 }
                 else
                 {
-                    // thanh toán thành công
-                    // merchant cập nhật trạng thái cho đơn hàng
-                    var dataJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataStr);
-                    //var saveOrder = await PostOrder(order);
-                    if(saveOrder)
-                    {
-                        result["returncode"] = 1;
-                        result["returnmessage"] = "success";
-                    }    
-                    Console.WriteLine("update order's status = success where apptransid = {0}", dataJson["apptransid"]);
+                    await _unitOfWork.Rates.Insert(rate);
                 }
             }
-            catch (Exception ex)
-            {
-                result["returncode"] = 0; // ZaloPay server sẽ callback lại (tối đa 3 lần)
-                result["returnmessage"] = ex.Message;
-            }
 
-            // thông báo kết quả cho ZaloPay server
-            return Ok(result);
+            // Delete all cart items of user
+            var cartItems = await _unitOfWork.Carts.GetAll(c => c.UserId == order.UserId);
+            _unitOfWork.Carts.DeleteRange(cartItems);
+
+            await _unitOfWork.Save();
+            
+            return Ok();
         }
 
         private async Task<object[]> CalculateOrderAmount(List<ProductItem> products, 
@@ -170,7 +186,6 @@ namespace WatchWebsite_TLCN.Controllers
             DateTime now = DateTime.Now;
             List<ZaloItem> items = new List<ZaloItem>();
             float discount = 0;
-            Dictionary<string, float> dataJson = new Dictionary<string, float>();
             Voucher voucher = new Voucher();
             if (voucherCode.Trim() != "")
             {
@@ -181,7 +196,17 @@ namespace WatchWebsite_TLCN.Controllers
                 }
             }
 
-            dataJson.Add("USD_VND", 23000);
+            string convertCurrencyApi = "https://api.fastforex.io/fetch-one?from=USD&to=VND&api_key=9ef3bf076c-6045f23d0b-rf1srh";
+            CurrencyTransfer currencyTransfer = new CurrencyTransfer();
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync(convertCurrencyApi))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    currencyTransfer = JsonConvert.DeserializeObject<CurrencyTransfer>(apiResponse);
+                }
+            }
+
             foreach (var item in products)
             {
                 var prod = await _unitOfWork.Products.Get(p => p.Id == item.Id);
@@ -190,103 +215,33 @@ namespace WatchWebsite_TLCN.Controllers
                 {
                     itemid = prod.Id,
                     itemname = prod.Name,
-                    itemprice = prod.Price * dataJson["USD_VND"],
+                    itemprice = prod.Price * currencyTransfer.result.VND,
                     itemquantity = item.Quantity,
                     itemvouchercode = voucherCode,
                     itemvoucherdiscount = voucher != null ? voucher.Discount : 0
                 });
                 total = total + prod.Price * item.Quantity;
             }
-            total = (float)Math.Truncate((total - discount) * dataJson["USD_VND"]);
-            if (total < dataJson["USD_VND"])
+            float totalUSD = total - discount;
+            total = (float)Math.Truncate((total - discount) * currencyTransfer.result.VND);
+            if (total < currencyTransfer.result.VND)
             {
-                total = dataJson["USD_VND"];
+                total = currencyTransfer.result.VND;
             }
-            return new object[] { items, total };
+            return new object[] { items, total, totalUSD };
         }
 
-        public async Task<bool> PostOrder(OrderDTO orderDTO)
+        public class VNDCurrency
         {
-            try
-            {
-                float discount = 0;
-                DateTime now = DateTime.Now;
-                DateTime timeVN = now.AddHours(7);
-                orderDTO.OrderDate = timeVN;
-                var order = _mapper.Map<Entities.Order>(orderDTO);
-                if (orderDTO.CodeVoucher != -1)
-                {
-                    var voucher = await _unitOfWork.Vouchers.Get(expression: v => v.VoucherId == orderDTO.CodeVoucher);
-                    if (voucher != null)
-                    {
-                        discount = voucher.Discount;
-                        order.VoucherName = voucher.Name;
-                        order.Discount = voucher.Discount;
-                    }
-                }
-                order.PaymentMethod = Constant.zaloPayMethod;
-                order.Total = await CalculateOrderAmount1(orderDTO.Products) / 100 - discount;
-
-                // Create order
-                await _unitOfWork.Orders.Insert(order);
-                await _unitOfWork.Save();
-
-                // Create order detail and update product sold, amound columns
-                foreach (var item in orderDTO.Products)
-                {
-                    var product = await _unitOfWork.Products.Get(p => p.Id == item.Id);
-                    product.Sold = product.Sold + item.Quantity;
-                    product.Amount = product.Amount - item.Quantity;
-                    _unitOfWork.Products.Update(product);
-
-                    var orderDetail = new OrderDetail()
-                    {
-                        OrderId = order.OrderId,
-                        ProductId = item.Id,
-                        Count = item.Quantity,
-                        Price = product.Price,
-                        ProductName = product.Name
-                    };
-                    var rate = new Rate() { ProductId = item.Id, UserId = order.UserId };
-
-                    await _unitOfWork.OrderDetails.Insert(orderDetail);
-
-                    var dbRate = await _unitOfWork.Rates.Get(expression: r => r.UserId == rate.UserId && r.ProductId == rate.ProductId);
-                    if (dbRate != null)
-                    {
-                        _unitOfWork.Rates.Update(rate);
-                    }
-                    else
-                    {
-                        await _unitOfWork.Rates.Insert(rate);
-                    }
-                }
-
-                // Delete all cart items of user
-                var cartItems = await _unitOfWork.Carts.GetAll(c => c.UserId == order.UserId);
-                _unitOfWork.Carts.DeleteRange(cartItems);
-
-                await _unitOfWork.Save();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            public float VND { get; set; }
         }
-
-        private async Task<float> CalculateOrderAmount1(List<ProductItem> products)
+        public class CurrencyTransfer
         {
-            float total = 0;
-            foreach (var item in products)
-            {
-                var prod = await _unitOfWork.Products.Get(p => p.Id == item.Id);
-                total = total + prod.Price * item.Quantity;
-            }
-            return total * 100;
+            public string Base { get; set; }
+            public string Updated { get; set; }
+            public float Ms { get; set; }
+            public VNDCurrency result { get; set; }
         }
-
     }
 
 }
