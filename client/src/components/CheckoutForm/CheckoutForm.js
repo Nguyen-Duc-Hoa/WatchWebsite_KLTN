@@ -22,6 +22,7 @@ mapboxgl.accessToken =
 
 function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   const [form] = Form.useForm();
+  const zoom = 15;
   const history = useHistory();
   const [vouchers, setVouchers] = useState([]);
   const mapContainer = useRef(null);
@@ -29,7 +30,6 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   const marker = useRef(null);
   const [lng, setLng] = useState(106.758144);
   const [lat, setLat] = useState(10.862592);
-  const [zoom, setZoom] = useState(15);
   const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
@@ -41,7 +41,6 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
   }, []);
 
   useEffect(() => {
-    if (address !== "null" && "") return;
     fetch(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?autocomplete=true&access_token=${mapboxgl.accessToken}`
     )
@@ -116,6 +115,7 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
 
   const handleClickAddress = (address) => {
     const { place_name, center } = address;
+    console.log(place_name);
     form.setFieldsValue({ address: place_name });
     setAddresses([]);
     setLng(center[0]);
@@ -148,8 +148,10 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
         size="large"
         form={form}
         onFinish={onFinish}
-        onValuesChange={(_, values) => {
-          handleSearch(values.address);
+        onValuesChange={(changedValues) => {
+          if ("address" in changedValues) {
+            handleSearch(changedValues.address);
+          }
         }}
       >
         <div className="heading">Shipping address</div>
@@ -165,18 +167,19 @@ function CheckoutForm({ name, address, phone, onSetInfoOrder, orderInfo }) {
           name="address"
           rules={[{ required: true, message: "Address is required!" }]}
         >
-          <Input placeholder="Address" autoComplete="off" onBlur={() => setAddresses([])} />
+          <Input placeholder="Address" autoComplete="off" />
         </Form.Item>
 
         <div className="addressDropdown">
-          {addresses.map((address) => (
-            <div
-              onClick={() => handleClickAddress(address)}
-              className="addressItem"
-            >
-              {address.place_name}
-            </div>
-          ))}
+          {addresses &&
+            addresses.map((address) => (
+              <div
+                onClick={() => handleClickAddress(address)}
+                className="addressItem"
+              >
+                {address.place_name}
+              </div>
+            ))}
         </div>
         <div className="map-container" ref={mapContainer}></div>
 

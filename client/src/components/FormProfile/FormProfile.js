@@ -21,7 +21,7 @@ function FormProfile({ form, onSubmit, loading, address }) {
   const marker = useRef(null);
   const [lng, setLng] = useState(106.758144);
   const [lat, setLat] = useState(10.862592);
-  const [zoom, setZoom] = useState(15);
+  const zoom = 15;
   const [addresses, setAddresses] = useState([]);
 
   const getLocationInfo = async (lngInput, latInput) => {
@@ -100,8 +100,10 @@ function FormProfile({ form, onSubmit, loading, address }) {
       style={{ maxWidth: 600 }}
       onFinish={onSubmit}
       form={form}
-      onValuesChange={(_, values) => {
-        handleSearch(values.address);
+      onValuesChange={(changedValues) => {
+        if("address" in changedValues) {
+          handleSearch(changedValues.address);
+        }
       }}
     >
       <Form.Item
@@ -135,7 +137,7 @@ function FormProfile({ form, onSubmit, loading, address }) {
           },
         ]}
       >
-        <Input autoComplete="off" onBlur={() => setAddresses([])} />
+        <Input autoComplete="off" />
       </Form.Item>
 
       <div className="addressDropdown">

@@ -46,25 +46,40 @@ function UpdateBrand({ onUpdateBrand, loading, token }) {
 
   const updateBrand = (values) => {
     if (!imageBase64) return;
-
-    const storageRef = ref(storage, new Date().getTime().toString());
-    uploadString(storageRef, imageBase64, "data_url")
-      .then((_) => getDownloadURL(storageRef))
-      .then((url) => {
-        id
-          ? onUpdateBrand(
-              { brandId: id, name: values.name, image: url },
-              isAdd,
-              notify,
-              token
-            )
-          : onUpdateBrand(
-              { name: values.name, image: url },
-              isAdd,
-              notify,
-              token
-            );
-      });
+    if (imageBase64.includes("base64")) {
+      const storageRef = ref(storage, new Date().getTime().toString());
+      uploadString(storageRef, imageBase64, "data_url")
+        .then((_) => getDownloadURL(storageRef))
+        .then((url) => {
+          id
+            ? onUpdateBrand(
+                { brandId: id, name: values.name, image: url },
+                isAdd,
+                notify,
+                token
+              )
+            : onUpdateBrand(
+                { name: values.name, image: url },
+                isAdd,
+                notify,
+                token
+              );
+        });
+    } else {
+      id
+        ? onUpdateBrand(
+            { brandId: id, name: values.name, image: imageBase64 },
+            isAdd,
+            notify,
+            token
+          )
+        : onUpdateBrand(
+            { name: values.name, image: imageBase64 },
+            isAdd,
+            notify,
+            token
+          );
+    }
   };
   return (
     <section className="admin">
@@ -106,7 +121,7 @@ function UpdateBrand({ onUpdateBrand, loading, token }) {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.brand.lading,
+    loading: state.brand.loading,
     token: state.auth.token,
   };
 };

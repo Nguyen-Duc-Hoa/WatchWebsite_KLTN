@@ -17,7 +17,7 @@ export const updateBrand = (brandInfo, isAdd, notify, token) => {
           notify(
             `${isAdd ? "ADD" : "EDIT"} SUCCESS`,
             `You have already ${isAdd ? "added" : "edited"} a ${
-              isAdd && "new"
+              isAdd ? "new" : ''
             } brand!`,
             "success"
           );
