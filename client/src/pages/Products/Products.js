@@ -13,13 +13,14 @@ import * as actions from "../../store/actions/index";
 import RecommendForUser from "../../components/RecommendForUser/RecommendForUser";
 import useAnalyticsEventTracker from "../../hook/useAnalyticsEventTracker";
 import Page from "../../components/Page/Page";
+import { FILTER } from "../../store/actions/actionTypes";
 
 const breadCrumbRoute = [
   { name: "Home", link: "/" },
   { name: "Products", link: "/products" },
 ];
 
-function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
+function Products({ filterInfo, onAddToCart, token, isAuth, userId, onFilter }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -32,7 +33,10 @@ function Products({ filterInfo, onAddToCart, token, isAuth, userId }) {
   }, [currentPage, filterInfo]);
 
   const filterHandler = (values) => {
-    filterReq(values);
+    setSpinning(true);
+    const searchValue = document.querySelector(".search__area input").value;
+    values["search"] = searchValue;
+    onFilter(values)
   };
 
   const addToCartHandler = (event, productId) => {
@@ -165,6 +169,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onAddToCart: (productId, quantity, userId, token, notify) =>
       dispatch(actions.addToCart(productId, quantity, userId, token, notify)),
+    onFilter: (payload) => dispatch({type: FILTER, payload})
   };
 };
 
