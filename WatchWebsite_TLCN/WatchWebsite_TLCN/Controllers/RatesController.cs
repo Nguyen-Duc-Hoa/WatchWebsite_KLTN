@@ -95,7 +95,8 @@ namespace WatchWebsite_TLCN.Controllers
                         numOfRate++;
                     }
                 }
-                var finalRate = Math.Ceiling((decimal)(totalStar / rates.Count));
+                float stars = totalStar / (float)numOfRate;
+                int finalRate = Convert.ToInt32(Math.Ceiling((decimal)(stars)));
                 return Ok(new
                 {
                     rateValue = finalRate,
