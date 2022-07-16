@@ -48,10 +48,11 @@ namespace WatchWebsite_TLCN.Controllers
                     if (item.Value >= 0)
                     {
                         totalStar = totalStar + item.Value;
-                        numOfRate++;
+                        numOfRate = numOfRate + 1;
                     }
                 }
-                var finalRate = totalStar / rates.Count;
+                float stars = totalStar / (float)numOfRate;
+                int finalRate = Convert.ToInt32(Math.Ceiling((decimal)(stars)));
                 return Ok(new
                 {
                     rateValue = finalRate,
