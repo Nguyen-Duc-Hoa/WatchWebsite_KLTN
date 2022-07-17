@@ -279,7 +279,7 @@ function Statistic({ token }) {
           <Table
             columns={productColumns}
             dataSource={productChartData}
-            pagination={{ position: ["none", "none"] }}
+            pagination={false}
             bordered={true}
           />
         </Col>

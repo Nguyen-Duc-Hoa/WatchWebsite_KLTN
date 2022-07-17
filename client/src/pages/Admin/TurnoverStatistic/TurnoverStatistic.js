@@ -119,7 +119,7 @@ function Statistic({ token }) {
           <Table
             columns={turnOverColumns}
             dataSource={turnOverChartData}
-            pagination={{ position: ["none", "none"] }}
+            pagination={false}
             bordered={true}
           />
         </Col>
