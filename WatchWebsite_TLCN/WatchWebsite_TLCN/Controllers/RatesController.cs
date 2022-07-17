@@ -51,6 +51,14 @@ namespace WatchWebsite_TLCN.Controllers
                         numOfRate = numOfRate + 1;
                     }
                 }
+                if(numOfRate == 0)
+                {
+                    return Ok(new
+                    {
+                        rateValue = 0,
+                        numOfRate = 0
+                    });
+                }
                 float stars = totalStar / (float)numOfRate;
                 int finalRate = Convert.ToInt32(Math.Ceiling((decimal)(stars)));
                 return Ok(new
@@ -59,7 +67,7 @@ namespace WatchWebsite_TLCN.Controllers
                     numOfRate = numOfRate
                 });
             }
-            catch
+            catch (Exception e)
             {
                 return StatusCode(500);
             }
